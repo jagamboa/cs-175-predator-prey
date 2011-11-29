@@ -1,0 +1,21 @@
+OUTPUTS:
+
+vision - container class vision: collection of each thing that is seen with classification
+				 where it is, and where it is pointed
+
+semi sup - single set of initial weights (one for each behavior)
+
+neural net - produces set of modified weights
+
+rules - a vector for each rule, when take a weighted sum produces a movement vector
+
+
+INPUTS:
+
+vision - the state of the world/screen
+
+semi sup - a collection of sets of weights and a fitness level for each
+
+neural net - set of initial weights
+
+rules - weights for each rule
