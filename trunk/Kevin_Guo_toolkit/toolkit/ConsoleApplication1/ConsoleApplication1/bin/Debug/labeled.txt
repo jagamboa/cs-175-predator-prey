@@ -1,0 +1,11 @@
+1,stop
+16,stop
+35,stop
+37,stop
+49,stop
+66,stop
+125,go
+130,go
+149,go
+155,go
+160,go
