@@ -1,0 +1,5 @@
+C:\Users\iceholder\Documents\UCI\CS 175\toolkit\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\iceholder\Documents\UCI\CS 175\toolkit\ConsoleApplication1\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\iceholder\Documents\UCI\CS 175\toolkit\ConsoleApplication1\ConsoleApplication1\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\iceholder\Documents\UCI\CS 175\toolkit\ConsoleApplication1\ConsoleApplication1\obj\x86\Debug\ConsoleApplication1.exe
+C:\Users\iceholder\Documents\UCI\CS 175\toolkit\ConsoleApplication1\ConsoleApplication1\obj\x86\Debug\ConsoleApplication1.pdb
