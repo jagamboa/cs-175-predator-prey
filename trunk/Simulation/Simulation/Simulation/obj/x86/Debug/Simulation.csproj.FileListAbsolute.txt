@@ -1,0 +1,7 @@
+C:\Users\Shawn Merrill\Documents\Visual Studio 2010\Projects\Simulation\Simulation\Simulation\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Shawn Merrill\Documents\Visual Studio 2010\Projects\Simulation\Simulation\Simulation\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Shawn Merrill\Documents\Visual Studio 2010\Projects\Simulation\Simulation\Simulation\bin\x86\Debug\Simulation.exe
+C:\Users\Shawn Merrill\Documents\Visual Studio 2010\Projects\Simulation\Simulation\Simulation\bin\x86\Debug\Simulation.pdb
+C:\Users\Shawn Merrill\Documents\Visual Studio 2010\Projects\Simulation\Simulation\Simulation\obj\x86\Debug\Simulation.exe
+C:\Users\Shawn Merrill\Documents\Visual Studio 2010\Projects\Simulation\Simulation\Simulation\obj\x86\Debug\Simulation.pdb
+C:\Users\Shawn Merrill\Documents\Visual Studio 2010\Projects\Simulation\Simulation\Simulation\bin\x86\Debug\Content\boid.xnb
