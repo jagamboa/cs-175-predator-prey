@@ -1,1 +1,0 @@
-C:\Users\James\Documents\UCI Classes\CS 175\NeuralNetworkToolkit\NeuralNetworkToolkit\NeuralNetworkToolkitContent\obj\x86\Debug\ResolveAssemblyReference.cache
