@@ -118,6 +118,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Vector.cs" />
+    <Compile Include="VisionContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

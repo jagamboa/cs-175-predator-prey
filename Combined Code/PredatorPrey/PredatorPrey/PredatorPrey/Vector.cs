@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace PredatorPrey
 {
@@ -16,6 +17,12 @@ namespace PredatorPrey
         {
             X = x;
             Y = y;
+        }
+
+        public Vector(Vector2 a)
+        {
+            X = a.X;
+            Y = a.Y;
         }
 
         public static double Dot(Vector a, Vector b)
@@ -46,6 +53,11 @@ namespace PredatorPrey
                 return a;
 
             return new Vector(a.X / magnitude, a.Y / magnitude);
+        }
+
+        public static Vector2 Vector2(Vector a)
+        {
+            return new Vector2((float)a.X, (float)a.Y);
         }
     }
 }
