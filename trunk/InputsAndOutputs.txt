@@ -2,6 +2,7 @@ OUTPUTS:
 
 vision - container class vision: collection of each thing that is seen with classification
 				 where it is, and where it is pointed
+	- used in rules and fitness function
 
 semi sup - single set of initial weights (one for each behavior)
 

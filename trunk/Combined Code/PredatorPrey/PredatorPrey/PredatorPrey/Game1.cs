@@ -37,7 +37,7 @@ namespace PredatorPrey
         // variables for toolkit
         List<Predator> predatorList;
         List<Prey> preyList;
-        int ticks = 0;
+        int updates = 0;
         int bestPredatorIndex = 0;
         int bestPredatorFitness = 0;
         int bestPreyIndex = 0;
@@ -171,7 +171,7 @@ namespace PredatorPrey
             do
             {
                 // if the simulation has not timed out
-                if (ticks < Parameters.numberOfTicks)
+                if (updates < Parameters.numberOfTicks)
                 {
                     foreach (Creature predator in predatorList)
                     {
@@ -237,7 +237,7 @@ namespace PredatorPrey
                     }
 
                     // increment the tick counter
-                    ticks++;
+                    updates++;
                 }
                 else
                 {
@@ -260,7 +260,7 @@ namespace PredatorPrey
 
 
                     // reset simulation for next generation
-                    ticks = 0;
+                    updates = 0;
                     bestPredatorFitness = 0;
                     bestPredatorIndex = 0;
 
@@ -274,7 +274,7 @@ namespace PredatorPrey
                     }
                 }
 
-            } while (loop && ticks != 0);
+            } while (loop && updates != 0);
 
             base.Update(gameTime);
         }

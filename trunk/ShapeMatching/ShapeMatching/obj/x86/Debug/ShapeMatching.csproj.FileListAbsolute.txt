@@ -1,5 +1,0 @@
-c:\users\rabidcow\documents\visual studio 2010\Projects\ShapeMatching\ShapeMatching\bin\Debug\ShapeMatching.exe
-c:\users\rabidcow\documents\visual studio 2010\Projects\ShapeMatching\ShapeMatching\bin\Debug\ShapeMatching.pdb
-c:\users\rabidcow\documents\visual studio 2010\Projects\ShapeMatching\ShapeMatching\obj\x86\Debug\ResolveAssemblyReference.cache
-c:\users\rabidcow\documents\visual studio 2010\Projects\ShapeMatching\ShapeMatching\obj\x86\Debug\ShapeMatching.exe
-c:\users\rabidcow\documents\visual studio 2010\Projects\ShapeMatching\ShapeMatching\obj\x86\Debug\ShapeMatching.pdb
