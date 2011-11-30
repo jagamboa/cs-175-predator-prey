@@ -4,9 +4,9 @@ vision - container class vision: collection of each thing that is seen with clas
 				 where it is, and where it is pointed
 	- used in rules and fitness function
 
-semi sup - single set of initial weights (one for each behavior)
+semi sup - single set of initial weights
 
-neural net - produces set of modified weights
+neural net - produces a movement vector
 
 rules - a vector for each rule, when take a weighted sum produces a movement vector
 
@@ -17,6 +17,13 @@ vision - the state of the world/screen
 
 semi sup - a collection of sets of weights and a fitness level for each
 
-neural net - set of initial weights
+neural net - vectors from each rule
 
 rules - weights for each rule
+
+rule space
+a neural net which produces a vector which takes as inputs the state of the creature and it's vision and an error fuction which may be omnicient
+
+neural net takes as parameter numof inputs/outputs etc
+
+online training for each rule as well
