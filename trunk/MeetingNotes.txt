@@ -1,0 +1,55 @@
+Today's Meeting
+
+---Rules---
+Rules have been defined as the following:
+- A neural network with input vectors defined specifically for each rule
+	(may include the state of the creature, vision, audio)
+- Neural network outputs a single movement vector
+- Has an error function which may be omnicient
+
+
+---Neural Network Implementation of Rules---
+- Learning Rate must be defined
+- sigmoid function threshold must be defined
+- input set must be defined
+- initial weight values must be defined (?)
+
+
+---Online Update---
+After calculating the movement vector of each rule:
+- calculate fitness level for current state (if it's not previously stored)
+- feed each movement vector into the online update neural network as
+	an input
+- the online update neural network produces a movement vector as output
+- creature temporarily moves to the new location, the fitness level is
+	evaluated a second time
+- if the fitness level of this new state is less than the fitness of the
+	previous state, calculate error function, propagate error back
+	through online update neural network (adjust it's weights), then
+	calculate a new output movement vector by feeding the movement 
+	vectors from the rules into this network again.  Move to this
+	new location
+- store the fitness level of whatever state the creature finally moves to
+
+
+---Vision---
+- for each creature, define where it is, what direction (estimated) it is
+	facing, and what it is
+- for matching patterns, compare to different rotations (at 30 degree
+	intervals) of the sprite.
+- for estimating direction, can base estimation on which rotation the image
+	matched the most
+
+
+---Audio---
+- defined as a position with no indication of what creature type it is
+- use straight distance comparisons
+
+
+---Semisupervised Learning---
+- input:  a collection of (weight sets paired with fitness level) containers
+- output: each creature's weights should be replaced with a set of weights
+	that are believed to be superior (when placing weights back into
+	creatures, use the mutation function from James_NeuralNetworkToolkit.
+	It is defined in GeneticAlgorithm.cs as mutate(List<double> genes) and
+	returns a List<double> of mutated weights
