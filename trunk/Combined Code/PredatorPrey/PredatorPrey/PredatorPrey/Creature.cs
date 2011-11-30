@@ -9,10 +9,11 @@ namespace PredatorPrey
 {
     class Creature
     {
-        private NeuralNetwork brain;
+        public NeuralNetwork brain;
 
         public int fitness { get; private set; }
 
+        // the weights of the Creature's neural network
         public List<double> genes
         {
             get
@@ -101,45 +102,8 @@ namespace PredatorPrey
             fitness--;
         }
 
-        public void update(List<Creature> vision)
+        public void update(VisionContainer vc)
         {
-            // find the closest creature (of the other species) to this creature
-            int closestCreature = 0;
-
-            for (int i = 1; i < vision.Count; i++)
-            {
-                if (Vector.Distance(position, vision[i].position) < Vector.Distance(position, vision[closestCreature].position))
-                {
-                    closestCreature = i;
-                }
-            }
-
-            // create inputs and pass them to the creature's brain
-            List<double> inputs = new List<double>(4);
-            Vector dirToClosest = Vector.Subtract(vision[closestCreature].position, position);
-            dirToClosest = Vector.Normalize(dirToClosest);
-
-            if (direction.X == 1)
-                direction.X = 0.9;
-            if (direction.Y == 1)
-                direction.Y = 0.9;
-
-            inputs.Add(dirToClosest.X);
-            inputs.Add(dirToClosest.Y);
-            inputs.Add(direction.X);
-            inputs.Add(direction.Y);
-
-            // receive outputs
-            List<double> outputs = brain.run(inputs);
-
-            //String s;
-            //if (leftSideSpeed != 0)
-            //    s = "hi";
-
-            // update the creature's leg speeds
-            leftSideSpeed = outputs[0];
-            rightSideSpeed = outputs[1];
-
             // calculate the rotation
             double rotationChange = leftSideSpeed - rightSideSpeed;
             double movementSpeed = leftSideSpeed + rightSideSpeed;

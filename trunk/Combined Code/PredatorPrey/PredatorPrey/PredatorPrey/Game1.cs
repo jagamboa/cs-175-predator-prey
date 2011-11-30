@@ -20,6 +20,20 @@ namespace PredatorPrey
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        // variables for Vision
+        //
+        //
+        //
+        //
+        //
+
+        // variables for Semi Supervised
+        //
+        //
+        //
+        //
+        //
+
         // variables for toolkit
         List<Predator> predatorList;
         List<Prey> preyList;
@@ -90,6 +104,18 @@ namespace PredatorPrey
                 preyList.Add(new Prey(pos));
             }
 
+            // Initialize Vision
+            //
+            //
+            //
+            //
+
+            // Initialize Semi Supervised
+            //
+            //
+            //
+            //
+
             base.Initialize();
         }
 
@@ -102,6 +128,7 @@ namespace PredatorPrey
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            // load all sprites and fonts needed
             predatorSprite = Content.Load<Texture2D>("Art/Wolf");
             preySprite = Content.Load<Texture2D>("Art/Sheep");
             font = Content.Load<SpriteFont>("Font");
@@ -148,17 +175,17 @@ namespace PredatorPrey
                 {
                     foreach (Creature predator in predatorList)
                     {
-                        // step1: give each predator it's visual percepts
+                        // step1: gather this predator's visual percepts
 
-                        // step2: the predator update's it's state (hunger, position, fitness, etc)
+                        // step2: give the predator it's visual percepts and update's it's state (hunger, position, fitness, etc)
 
                         // step3: the predator runs it's weight improvement routine (through the nerual net)
                     }
                     foreach (Creature sheep in preyList)
                     {
-                        // step1: give each prey it's visual percepts
+                        // step1: gather this prey's visual percepts
 
-                        // step2: the prey update's it's state (hunger, position, fitness, etc)
+                        // step2: give the prey it's visual percepts and update's it's state (hunger, position, fitness, etc)
 
                         // step3: the prey runs it's weight improvement routine (through the nerual net)
                     }
@@ -184,6 +211,21 @@ namespace PredatorPrey
                         }
                     }
 
+                    // check if any prey has eaten food
+                    //
+                    //
+                    //
+                    //
+                    //
+
+                    // perform any other enviromental state checks (collision, boundaries, etc)
+                    //
+                    //
+                    //
+                    //
+                    //
+                    //
+
                     // keeps track of the index of the best prey
                     for (int i = 0; i < preyList.Count; i++)
                     {
@@ -207,14 +249,14 @@ namespace PredatorPrey
 
                         // step2: run semi-supervised routine, output new weights
 
-                        // step3: mutate new weights and place them back in predators
+                        // step3: mutate new weights and place them back in predators (Creature.genes)
 
                     // UPDATE PREY
                         // step1: gather semi-supervised data
 
                         // step2: run semi-supervised routine, output new weights
 
-                        // step3: mutate new weights and place them back in prey
+                        // step3: mutate new weights and place them back in prey (Creatures.genes)
 
 
                     // reset simulation for next generation
@@ -262,11 +304,11 @@ namespace PredatorPrey
             // draw the prey
             for (int i = 0; i < preyList.Count; i++)
             {
-                if (i == bestPreyIndex)
+                if (i == bestPreyIndex) // draw the best prey
                 {
                     spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.SpringGreen, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
-                else
+                else // draw the other prey
                 {
                     spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.White, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
