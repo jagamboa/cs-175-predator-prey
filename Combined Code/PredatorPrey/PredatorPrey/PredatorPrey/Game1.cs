@@ -16,13 +16,45 @@ namespace PredatorPrey
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        // XNA variables
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        // variables for toolkit
+        List<Predator> predatorList;
+        List<Prey> preyList;
+        int ticks = 0;
+        int bestPredatorIndex = 0;
+        int bestPredatorFitness = 0;
+        int bestPreyIndex = 0;
+        int bestPreyFitness = Int32.MinValue;
+
+        Texture2D predatorSprite;
+        Texture2D preySprite;
+        SpriteFont font;
+        Vector2 centerPoint = new Vector2(5, 10);
+        Vector2 predatorText1 = new Vector2(5, 8);
+        Vector2 predatorText2 = new Vector2(5, 24);
+        Vector2 predatorText3 = new Vector2(5, 40);
+        Vector2 predatorText4 = new Vector2(5, 56);
+        Vector2 preyText1 = new Vector2(290, 8);
+        Vector2 preyText2 = new Vector2(290, 24);
+        Vector2 preyText3 = new Vector2(290, 40);
+        Vector2 preyText4 = new Vector2(290, 56);
+
+        // input
+        KeyboardState keyState;
+        Boolean spaceDown = false;
+        Boolean loop = false;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = 500;
+            graphics.PreferredBackBufferHeight = 500;
+            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -33,7 +65,30 @@ namespace PredatorPrey
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            Parameters.random = new Random();
+            Parameters.worldWidth = GraphicsDevice.Viewport.Width;
+            Parameters.worldHeight = GraphicsDevice.Viewport.Height;
+
+            predatorList = new List<Predator>(Parameters.numberOfWolves);
+            preyList = new List<Prey>(Parameters.numberOfSheep);
+
+            for (int i = 0; i < Parameters.numberOfWolves; i++)
+            {
+                // random position
+                Vector pos = new Vector(Parameters.random.Next(Parameters.worldWidth),
+                                                Parameters.random.Next(Parameters.worldHeight));
+                
+                predatorList.Add(new Predator(pos));
+            }
+
+            for (int i = 0; i < Parameters.numberOfSheep; i++)
+            {
+                // random position
+                Vector pos = new Vector(Parameters.random.Next(Parameters.worldWidth),
+                                                Parameters.random.Next(Parameters.worldHeight));
+
+                preyList.Add(new Prey(pos));
+            }
 
             base.Initialize();
         }
@@ -47,7 +102,9 @@ namespace PredatorPrey
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            predatorSprite = Content.Load<Texture2D>("Art/Wolf");
+            preySprite = Content.Load<Texture2D>("Art/Sheep");
+            font = Content.Load<SpriteFont>("Font");
         }
 
         /// <summary>
@@ -70,7 +127,112 @@ namespace PredatorPrey
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+            keyState = Keyboard.GetState();
+
+            if (keyState.IsKeyDown(Keys.Space) && !spaceDown)
+            {
+                spaceDown = true;
+                loop = !loop;
+                this.IsFixedTimeStep = !loop;
+                graphics.SynchronizeWithVerticalRetrace = !loop;
+            }
+            else if (keyState.IsKeyUp(Keys.Space))
+            {
+                spaceDown = false;
+            }
+
+            do
+            {
+                // if the simulation has not timed out
+                if (ticks < Parameters.numberOfTicks)
+                {
+                    foreach (Creature predator in predatorList)
+                    {
+                        // step1: give each predator it's visual percepts
+
+                        // step2: the predator update's it's state (hunger, position, fitness, etc)
+
+                        // step3: the predator runs it's weight improvement routine (through the nerual net)
+                    }
+                    foreach (Creature sheep in preyList)
+                    {
+                        // step1: give each prey it's visual percepts
+
+                        // step2: the prey update's it's state (hunger, position, fitness, etc)
+
+                        // step3: the prey runs it's weight improvement routine (through the nerual net)
+                    }
+
+                    // check if any predators ate any prey
+                    for (int i = 0; i < predatorList.Count; i++)
+                    {
+                        for (int j = 0; j < preyList.Count; j++)
+                        {
+                            if (Vector.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch)
+                            {
+                                // step1: kill the sheep
+
+                                // step2: change any fitness/eat count values accordingly
+                            }
+                        }
+
+                        // keeps track of the index of the best predator
+                        if (predatorList[i].fitness > bestPredatorFitness)
+                        {
+                            bestPredatorFitness = predatorList[i].fitness;
+                            bestPredatorIndex = i;
+                        }
+                    }
+
+                    // keeps track of the index of the best prey
+                    for (int i = 0; i < preyList.Count; i++)
+                    {
+                        if (preyList[i].fitness > bestPreyFitness)
+                        {
+                            bestPreyFitness = preyList[i].fitness;
+                            bestPreyIndex = i;
+                        }
+                    }
+
+                    // increment the tick counter
+                    ticks++;
+                }
+                else
+                {
+                    // CONSOLE OUTPUT
+                        // output any statistis that should be outputted after each generation here
+
+                    // UPDATE PREDATORS
+                        // step1: gather semi-supervised data
+
+                        // step2: run semi-supervised routine, output new weights
+
+                        // step3: mutate new weights and place them back in predators
+
+                    // UPDATE PREY
+                        // step1: gather semi-supervised data
+
+                        // step2: run semi-supervised routine, output new weights
+
+                        // step3: mutate new weights and place them back in prey
+
+
+                    // reset simulation for next generation
+                    ticks = 0;
+                    bestPredatorFitness = 0;
+                    bestPredatorIndex = 0;
+
+                    foreach (Creature predator in predatorList)
+                    {
+                        predator.reset();
+                    }
+                    foreach (Creature sheep in preyList)
+                    {
+                        sheep.reset();
+                    }
+                }
+
+            } while (loop && ticks != 0);
 
             base.Update(gameTime);
         }
@@ -83,7 +245,45 @@ namespace PredatorPrey
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            // draw the predators
+            for (int i = 0; i < predatorList.Count; i++)
+            {
+                if (i == bestPredatorIndex) // draw the best predator
+                {
+                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.Tomato, (float)predatorList[i].getAngle(), centerPoint, 1.5f, SpriteEffects.None, 0);
+                }
+                else // draw the other predators
+                {
+                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.Turquoise, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                }
+            }
+            // draw the prey
+            for (int i = 0; i < preyList.Count; i++)
+            {
+                if (i == bestPreyIndex)
+                {
+                    spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.SpringGreen, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                }
+                else
+                {
+                    spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.White, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                }
+            }
+
+            // render text info to screen
+
+            spriteBatch.DrawString(font, "Predator", predatorText1, Color.Tomato);
+            //spriteBatch.DrawString(font, "Generation: " + predatorGenAlg.generationCount, predatorText2, Color.Tomato);
+            //spriteBatch.DrawString(font, "Best Fitness: " + predatorGenAlg.bestFitness, predatorText3, Color.Tomato);
+            //spriteBatch.DrawString(font, "Average Fitness: " + predatorGenAlg.getAverageFitness(), predatorText4, Color.Tomato);
+            spriteBatch.DrawString(font, "Sheep", preyText1, Color.DarkOrange);
+            //spriteBatch.DrawString(font, "Generation: " + sheepGenAlg.generationCount, sheepText2, Color.DarkOrange);
+            //spriteBatch.DrawString(font, "Best Fitness: " + sheepGenAlg.bestFitness, sheepText3, Color.DarkOrange);
+            //spriteBatch.DrawString(font, "Average Fitness: " + sheepGenAlg.getAverageFitness(), sheepText4, Color.DarkOrange);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
