@@ -10,66 +10,78 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace ShapeMatching
+namespace PredatorPrey
 {
     class ShapeMatcher
     {
-
-        ArrayList<int[,]> initialHistograms;
-        ArrayList<Classification> types;
-        public ShapeMatcher(Texture2D[] initialTextures,ArrayList<Classifications> type)
+        public const int boxNum1 = 10;
+        public const int boxNum2 = 10;
+        List<int[,]> initialHistograms;
+        List<Classification> types;
+        List<Vector> directions;
+        public ShapeMatcher(Texture2D[] initialTextures,List<Classification> type, List<Vector> direction)
         {
+            
             types = type;
-            for(int i; i<initialTextures.Length;i++)
+            directions = direction;
+            for(int i=0; i<initialTextures.Length;i++)
             {
-                int width = initialTextues[i].Width;
+                int width = initialTextures[i].Width;
                 int height = initialTextures[i].Height;
                 int max = Math.Max(width, height);
                 int temp = width*height;
                 Color[] list = new Color[temp];
                 initialTextures[0].GetData<Color>(list,0,temp);
-                int[,] tempImage = newint[max, max];
+                int[,] tempImage = new int[max, max];
                 if (width == max)
                 {
-                    for (int j; j < list.Length; j++)
+                    for (int j=0; j < list.Length; j++)
                     {
-                        if (list[j].equals(Color.Black))
+                        if (list[j].Equals(Color.Black))
                             tempImage[j % width, j / width+((max-height)/2)] = 1;
                     }
                 }
                 else
                 {
-                    for (int j; j < list.Length; j++)
+                    for (int j=0; j < list.Length; j++)
                     {
-                        if (list[j].equals(Color.Black))
+                        if (list[j].Equals(Color.Black))
                             tempImage[j % width+((max-width)/2), j / width] = 1;
                     }
                 }
-                initialHistograms.add(createHistogram(tempImage,width,height));
+                initialHistograms.Add(createHistogram(tempImage,max,max));
             }
             
         }
 
-        public VisualCollection look(Creature creat, Color[] visionArea)
+        public VisionContainer look(Creature creat, Color[] visionArea)
         {
 
         }
 
-        private ArrayList<int[,]> findObjects(Color[] list,int width, int height)
+        private VisionContainer findObjects(Creature creat, Color[] visionArea,int width, int height)
         {
+            VisionContainer container = new VisionContainer();
             int count = 0;
             int countStop=0;
-            int[,] thing;
-            Vector previousDirection = Vector.Zero;
+            Vector2 previousDirection = Vector2.Zero;
             int leftMostPoint = 100;
             int rightMostPoint = 0;
             int topMostPoint = 100;
             int bottomMostPoint = 0;
             bool inObject = false;
-            while (count < list.Length)
+            while (count < visionArea.Length)
             {
+                if (inObject)
+                {
+                    if (count == countStop)
+                    {
+                        visionArea[count] = Color.Red;
+                        container.add(detect(creat, visionArea, topMostPoint,bottomMostPoint,leftMostPoint,rightMostPoint,width,height));
+                    }
+                }
 
-                if (list[count].Equals(Color.Black))
+                if (visionArea[count].Equals(Color.Black))
                 {
                     if (inObject)
                     {
@@ -82,33 +94,94 @@ namespace ShapeMatching
                         else if (count / width < topMostPoint)
                             topMostPoint = count;
 
-                        if (previousDirection.X != 1 && list[count + 1].Equals(Color.Black))
+                        if (previousDirection.X != 1 && visionArea[count + 1].Equals(Color.Black))
+                        {
                             count++;
-                        else if (previousDirection.Y == -1 && list[count - width].equals(Color.Black))
+                        }
+                        else if (previousDirection.Y == -1 && visionArea[count - width].Equals(Color.Black))
+                        {
                             count = count - width;
-                        else if ((previousDirection.X != 1 && previousDirection.Y == -1) && list[count - width + 1].equals(Color.Black))
+                        }
+                        else if ((previousDirection.X != 1 && previousDirection.Y == -1) && visionArea[count - width + 1].Equals(Color.Black))
+                        {
                             count = count - width + 1;
-                        else if (previousDirection.Y == 1 && list[count + width].equals(Color.Black))
-                            count = count + Width;
-                        else if ((previousDirection.X != 1 && previousDirection.Y == 1) && list[count + width + 1].equals(Color.Black))
+                        }
+                        else if (previousDirection.Y == 1 && visionArea[count + width].Equals(Color.Black))
+                        {
+                            count = count + width;
+                        }
+                        else if ((previousDirection.X != 1 && previousDirection.Y == 1) && visionArea[count + width + 1].Equals(Color.Black))
+                        {
                             count = count + width + 1;
-                        else if ((previousDirection.X != -1 && previousDirection.Y == -1) && list[count - width - 1].equals(Color.Black))
+                        }
+                        else if ((previousDirection.X != -1 && previousDirection.Y == -1) && visionArea[count - width - 1].Equals(Color.Black))
+                        {
                             count = count - width - 1;
-                        else if ((previousDirection.X!=-1 && previousDirection.Y==1) && list[count + witdh - 1].equals(Color.Black))
+                        }
+                        else if ((previousDirection.X != -1 && previousDirection.Y == 1) && visionArea[count + width - 1].Equals(Color.Black))
+                        {
                             count = count + width - 1;
-                        else if (previousDirection.X!=-1 && list[count - 1].equals(Color.Black))
+                        }
+                        else if (previousDirection.X != -1 && visionArea[count - 1].Equals(Color.Black))
+                        {
                             count--;
+                        }
+                        visionArea[count] = Color.Red;
                     }
                     else
-                    { 
-                        countStop=count;
-                        inObject=true;
+                    {
+                        countStop = count;
+                        inObject = true;
+                        leftMostPoint = count;
+                        rightMostPoint = count;
+                        topMostPoint = count;
+                        bottomMostPoint = count;
                     }
                 }
+                else
+                    count++;
             }
         }
 
-        private int[,] createHistogram(int[,] shape, int width, int height, int boxNum1, int boxNum2)
+        private ObjectSeen detect(Creature creat, Color[] visionArea2, int top, int bottom, int left, int right, int areaWidth, int areaHeight)
+        {
+            int best = int.MaxValue;
+            ObjectSeen bestObject = null;
+            int tempHist;
+            int width = right-left;
+            int height = bottom-top;
+            int max = Math.Max(width, height);
+            int[,] tempImage = new int[width,height];
+            if (width == max)
+            {
+                for (int j=0; j < visionArea2.Length; j++)
+                {
+                    if (visionArea2[j].Equals(Color.Black))
+                        tempImage[j % width, j / width + ((max - height) / 2)] = 1;
+                }
+            }
+            else
+            {
+                for (int j=0; j < visionArea2.Length; j++)
+                {
+                    if (visionArea2[j].Equals(Color.Black))
+                        tempImage[j % width + ((max - width) / 2), j / width] = 1;
+                }
+            }
+            tempImage = createHistogram(tempImage, max, max);
+            for (int i = 0; i < initialHistograms.Count; i++)
+            {
+                tempHist = compareHistograms(tempImage, initialHistograms[i]);
+                if(tempHist<best)
+                {
+                    best = tempHist;
+                    bestObject = new ObjectSeen(types[i / 8], new Vector(Math.Abs(creat.getPosition().X - (left + width / 2)), Math.Abs(creat.getPosition().Y - (top + height / 2))), directions[i % 8]);
+                }
+            }
+            return bestObject;
+        }
+
+        private int[,] createHistogram(int[,] shape, int width, int height)
         {
             int boxDivider1 = (width + height) / boxNum1;
             int boxDivider2 = 360 / boxNum2;
@@ -172,6 +245,28 @@ namespace ShapeMatching
                 }
             }
             return hist;
+        }
+
+        private int compareHistograms(int[,] hist1, int[,] hist2)
+        {
+            int x;
+            int y;
+            int cost=0;
+            for (x = 0; x <boxNum1; x++)
+            {
+                for (y = 0; y <boxNum2; y++)
+                {
+                    try
+                    {
+                        if (hist1[x, y] - hist2[x, y] != 0)
+                        {
+                            cost = cost + (int)((Math.Pow((hist1[x, y] - hist2[x, y]), 2)) / (hist1[x, y] + hist2[x, y]));
+                        }
+                    }
+                    catch (DivideByZeroException e) { }
+                }
+            }
+            return cost;
         }
     }
 }
