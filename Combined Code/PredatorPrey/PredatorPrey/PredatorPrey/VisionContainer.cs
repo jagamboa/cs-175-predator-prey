@@ -27,7 +27,7 @@ namespace PredatorPrey
 
     class ObjectSeen
     {
-        Classification type;
+        public Classification type;
         Vector position;
         Vector direction;
 
