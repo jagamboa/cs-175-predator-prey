@@ -16,6 +16,7 @@ namespace PredatorPrey
     {
         public const int boxNum1 = 10;
         public const int boxNum2 = 10;
+        public const double histThreshold = .1;
         List<int[,]> initialHistograms;
         List<Classification> types;
         List<Vector> directions;
@@ -54,11 +55,6 @@ namespace PredatorPrey
             
         }
 
-        public VisionContainer look(Creature creat, Color[] visionArea)
-        {
-
-        }
-
         private VisionContainer findObjects(Creature creat, Color[] visionArea,int width, int height)
         {
             VisionContainer container = new VisionContainer();
@@ -78,6 +74,12 @@ namespace PredatorPrey
                     {
                         visionArea[count] = Color.Red;
                         container.add(detect(creat, visionArea, topMostPoint,bottomMostPoint,leftMostPoint,rightMostPoint,width,height));
+                        count= countStop+1;
+                    }
+                    else if(visionArea[count].Equals(Color.Red))
+                    {
+                        container.add(detect(creat, visionArea, topMostPoint, bottomMostPoint, leftMostPoint, rightMostPoint, width, height));
+                        count = countStop + 1;
                     }
                 }
 
@@ -141,13 +143,14 @@ namespace PredatorPrey
                 else
                     count++;
             }
+            return container;
         }
 
         private ObjectSeen detect(Creature creat, Color[] visionArea2, int top, int bottom, int left, int right, int areaWidth, int areaHeight)
         {
-            int best = int.MaxValue;
+            double best = int.MaxValue;
             ObjectSeen bestObject = null;
-            int tempHist;
+            double tempHist;
             int width = right-left;
             int height = bottom-top;
             int max = Math.Max(width, height);
@@ -178,6 +181,8 @@ namespace PredatorPrey
                     bestObject = new ObjectSeen(types[i / 8], new Vector(Math.Abs(creat.getPosition().X - (left + width / 2)), Math.Abs(creat.getPosition().Y - (top + height / 2))), directions[i % 8]);
                 }
             }
+            if (best > histThreshold)
+                bestObject.type = Classification.Unknown;
             return bestObject;
         }
 
@@ -247,11 +252,11 @@ namespace PredatorPrey
             return hist;
         }
 
-        private int compareHistograms(int[,] hist1, int[,] hist2)
+        private double compareHistograms(int[,] hist1, int[,] hist2)
         {
             int x;
             int y;
-            int cost=0;
+            double cost=0;
             for (x = 0; x <boxNum1; x++)
             {
                 for (y = 0; y <boxNum2; y++)
@@ -260,7 +265,7 @@ namespace PredatorPrey
                     {
                         if (hist1[x, y] - hist2[x, y] != 0)
                         {
-                            cost = cost + (int)((Math.Pow((hist1[x, y] - hist2[x, y]), 2)) / (hist1[x, y] + hist2[x, y]));
+                            cost = cost + ((Math.Pow((hist1[x, y] - hist2[x, y]), 2)) / (hist1[x, y] + hist2[x, y]));
                         }
                     }
                     catch (DivideByZeroException e) { }
