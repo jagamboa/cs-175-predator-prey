@@ -9,6 +9,7 @@ namespace PredatorPrey
 {
     class Creature
     {
+
         public NeuralNetwork brain;
 
         public int fitness { get; private set; }
@@ -36,6 +37,8 @@ namespace PredatorPrey
         public double leftSideSpeed;
         public double rightSideSpeed;
 
+        public double hunger;
+        public bool eating;
 
         public Creature(Vector position)
         {
@@ -48,6 +51,8 @@ namespace PredatorPrey
             this.position = new Vector(initPos.X, initPos.Y);
             this.direction = new Vector(initDirection.X, initDirection.Y);
 
+            hunger = Parameters.startingHunger;
+            eating = true;
             fitness = 0;
             leftSideSpeed = 0;
             rightSideSpeed = 0;
@@ -56,6 +61,16 @@ namespace PredatorPrey
         public List<double> run(List<double> inputs)
         {
             return brain.run(inputs);
+        }
+
+        public void eat()
+        {
+            hunger += Parameters.eatingAddition;
+        }
+
+        public void starve()
+        {
+            hunger -= Parameters.starvingSubtract;
         }
 
         public int genomeLength()
@@ -90,6 +105,13 @@ namespace PredatorPrey
             position.Y = Parameters.random.Next(Parameters.worldHeight);
 
             direction = initDirection;
+        }
+
+        //this is to calculate the personal fitness function
+        //but must be overrided in the prey and predetor classes
+        public double calculateFitness()
+        {
+            return 0;
         }
 
         public void incrementFitness()
@@ -145,6 +167,12 @@ namespace PredatorPrey
                 position.Y -= Parameters.worldHeight;
             if (position.Y < 0)
                 position.Y = Parameters.worldHeight + position.Y;
+
+            //update the hunger
+            if (eating)
+                eat();
+            else
+                starve();
         }
     }
 }

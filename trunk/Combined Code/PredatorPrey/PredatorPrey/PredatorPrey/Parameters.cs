@@ -28,5 +28,16 @@ namespace PredatorPrey
         public static int worldHeight;
 
         public static Random random;
+
+        //these are values for the creatures
+        public const double startingHunger = 5;
+        public const int eatingAddition = 1;
+        public const double starvingSubtract =.1;
+
+        //these are values for the weights that determin the fitness function
+        public const double hungerWeight = .5;
+        public const double numberOfWolvesWeight = .2;
+        public const double closestWolfWeight = .3;
+
     }
 }

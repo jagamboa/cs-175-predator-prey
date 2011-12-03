@@ -23,6 +23,14 @@ namespace PredatorPrey
         {
             objectsSeen.Clear();
         }
+        public ObjectSeen getSeenObject(int index)
+        {
+            return objectsSeen[index];
+        }
+        public int size()
+        {
+            return objectsSeen.Count;
+        }
     }
 
     class ObjectSeen
