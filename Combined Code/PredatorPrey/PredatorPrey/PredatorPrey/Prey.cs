@@ -7,6 +7,7 @@ namespace PredatorPrey
 {
     class Prey : Creature
     {
+
         public Prey(Vector position) : base(position)
         {
 
@@ -34,11 +35,13 @@ namespace PredatorPrey
             //              ???????
         }
 
-        public int calculateFitness()
+        //this is just my first idea, feel free to change it if you think of something
+        //also the weights are just temporary values right now
+        public override double calculateFitness()
         {
-            // step1: ???????
-
-            return 0;
+            double numberOfWolves = 0;
+            double closestWolf = 0;
+            return Parameters.hungerWeight * base.hunger + Parameters.numberOfWolvesWeight * numberOfWolves + Parameters.closestWolfWeight * closestWolf;
         }
     }
 }
