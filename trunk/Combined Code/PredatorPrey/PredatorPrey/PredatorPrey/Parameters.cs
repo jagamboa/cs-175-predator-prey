@@ -20,7 +20,7 @@ namespace PredatorPrey
         public const int numberOfFittestCopies = 5;
         public const int numberOfWolves = 20;
         public const int numberOfSheep = 40;
-        public const int numberOfTicks = 2000;
+        public const int numberOfUpdates = 2000;
         public const double maxRotation = 0.1;
         public const double maxMoveSpeed = 2;
         public const int minDistanceToTouch = 15;

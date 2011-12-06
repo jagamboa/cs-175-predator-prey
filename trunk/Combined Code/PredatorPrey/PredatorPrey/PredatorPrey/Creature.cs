@@ -27,10 +27,10 @@ namespace PredatorPrey
             }
         }
 
-        public Vector initPos;
-        public Vector initDirection;
-        public Vector position;
-        public Vector direction;
+        public Vector2 initPos;
+        public Vector2 initDirection;
+        public Vector2 position;
+        public Vector2 direction;
 
         public double rotation;
 
@@ -40,16 +40,16 @@ namespace PredatorPrey
         public double hunger;
         public bool eating;
 
-        public Creature(Vector position)
+        public Creature(Vector2 position)
         {
             brain = new NeuralNetwork();
             rotation = Parameters.random.NextDouble() * Math.PI * 2;
 
             initPos = position;
-            initDirection = new Vector((float)-Math.Sin(rotation), (float)Math.Cos(rotation));
+            initDirection = new Vector2((float)-Math.Sin(rotation), (float)Math.Cos(rotation));
 
-            this.position = new Vector(initPos.X, initPos.Y);
-            this.direction = new Vector(initDirection.X, initDirection.Y);
+            this.position = new Vector2(initPos.X, initPos.Y);
+            this.direction = new Vector2(initDirection.X, initDirection.Y);
 
             hunger = Parameters.startingHunger;
             eating = true;
@@ -109,7 +109,7 @@ namespace PredatorPrey
 
         //this is to calculate the personal fitness function
         //but must be overrided in the prey and predetor classes
-        public double calculateFitness()
+        public virtual double calculateFitness()
         {
             return 0;
         }

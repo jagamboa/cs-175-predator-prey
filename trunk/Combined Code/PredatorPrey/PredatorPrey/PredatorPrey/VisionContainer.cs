@@ -37,10 +37,10 @@ namespace PredatorPrey
     class ObjectSeen
     {
         public Classification type;
-        Vector position;
-        Vector direction;
+        Vector2 position;
+        Vector2 direction;
 
-        public ObjectSeen(Classification type, Vector position, Vector direction)
+        public ObjectSeen(Classification type, Vector2 position, Vector2 direction)
         {
             this.type = type;
             this.position = position;
