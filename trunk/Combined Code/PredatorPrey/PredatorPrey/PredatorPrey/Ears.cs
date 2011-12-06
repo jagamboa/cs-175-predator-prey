@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
-namespace ShapeMatching
+namespace PredatorPrey
 {
     class Ears
     {
-        AudioCollection list;
+        /*AudioCollection list;
         public Ears(Creature creat, Creature[] otherCreatures)
         {
             list = new AuditoryCollection();
@@ -15,6 +16,6 @@ namespace ShapeMatching
             {
 
             }
-        }
+        }*/
     }
 }
