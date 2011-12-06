@@ -20,12 +20,24 @@ namespace PredatorPrey
         List<int[,]> initialHistograms;
         List<Classification> types;
         List<Vector2> directions;
-        public ShapeMatcher(Texture2D[] initialTextures,List<Classification> type, List<Vector2> direction)
+        public ShapeMatcher(List<Texture2D> initialTextures)
         {
+
+            types = new List<Classification>();
+            types.Add(Classification.Predator);
+            types.Add(Classification.Prey);
             
-            types = type;
-            directions = direction;
-            for(int i=0; i<initialTextures.Length;i++)
+            directions = new List<Vector2>();
+            directions.Add(new Vector2(0));
+            directions.Add(new Vector2((float)Math.PI/4));
+            directions.Add(new Vector2((float)Math.PI / 2));
+            directions.Add(new Vector2((float)(3 * Math.PI) / 4));
+            directions.Add(new Vector2((float)Math.PI));
+            directions.Add(new Vector2((float)(5 * Math.PI) / 4));
+            directions.Add(new Vector2((float)(3*Math.PI) / 2));
+            directions.Add(new Vector2((float)(7 * Math.PI) / 4));
+            initialHistograms = new List<int[,]>();
+            for(int i=0; i<initialTextures.Count;i++)
             {
                 int width = initialTextures[i].Width;
                 int height = initialTextures[i].Height;
@@ -51,6 +63,26 @@ namespace PredatorPrey
                     }
                 }
                 initialHistograms.Add(createHistogram(tempImage,max,max));
+
+                /*int[,] rotatedImage = new int[max,max];
+                double angle;
+                int newX;
+                int newY;
+                for (angle = 0; angle < (2 * Math.PI); angle +=Math.PI / 4)
+                {
+                    for (int x = 0; x < max; x++)
+                    {
+                        for (int y = 0; y < max; y++)
+                        {
+                            newX = (int)(x * Math.Cos(angle) - y * Math.Sign(angle));
+                            newY = (int)(x * Math.Sin(angle) + y * Math.Cos(angle));
+                            if(newX<max && newY<max)
+                                rotatedImage[newX,newY] = tempImage[x, y];
+                        }
+                    }
+                    initialHistograms.Add(createHistogram(rotatedImage,max,max));
+                    directions.Add(new Vector2((float)angle));
+                }*/
             }
             
         }
@@ -192,12 +224,13 @@ namespace PredatorPrey
             int boxDivider2 = 360 / boxNum2;
             int[,] hist = new int[width + height / boxDivider1, 360 / boxDivider2];
             int[] currentPoint = new int[2];
-            currentPoint[0] = 0;
-            int counter = 0;
+            currentPoint[0] = width/2;
+            currentPoint[1] = height / 2;
+            //int counter = 0;
 
             //this finds the initial point to look at
             //this will be changed so that it looks at all of the points
-            while (currentPoint[0] == 0)
+            /*while (currentPoint[0] == 0)
             {
                 if (shape[counter, height / 2] == 1)
                 {
@@ -206,7 +239,7 @@ namespace PredatorPrey
                 }
                 else
                     counter++;
-            }
+            }*/
 
             int x;
             int y;
