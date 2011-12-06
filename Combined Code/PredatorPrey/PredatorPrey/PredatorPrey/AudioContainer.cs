@@ -8,14 +8,14 @@ namespace PredatorPrey
 {
     class AudioContainer
     {
-        List<Vector> objectsHeard;
+        List<Vector2> objectsHeard;
 
         public AudioContainer()
         {
-            objectsHeard = new List<Vector>();
+            objectsHeard = new List<Vector2>();
         }
 
-        public void add(Vector v)
+        public void add(Vector2 v)
         {
             objectsHeard.Add(v);
         }
@@ -25,7 +25,7 @@ namespace PredatorPrey
             objectsHeard.Clear();
         }
 
-        public Vector getHeardObject(int index)
+        public Vector2 getHeardObject(int index)
         {
             return objectsHeard[index];
         }

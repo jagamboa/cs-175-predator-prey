@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace PredatorPrey
+namespace NotInProject
 {
     class Vector
     {
@@ -55,7 +55,7 @@ namespace PredatorPrey
             return new Vector(a.X / magnitude, a.Y / magnitude);
         }
 
-        public static Vector2 Vector2(Vector a)
+        public static Vector2 Vector2(Vector2 a)
         {
             return new Vector2((float)a.X, (float)a.Y);
         }

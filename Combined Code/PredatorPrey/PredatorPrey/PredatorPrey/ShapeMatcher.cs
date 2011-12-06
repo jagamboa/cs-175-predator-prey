@@ -19,8 +19,8 @@ namespace PredatorPrey
         public const double histThreshold = .1;
         List<int[,]> initialHistograms;
         List<Classification> types;
-        List<Vector> directions;
-        public ShapeMatcher(Texture2D[] initialTextures,List<Classification> type, List<Vector> direction)
+        List<Vector2> directions;
+        public ShapeMatcher(Texture2D[] initialTextures,List<Classification> type, List<Vector2> direction)
         {
             
             types = type;
@@ -178,7 +178,7 @@ namespace PredatorPrey
                 if(tempHist<best)
                 {
                     best = tempHist;
-                    bestObject = new ObjectSeen(types[i / 8], new Vector(Math.Abs(creat.getPosition().X - (left + width / 2)), Math.Abs(creat.getPosition().Y - (top + height / 2))), directions[i % 8]);
+                    bestObject = new ObjectSeen(types[i / 8], new Vector2(Math.Abs(creat.getPosition().X - (left + width / 2)), Math.Abs(creat.getPosition().Y - (top + height / 2))), directions[i % 8]);
                 }
             }
             if (best > histThreshold)

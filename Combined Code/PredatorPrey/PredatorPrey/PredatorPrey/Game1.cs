@@ -79,6 +79,9 @@ namespace PredatorPrey
         /// </summary>
         protected override void Initialize()
         {
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.ApplyChanges();
             Parameters.random = new Random();
             Parameters.worldWidth = GraphicsDevice.Viewport.Width;
             Parameters.worldHeight = GraphicsDevice.Viewport.Height;
@@ -89,7 +92,7 @@ namespace PredatorPrey
             for (int i = 0; i < Parameters.numberOfWolves; i++)
             {
                 // random position
-                Vector pos = new Vector(Parameters.random.Next(Parameters.worldWidth),
+                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                                                 Parameters.random.Next(Parameters.worldHeight));
                 
                 predatorList.Add(new Predator(pos));
@@ -98,7 +101,7 @@ namespace PredatorPrey
             for (int i = 0; i < Parameters.numberOfSheep; i++)
             {
                 // random position
-                Vector pos = new Vector(Parameters.random.Next(Parameters.worldWidth),
+                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                                                 Parameters.random.Next(Parameters.worldHeight));
 
                 preyList.Add(new Prey(pos));
@@ -150,10 +153,6 @@ namespace PredatorPrey
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
             keyState = Keyboard.GetState();
 
             if (keyState.IsKeyDown(Keys.Space) && !spaceDown)
@@ -171,7 +170,7 @@ namespace PredatorPrey
             do
             {
                 // if the simulation has not timed out
-                if (updates < Parameters.numberOfTicks)
+                if (updates < Parameters.numberOfUpdates)
                 {
                     foreach (Creature predator in predatorList)
                     {
@@ -195,7 +194,7 @@ namespace PredatorPrey
                     {
                         for (int j = 0; j < preyList.Count; j++)
                         {
-                            if (Vector.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch)
+                            if (Vector2.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch)
                             {
                                 // step1: kill the sheep
 
@@ -285,7 +284,7 @@ namespace PredatorPrey
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Gray);
 
             spriteBatch.Begin();
 
