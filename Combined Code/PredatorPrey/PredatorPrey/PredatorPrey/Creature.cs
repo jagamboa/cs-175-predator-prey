@@ -52,10 +52,10 @@ namespace PredatorPrey
             this.direction = new Vector2(initDirection.X, initDirection.Y);
 
             hunger = Parameters.startingHunger;
-            eating = true;
+            eating = false;
             fitness = 0;
-            leftSideSpeed = 0;
-            rightSideSpeed = 0;
+            leftSideSpeed = 1;
+            rightSideSpeed = 1;
         }
 
         public List<double> run(List<double> inputs)
@@ -96,7 +96,7 @@ namespace PredatorPrey
 
         public Vector2 getPosition()
         {
-            return new Vector2((float)position.X, (float)position.Y);
+            return position;
         }
 
         public void reposition()
