@@ -26,6 +26,7 @@ namespace PredatorPrey
         //
         //
         //
+        ShapeMatcher sm;
 
         // variables for Semi Supervised
         //
@@ -45,6 +46,7 @@ namespace PredatorPrey
 
         Texture2D predatorSprite;
         Texture2D preySprite;
+        Texture2D backBufferData;
         SpriteFont font;
         Vector2 centerPoint = new Vector2(5, 10);
         Vector2 predatorText1 = new Vector2(5, 8);
@@ -135,6 +137,12 @@ namespace PredatorPrey
             predatorSprite = Content.Load<Texture2D>("Art/Wolf");
             preySprite = Content.Load<Texture2D>("Art/Sheep");
             font = Content.Load<SpriteFont>("Font");
+
+            //initialize the shapeMatcher with the textures
+            List<Texture2D> l = new List<Texture2D>();
+            l.Add(predatorSprite);
+            l.Add(preySprite);
+            sm = new ShapeMatcher(l);
         }
 
         /// <summary>
@@ -172,16 +180,129 @@ namespace PredatorPrey
                 // if the simulation has not timed out
                 if (updates < Parameters.numberOfUpdates)
                 {
+                    backBufferData = new Texture2D(
+                            GraphicsDevice,
+                            GraphicsDevice.PresentationParameters.BackBufferWidth,
+                            GraphicsDevice.PresentationParameters.BackBufferHeight);
+                    Color[] visionRect;
+                    VisionContainer eyes;
+                    int rectStartX;
+                    int rectStartY;
+                    int width;
+                    int height;
                     foreach (Creature predator in predatorList)
                     {
+                        //the creatures will not be able to see past the edge of the screen
+                        //therefore this checks if it's vision intersects with any of the walls
+                        width = Parameters.predatorVisionWidth;
+                        height = Parameters.predatorVisionHeight;
+                        rectStartX = (int)predator.position.X - width/2;
+                        rectStartY = (int)predator.position.Y - height / 2;
+                        if (predator.position.X + width/2 > backBufferData.Width&& predator.position.Y+height/2>backBufferData.Height)
+                        {
+                            width = width / 2 +  backBufferData.Width-(int)predator.position.X;
+                            height = height / 2 +  backBufferData.Height-(int)predator.position.Y;
+                        }
+                        else if(predator.position.X - width / 2 < 0 && predator.position.Y + height / 2 > backBufferData.Height)
+                        {
+                            width = width / 2 + (int)predator.position.X;
+                            height = height / 2 +  backBufferData.Height - (int)predator.position.Y;
+                            rectStartX = 0;
+                        }
+                        else if (predator.position.X - width / 2 < 0 && predator.position.Y - height / 2 < 0)
+                        {
+                            rectStartX = 0;
+                            rectStartY = 0;
+                            width = width / 2 + (int)predator.position.X;
+                            height = height / 2 + (int)predator.position.Y;
+                        }
+                        else if (predator.position.X - width / 2 < 0 && predator.position.Y + height / 2 > backBufferData.Height)
+                        {
+                            width = width / 2 + backBufferData.Width - (int)predator.position.X;
+                            height = height / 2 + (int)predator.position.Y;
+                            rectStartY = 0;
+                        }
+                        else if (predator.position.X + width / 2 > backBufferData.Width)
+                        {
+                            width = width / 2 + backBufferData.Width - (int)predator.position.X;
+                        }
+                        else if (predator.position.X - width / 2 < 0)
+                        {
+                            width = width / 2 + (int)predator.position.X;
+                            rectStartX = 0;
+                        }
+                        else if (predator.position.Y + height / 2 > backBufferData.Height)
+                        {
+                            height = height / 2 + backBufferData.Height - (int)predator.position.Y;
+                        }
+                        else if (predator.position.Y - height / 2 < 0)
+                        {
+                            height = height / 2 + (int)predator.position.Y;
+                            rectStartY = 0;
+                        }
+
+                        visionRect = new Color[height*width];
+                        backBufferData.GetData<Color>(0, new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
+                        eyes =sm.findObjects(predator, visionRect, width, height);
+                        predator.update(eyes);
                         // step1: gather this predator's visual percepts
 
                         // step2: give the predator it's visual percepts and update's it's state (hunger, position, fitness, etc)
 
                         // step3: the predator runs it's weight improvement routine (through the nerual net)
                     }
-                    foreach (Creature sheep in preyList)
+                    foreach (Creature prey in preyList)
                     {
+                        width = Parameters.preyVisionWidth;
+                        height = Parameters.preyVisionHeight;
+                        rectStartX = (int)prey.position.X - width / 2;
+                        rectStartY = (int)prey.position.Y - height / 2;
+                        if (prey.position.X + width / 2 > backBufferData.Width && prey.position.Y + height / 2 > backBufferData.Height)
+                        {
+                            width = width / 2 + backBufferData.Width - (int)prey.position.X;
+                            height = height / 2 + backBufferData.Height - (int)prey.position.Y;
+                        }
+                        else if (prey.position.X - width / 2 < 0 && prey.position.Y + height / 2 > backBufferData.Height)
+                        {
+                            width = width / 2 + (int)prey.position.X;
+                            height = height / 2 + backBufferData.Height - (int)prey.position.Y;
+                            rectStartX = 0;
+                        }
+                        else if (prey.position.X - width / 2 < 0 && prey.position.Y - height / 2 < 0)
+                        {
+                            rectStartX = 0;
+                            rectStartY = 0;
+                            width = width / 2 + (int)prey.position.X;
+                            height = height / 2 + (int)prey.position.Y;
+                        }
+                        else if (prey.position.X - width / 2 < 0 && prey.position.Y + height / 2 > backBufferData.Height)
+                        {
+                            width = width / 2 + backBufferData.Width - (int)prey.position.X;
+                            height = height / 2 + (int)prey.position.Y;
+                            rectStartY = 0;
+                        }
+                        else if (prey.position.X + width / 2 > backBufferData.Width)
+                        {
+                            width = width / 2 + backBufferData.Width - (int)prey.position.X;
+                        }
+                        else if (prey.position.X - width / 2 < 0)
+                        {
+                            width = width / 2 + (int)prey.position.X;
+                            rectStartX = 0;
+                        }
+                        else if (prey.position.Y + height / 2 > backBufferData.Height)
+                        {
+                            height = height / 2 + backBufferData.Height - (int)prey.position.Y;
+                        }
+                        else if (prey.position.Y - height / 2 < 0)
+                        {
+                            height = height / 2 + (int)prey.position.Y;
+                            rectStartY = 0;
+                        }
+                        visionRect = new Color[height * width];
+                        backBufferData.GetData<Color>(0, new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
+                        eyes = sm.findObjects(prey, visionRect, width, height);
+                        prey.update(eyes);
                         // step1: gather this prey's visual percepts
 
                         // step2: give the prey it's visual percepts and update's it's state (hunger, position, fitness, etc)
@@ -194,10 +315,12 @@ namespace PredatorPrey
                     {
                         for (int j = 0; j < preyList.Count; j++)
                         {
-                            if (Vector2.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch)
+                            int positionX = (int)(preyList[j].position.X -predatorList[i].position.X);
+                            int positionY = (int)(preyList[j].position.Y -predatorList[i].position.Y);
+                            if (Vector2.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch && positionX*predatorList[i].direction.X>0 && positionY*predatorList[i].direction.Y>0)
                             {
                                 // step1: kill the sheep
-
+                                preyList.RemoveAt(j);
                                 // step2: change any fitness/eat count values accordingly
                             }
                         }

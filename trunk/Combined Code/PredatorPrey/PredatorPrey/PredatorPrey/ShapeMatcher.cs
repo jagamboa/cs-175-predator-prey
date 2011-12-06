@@ -87,7 +87,7 @@ namespace PredatorPrey
             
         }
 
-        private VisionContainer findObjects(Creature creat, Color[] visionArea,int width, int height)
+        public VisionContainer findObjects(Creature creat, Color[] visionArea,int width, int height)
         {
             VisionContainer container = new VisionContainer();
             int count = 0;

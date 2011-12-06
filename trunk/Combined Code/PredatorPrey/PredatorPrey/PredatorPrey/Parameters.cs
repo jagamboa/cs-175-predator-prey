@@ -23,7 +23,7 @@ namespace PredatorPrey
         public const int numberOfUpdates = 2000;
         public const double maxRotation = 0.1;
         public const double maxMoveSpeed = 2;
-        public const int minDistanceToTouch = 15;
+        public const int minDistanceToTouch = 20;
 
         public static int worldWidth;
         public static int worldHeight;
@@ -39,6 +39,12 @@ namespace PredatorPrey
         public const double hungerWeight = .5;
         public const double numberOfWolvesWeight = .2;
         public const double closestWolfWeight = .3;
+
+        //these are for size of vision
+        public const int predatorVisionWidth = 10;
+        public const int predatorVisionHeight = 10;
+        public const int preyVisionWidth = 10;
+        public const int preyVisionHeight = 10;
 
     }
 }
