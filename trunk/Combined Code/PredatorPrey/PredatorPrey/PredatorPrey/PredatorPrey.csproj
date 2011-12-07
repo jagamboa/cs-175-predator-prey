@@ -112,6 +112,7 @@
     <Compile Include="Creature.cs" />
     <Compile Include="Ears.cs" />
     <Compile Include="Fluffies.cs" />
+    <Compile Include="GoalRule.cs" />
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="NeuronLayer.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Rule.cs" />
     <Compile Include="ShapeMatcher.cs" />
+    <Compile Include="SteeringRule.cs" />
     <Compile Include="Vector.cs" />
     <Compile Include="VisionContainer.cs" />
     <Compile Include="Wulffies.cs" />

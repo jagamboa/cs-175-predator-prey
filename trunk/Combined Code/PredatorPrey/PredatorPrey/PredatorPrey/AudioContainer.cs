@@ -33,7 +33,5 @@ namespace PredatorPrey
         {
             return objectsHeard.Count;
         }
-
-
     }
 }

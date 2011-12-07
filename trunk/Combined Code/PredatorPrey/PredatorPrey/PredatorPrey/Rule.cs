@@ -10,8 +10,8 @@ namespace PredatorPrey
     {
         protected NeuralNetwork ruleNet;
 
-        public abstract void run(VisionContainer vc, AudioContainer ac);
+        public abstract Vector2 run(VisionContainer vc, AudioContainer ac);
 
-        public abstract void run(Vector2 goal);
+        public abstract Vector2 run(Vector2 goal);
     }
 }

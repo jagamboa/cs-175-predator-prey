@@ -32,12 +32,6 @@ namespace PredatorPrey
         {
             return objectsSeen.Count;
         }
-        public void sortDistance()
-        {
-            // Sorts objects seen based on the distance
-            // the object is from the viewer.
-            // Closer objects come first.
-        }
     }
 
     class ObjectSeen

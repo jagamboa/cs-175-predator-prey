@@ -52,6 +52,9 @@ namespace PredatorPrey
         public const int eatTime = 20;
 
         //constants for rules
+        public const int inputsPerSensedObject = 3;
+        public const int maxVisionInput = 15 * inputsPerSensedObject;
+        public const int maxHearInput = 15 * inputsPerSensedObject;
 
         // avoidance
         public const int avoid_numOfHiddenLayers = 1;
