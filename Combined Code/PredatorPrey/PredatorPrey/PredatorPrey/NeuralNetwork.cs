@@ -15,12 +15,12 @@ namespace PredatorPrey
         private int totalNumberOfWeights;
         private List<NeuronLayer> networkLayers;
 
-        public NeuralNetwork()
+        public NeuralNetwork(int numberOfInputs, int numberOfOutputs, int numberOfHiddenLayers, int numberOfNeuronsPerHiddenLayer)
         {
-            numberOfInputs = Parameters.numberOfInputs;
-            numberOfOutputs = Parameters.numberOfOutputs;
-            numberOfHiddenLayers = Parameters.numberOfHiddenLayers;
-            numberOfNeuronsPerHiddenLayer = Parameters.numberOfNeuronsPerHiddenLayer;
+            this.numberOfInputs = numberOfInputs;
+            this.numberOfOutputs = numberOfOutputs;
+            this.numberOfHiddenLayers = numberOfHiddenLayers;
+            this.numberOfNeuronsPerHiddenLayer = numberOfNeuronsPerHiddenLayer;
             totalNumberOfWeights = 0;
 
             networkLayers = new List<NeuronLayer>(numberOfHiddenLayers + 1);
@@ -98,6 +98,31 @@ namespace PredatorPrey
             }
 
             List<double> outputs = networkLayers[0].run(inputs);
+
+            for (int i = 1; i < numberOfHiddenLayers + 1; i++)
+            {
+                outputs = networkLayers[i].run(outputs);
+            }
+
+            if (outputs.Count != numberOfOutputs)
+            {
+                throw new Exception("The number of outputs returned by this neural network (" + outputs.Count +
+                                    ") does not match the number of outputs this network should return (" + numberOfOutputs + ")");
+            }
+
+            return outputs;
+        }
+
+        // runs inputs through the neural network and returns a list of outputs
+        public List<Vector2> run(List<Vector2> inputs)
+        {
+            if (inputs.Count != numberOfInputs)
+            {
+                throw new ArgumentException("The number of inputs passed to this neural network (" + inputs.Count +
+                                            ") does not match the number of inputs this network accepts (" + numberOfInputs + ")");
+            }
+
+            List<Vector2> outputs = networkLayers[0].run(inputs);
 
             for (int i = 1; i < numberOfHiddenLayers + 1; i++)
             {

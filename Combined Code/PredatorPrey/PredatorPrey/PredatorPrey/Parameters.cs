@@ -46,8 +46,16 @@ namespace PredatorPrey
         public const int predatorVisionOffset = predatorVisionHeight/2;
         public const int preyVisionWidth = 50;
         public const int preyVisionHeight = 50;
+        public const int preyMaxVisionDist = 25;
 
         //Duration of eating
         public const int eatTime = 20;
+
+        //constants for rules
+
+        // avoidance
+        public const int avoid_numOfHiddenLayers = 1;
+        public const int avoid_numOfNeuronsPerLayer = 10;
+
     }
 }

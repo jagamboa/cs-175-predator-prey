@@ -9,6 +9,8 @@ namespace PredatorPrey
     class Prey : Creature
     {
 
+
+
         public Prey(Vector2 position) : base(position)
         {
 
@@ -44,5 +46,7 @@ namespace PredatorPrey
             double closestWolf = 0;
             return Parameters.hungerWeight * base.hunger + Parameters.numberOfWolvesWeight * numberOfWolves + Parameters.closestWolfWeight * closestWolf;
         }
+
+
     }
 }

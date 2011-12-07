@@ -103,15 +103,12 @@ namespace PredatorPrey
             for (int i = 0; i < Parameters.numberOfSheep; i++)
             {
                 // random position
-                //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
-                //                                Parameters.random.Next(Parameters.worldHeight));
+                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                                                Parameters.random.Next(Parameters.worldHeight));
 
-<<<<<<< .mine
+
                 preyList.Add(new Fluffies(pos));
-=======
-                Vector2 pos = new Vector2(130, 130);
-                preyList.Add(new Prey(pos));
->>>>>>> .r26
+
             }
 
             // Initialize Vision
