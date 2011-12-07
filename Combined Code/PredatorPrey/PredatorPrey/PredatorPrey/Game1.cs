@@ -183,6 +183,7 @@ namespace PredatorPrey
                 {
                     Color[] visionRect;
                     VisionContainer eyes;
+                    AudioContainer temp_ac = new AudioContainer();
                     int rectStartX;
                     int rectStartY;
                     int width;
@@ -242,7 +243,7 @@ namespace PredatorPrey
                         visionRect = new Color[height*width];
                         GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
                         eyes =sm.findObjects(predator, visionRect, width, height);
-                        predator.update(eyes);
+                        predator.update(eyes, temp_ac);
                         // step1: gather this predator's visual percepts
 
                         // step2: give the predator it's visual percepts and update's it's state (hunger, position, fitness, etc)
@@ -300,7 +301,7 @@ namespace PredatorPrey
                         visionRect = new Color[height * width];
                         GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
-                        prey.update(eyes);
+                        prey.update(eyes, temp_ac);
                         if (eyes.size() > 0)
                         {
                             prey.leftSideSpeed = 1;

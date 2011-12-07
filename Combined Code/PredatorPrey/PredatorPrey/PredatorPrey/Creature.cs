@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PredatorPrey
 {
-    class Creature
+    abstract class Creature
     {
 
         public NeuralNetwork brain;
@@ -118,18 +118,8 @@ namespace PredatorPrey
             return 0;
         }
 
-        public void update(VisionContainer vc)
+        public virtual void update(VisionContainer vc, AudioContainer ac)
         {
-            // Stop the creature (fluffies or wulffies)
-            if (eatDuration > 0)
-            {
-                eatDuration--;
-                if (eatDuration == 0)
-                {
-                    eating = false;
-                }
-                return;
-            }
             // calculate the rotation
             double rotationChange = leftSideSpeed - rightSideSpeed;
             double movementSpeed = leftSideSpeed + rightSideSpeed;
@@ -172,11 +162,7 @@ namespace PredatorPrey
             if (position.Y < 0)
                 position.Y = Parameters.worldHeight + position.Y;
 
-            //update the hunger
-            if (eating)
-                eat();
-            else
-                starve();
+
         }
     }
 }

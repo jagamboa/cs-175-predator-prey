@@ -11,11 +11,12 @@ namespace PredatorPrey
 
         public Wulffies(Vector2 position) : base(position)
         {
-
+            brain = new NeuralNetwork(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject, Parameters.inputsPerSensedObject,
+                    Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
         }
 
-        //public override void update(VisionContainer vc)
-        //{
+        public override void update(VisionContainer vc, AudioContainer ac)
+        {
             // step1: update values that change with time (hunger)
 
             // step2: use predator rules (extract data from VisionContainer) to create a list of movement vectors
@@ -23,7 +24,7 @@ namespace PredatorPrey
             // step3: sum up movement vectors using stored weights
 
             // step4: update velocity, position, and direction
-        //}
+        }
 
         public void updateWeights()
         {
