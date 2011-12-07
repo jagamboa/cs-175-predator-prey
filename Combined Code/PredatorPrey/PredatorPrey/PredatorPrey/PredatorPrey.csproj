@@ -120,7 +120,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="ShapeMatcher.cs" />
-    <Compile Include="Vector.cs" />
     <Compile Include="VisionContainer.cs" />
   </ItemGroup>
   <ItemGroup>
