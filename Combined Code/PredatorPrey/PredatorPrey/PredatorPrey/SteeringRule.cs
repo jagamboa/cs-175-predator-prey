@@ -6,21 +6,21 @@ using Microsoft.Xna.Framework;
 
 namespace PredatorPrey
 {
-    class AvoidanceRule : Rule
+    class SteeringRule : Rule
     {
-        AvoidanceRule()
+        SteeringRule()
         {
             // create new neural network
-            ruleNet = new NeuralNetwork(Parameters.maxVisionInput + Parameters.maxHearInput, Parameters.inputsPerSensedObject,
+            ruleNet = new NeuralNetwork(Parameters.maxVisionInput + Parameters.maxHearInput, 3,
                 Parameters.avoid_numOfHiddenLayers, Parameters.avoid_numOfNeuronsPerLayer);
-            
+
             // replace default weights with custom weights
             int totalNumberOfWeights = ruleNet.getTotalNumberOfWeights();
             List<double> newWeights = new List<double>(totalNumberOfWeights);
 
             for (int i = 0; i < totalNumberOfWeights; i++)
             {
-                newWeights.Add(-1);
+                newWeights.Add(1);
             }
             ruleNet.replaceWeights(newWeights);
         }
@@ -85,7 +85,6 @@ namespace PredatorPrey
 
             return result;
         }
-
 
         public override Vector2 run(Vector2 goal)
         {
