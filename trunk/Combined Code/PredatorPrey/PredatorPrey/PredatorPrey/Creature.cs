@@ -114,16 +114,6 @@ namespace PredatorPrey
             return 0;
         }
 
-        public void incrementFitness()
-        {
-            fitness++;
-        }
-
-        public void decrementFitness()
-        {
-            fitness--;
-        }
-
         public void update(VisionContainer vc)
         {
             // calculate the rotation

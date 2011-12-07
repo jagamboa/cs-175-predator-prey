@@ -8,14 +8,14 @@ namespace PredatorPrey
 {
     class Ears
     {
-        /*AudioCollection list;
+        AudioContainer list;
         public Ears(Creature creat, Creature[] otherCreatures)
         {
-            list = new AuditoryCollection();
-            for (int i = 0; i < otherCreatures.GetLength; i++)
+            list = new AudioContainer();
+            for (int i = 0; i < otherCreatures.GetLength(0); i++)
             {
 
             }
-        }*/
+        }
     }
 }
