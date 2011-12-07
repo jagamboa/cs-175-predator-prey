@@ -20,6 +20,8 @@ namespace PredatorPrey
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        RenderTarget2D render;
+
         // variables for Vision
         //
         //
@@ -129,6 +131,8 @@ namespace PredatorPrey
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            render = new RenderTarget2D(GraphicsDevice, GraphicsDevice.PresentationParameters.BackBufferWidth, GraphicsDevice.PresentationParameters.BackBufferHeight, false, SurfaceFormat.Color, DepthFormat.None);
 
             // load all sprites and fonts needed
             predatorSprite = Content.Load<Texture2D>("Art/Wolf");
@@ -414,6 +418,7 @@ namespace PredatorPrey
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.SetRenderTarget(render);
             GraphicsDevice.Clear(new Color(68, 34, 136));
 
             spriteBatch.Begin();
@@ -456,7 +461,19 @@ namespace PredatorPrey
 
             spriteBatch.End();
 
+            GraphicsDevice.SetRenderTarget(null);
+
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+            
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(render, Vector2.Zero, Color.White);
+
+            spriteBatch.End();
+            
             base.Draw(gameTime);
+
+            
         }
     }
 }
