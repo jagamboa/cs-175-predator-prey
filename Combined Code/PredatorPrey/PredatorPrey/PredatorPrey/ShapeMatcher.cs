@@ -107,15 +107,17 @@ namespace PredatorPrey
                         visionArea[count] = Color.Red;
                         container.add(detect(creat, visionArea, topMostPoint,bottomMostPoint,leftMostPoint,rightMostPoint,width,height));
                         count= countStop+1;
+                        inObject = false;
                     }
                     else if(visionArea[count].Equals(Color.Red))
                     {
                         container.add(detect(creat, visionArea, topMostPoint, bottomMostPoint, leftMostPoint, rightMostPoint, width, height));
                         count = countStop + 1;
+                        inObject = false;
                     }
                 }
 
-                if (visionArea[count].Equals(Color.Black))
+                if (visionArea[count].R + visionArea[count].G + visionArea[count].B >740)
                 {
                     if (inObject)
                     {
@@ -128,38 +130,50 @@ namespace PredatorPrey
                         else if (count / width < topMostPoint)
                             topMostPoint = count;
 
-                        if (previousDirection.X != 1 && visionArea[count + 1].Equals(Color.Black))
+                        if (previousDirection.X != 1 && visionArea[count + 1].R + visionArea[count + 1].G + visionArea[count + 1].B > 740)
                         {
                             count++;
                         }
-                        else if (previousDirection.Y == -1 && visionArea[count - width].Equals(Color.Black))
+                        else if (previousDirection.Y == -1 && visionArea[count - width].R + visionArea[count - width].G + visionArea[count - width].B > 740)
                         {
                             count = count - width;
                         }
-                        else if ((previousDirection.X != 1 && previousDirection.Y == -1) && visionArea[count - width + 1].Equals(Color.Black))
+                        else if ((previousDirection.X != 1 && previousDirection.Y == -1) && visionArea[count - width + 1].R + visionArea[count - width + 1].G + visionArea[count - width + 1].B > 740)
                         {
                             count = count - width + 1;
                         }
-                        else if (previousDirection.Y == 1 && visionArea[count + width].Equals(Color.Black))
+                        else if (previousDirection.Y == 1 && visionArea[count + width].R + visionArea[count + width].G + visionArea[count + width].B > 740)
                         {
                             count = count + width;
                         }
-                        else if ((previousDirection.X != 1 && previousDirection.Y == 1) && visionArea[count + width + 1].Equals(Color.Black))
+                        else if ((previousDirection.X != 1 && previousDirection.Y == 1) && visionArea[count + width + 1].R + visionArea[count + width + 1].G + visionArea[count + width + 1].B > 740)
                         {
                             count = count + width + 1;
                         }
-                        else if ((previousDirection.X != -1 && previousDirection.Y == -1) && visionArea[count - width - 1].Equals(Color.Black))
+                        else if ((previousDirection.X != -1 && previousDirection.Y == -1) && visionArea[count - width - 1].R + visionArea[count - width - 1].G + visionArea[count - width - 1].B > 740)
                         {
                             count = count - width - 1;
                         }
-                        else if ((previousDirection.X != -1 && previousDirection.Y == 1) && visionArea[count + width - 1].Equals(Color.Black))
+                        else if ((previousDirection.X != -1 && previousDirection.Y == 1) && visionArea[count + width - 1].R + visionArea[count + width - 1].G + visionArea[count + width - 1].B > 740)
                         {
                             count = count + width - 1;
                         }
-                        else if (previousDirection.X != -1 && visionArea[count - 1].Equals(Color.Black))
+                        else if (previousDirection.X != -1 && visionArea[count - 1].R + visionArea[count - 1].G + visionArea[count - 1].B > 740)
                         {
                             count--;
                         }
+                        else if (visionArea[count + width].G - visionArea[count + width].B > 200)
+                        {
+                            for (int i = 1; i <= 10; i++)
+                            {
+                                if (count + i * width < visionArea.Count() && visionArea[count + i * width].A + visionArea[count + i * width].G + visionArea[count + i * width].B > 740)
+                                {
+                                    count = count + i * width;
+                                }
+                            }
+                        }
+                        else
+                            count = countStop;
                         visionArea[count] = Color.Red;
                     }
                     else

@@ -54,8 +54,8 @@ namespace PredatorPrey
             hunger = Parameters.startingHunger;
             eating = false;
             fitness = 0;
-            leftSideSpeed = 1;
-            rightSideSpeed = 1;
+            leftSideSpeed = 0;
+            rightSideSpeed = 0;
         }
 
         public List<double> run(List<double> inputs)

@@ -91,21 +91,22 @@ namespace PredatorPrey
             predatorList = new List<Predator>(Parameters.numberOfWolves);
             preyList = new List<Prey>(Parameters.numberOfSheep);
 
-            for (int i = 0; i < Parameters.numberOfWolves; i++)
+            for (int i = 1; i <= Parameters.numberOfWolves; i++)
             {
                 // random position
-                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
-                                                Parameters.random.Next(Parameters.worldHeight));
-                
+                //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                //                               Parameters.random.Next(Parameters.worldHeight));
+                Vector2 pos = new Vector2(i*100, i*100);
                 predatorList.Add(new Predator(pos));
             }
 
             for (int i = 0; i < Parameters.numberOfSheep; i++)
             {
                 // random position
-                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
-                                                Parameters.random.Next(Parameters.worldHeight));
+                //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                //                                Parameters.random.Next(Parameters.worldHeight));
 
+                Vector2 pos = new Vector2(130, 130);
                 preyList.Add(new Prey(pos));
             }
 
@@ -198,47 +199,48 @@ namespace PredatorPrey
                         height = Parameters.predatorVisionHeight;
                         rectStartX = (int)predator.position.X - width/2;
                         rectStartY = (int)predator.position.Y - height / 2;
-                        if (predator.position.X + width/2 > backBufferData.Width&& predator.position.Y+height/2>backBufferData.Height)
+
+                        if (predator.position.X + width/2 >= backBufferData.Width&& predator.position.Y+height/2 >= backBufferData.Height)
                         {
                             width = width / 2 +  backBufferData.Width-(int)predator.position.X;
                             height = height / 2 +  backBufferData.Height-(int)predator.position.Y;
                         }
-                        else if(predator.position.X - width / 2 < 0 && predator.position.Y + height / 2 > backBufferData.Height)
+                        else if(predator.position.X - width / 2 <= 0 && predator.position.Y + height / 2 >= backBufferData.Height)
                         {
                             width = width / 2 + (int)predator.position.X;
                             height = height / 2 +  backBufferData.Height - (int)predator.position.Y;
                             rectStartX = 0;
                         }
-                        else if (predator.position.X - width / 2 < 0 && predator.position.Y - height / 2 < 0)
+                        else if (predator.position.X - width / 2 <= 0 && predator.position.Y - height / 2 <= 0)
                         {
                             rectStartX = 0;
                             rectStartY = 0;
                             width = width / 2 + (int)predator.position.X;
                             height = height / 2 + (int)predator.position.Y;
                         }
-                        else if (predator.position.X - width / 2 < 0 && predator.position.Y + height / 2 > backBufferData.Height)
+                        else if (predator.position.X - width / 2 <= 0 && predator.position.Y + height / 2 >= backBufferData.Height)
                         {
                             width = width / 2 + backBufferData.Width - (int)predator.position.X;
                             height = height / 2 + (int)predator.position.Y;
                             rectStartY = 0;
                         }
-                        else if (predator.position.X + width / 2 > backBufferData.Width)
+                        else if (predator.position.X + width / 2 >= backBufferData.Width)
                         {
                             width = width / 2 + backBufferData.Width - (int)predator.position.X;
                         }
-                        else if (predator.position.X - width / 2 < 0)
-                        {
-                            width = width / 2 + (int)predator.position.X;
-                            rectStartX = 0;
-                        }
-                        else if (predator.position.Y + height / 2 > backBufferData.Height)
+                        else if (predator.position.Y + height / 2 >= backBufferData.Height)
                         {
                             height = height / 2 + backBufferData.Height - (int)predator.position.Y;
                         }
-                        else if (predator.position.Y - height / 2 < 0)
+                        if (rectStartY <= 0)
                         {
                             height = height / 2 + (int)predator.position.Y;
                             rectStartY = 0;
+                        }
+                        if (rectStartX <= 0)
+                        {
+                            width = width / 2 + (int)predator.position.X;
+                            rectStartX = 0;
                         }
 
                         visionRect = new Color[height*width];
@@ -285,24 +287,28 @@ namespace PredatorPrey
                         {
                             width = width / 2 + backBufferData.Width - (int)prey.position.X;
                         }
-                        else if (prey.position.X - width / 2 < 0)
-                        {
-                            width = width / 2 + (int)prey.position.X;
-                            rectStartX = 0;
-                        }
                         else if (prey.position.Y + height / 2 > backBufferData.Height)
                         {
                             height = height / 2 + backBufferData.Height - (int)prey.position.Y;
                         }
-                        else if (prey.position.Y - height / 2 < 0)
+                        if (rectStartY < 0)
                         {
                             height = height / 2 + (int)prey.position.Y;
                             rectStartY = 0;
+                        }
+                        if (rectStartX < 0)
+                        {
+                            width = width / 2 + (int)prey.position.X;
+                            rectStartX = 0;
                         }
                         visionRect = new Color[height * width];
                         backBufferData.GetData<Color>(0, new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
                         prey.update(eyes);
+                        if (eyes.size() > 0)
+                        {
+                            prey.leftSideSpeed = 1;
+                        }
                         // step1: gather this prey's visual percepts
 
                         // step2: give the prey it's visual percepts and update's it's state (hunger, position, fitness, etc)
@@ -416,7 +422,7 @@ namespace PredatorPrey
             {
                 if (i == bestPredatorIndex) // draw the best predator
                 {
-                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.Tomato, (float)predatorList[i].getAngle(), centerPoint, 1.5f, SpriteEffects.None, 0);
+                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.Tomato, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
                 else // draw the other predators
                 {
@@ -428,7 +434,7 @@ namespace PredatorPrey
             {
                 if (i == bestPreyIndex) // draw the best prey
                 {
-                    spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.SpringGreen, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.White, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
                 else // draw the other prey
                 {
