@@ -177,10 +177,6 @@ namespace PredatorPrey
                 // if the simulation has not timed out
                 if (updates < Parameters.numberOfUpdates)
                 {
-                    backBufferData = new Texture2D(
-                            GraphicsDevice,
-                            GraphicsDevice.PresentationParameters.BackBufferWidth,
-                            GraphicsDevice.PresentationParameters.BackBufferHeight);
                     Color[] visionRect;
                     VisionContainer eyes;
                     int rectStartX;
@@ -240,7 +236,7 @@ namespace PredatorPrey
                         }
 
                         visionRect = new Color[height*width];
-                        backBufferData.GetData<Color>(0, new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
+                        GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
                         eyes =sm.findObjects(predator, visionRect, width, height);
                         predator.update(eyes);
                         // step1: gather this predator's visual percepts
@@ -298,7 +294,7 @@ namespace PredatorPrey
                             rectStartX = 0;
                         }
                         visionRect = new Color[height * width];
-                        backBufferData.GetData<Color>(0, new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
+                        GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
                         prey.update(eyes);
                         if (eyes.size() > 0)
