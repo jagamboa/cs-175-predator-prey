@@ -46,7 +46,7 @@ namespace PredatorPrey
 
         Texture2D predatorSprite;
         Texture2D preySprite;
-        Texture2D backBufferData;
+        RenderTarget2D target; 
         SpriteFont font;
         Vector2 centerPoint = new Vector2(5, 10);
         Vector2 predatorText1 = new Vector2(5, 8);
@@ -90,18 +90,18 @@ namespace PredatorPrey
             for (int i = 1; i <= Parameters.numberOfWolves; i++)
             {
                 // random position
-                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
-                                               Parameters.random.Next(Parameters.worldHeight));
-                //Vector2 pos = new Vector2(i*100, i*100);
+                //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                //                               Parameters.random.Next(Parameters.worldHeight));
+                Vector2 pos = new Vector2(i*100, i*100);
                 predatorList.Add(new Wulffies(pos));
             }
 
             for (int i = 0; i < Parameters.numberOfSheep; i++)
             {
                 // random position
-                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
-                                                Parameters.random.Next(Parameters.worldHeight));
-                //Vector2 pos = new Vector2(130, 130);
+                //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                //                                Parameters.random.Next(Parameters.worldHeight));
+                Vector2 pos = new Vector2(130, 130);
                 preyList.Add(new Fluffies(pos));
 
             }
@@ -192,15 +192,15 @@ namespace PredatorPrey
                         rectStartX = (int)predator.position.X - width/2;
                         rectStartY = (int)predator.position.Y - height / 2;
 
-                        if (predator.position.X + width/2 >= backBufferData.Width&& predator.position.Y+height/2 >= backBufferData.Height)
+                        if (predator.position.X + width/2 >= GraphicsDevice.PresentationParameters.BackBufferWidth&& predator.position.Y+height/2 >= GraphicsDevice.PresentationParameters.BackBufferHeight)
                         {
-                            width = width / 2 +  backBufferData.Width-(int)predator.position.X;
-                            height = height / 2 +  backBufferData.Height-(int)predator.position.Y;
+                            width = width / 2 +  GraphicsDevice.PresentationParameters.BackBufferWidth-(int)predator.position.X;
+                            height = height / 2 +  GraphicsDevice.PresentationParameters.BackBufferHeight-(int)predator.position.Y;
                         }
-                        else if(predator.position.X - width / 2 <= 0 && predator.position.Y + height / 2 >= backBufferData.Height)
+                        else if(predator.position.X - width / 2 <= 0 && predator.position.Y + height / 2 >= GraphicsDevice.PresentationParameters.BackBufferHeight)
                         {
                             width = width / 2 + (int)predator.position.X;
-                            height = height / 2 +  backBufferData.Height - (int)predator.position.Y;
+                            height = height / 2 +  GraphicsDevice.PresentationParameters.BackBufferHeight - (int)predator.position.Y;
                             rectStartX = 0;
                         }
                         else if (predator.position.X - width / 2 <= 0 && predator.position.Y - height / 2 <= 0)
@@ -210,19 +210,19 @@ namespace PredatorPrey
                             width = width / 2 + (int)predator.position.X;
                             height = height / 2 + (int)predator.position.Y;
                         }
-                        else if (predator.position.X - width / 2 <= 0 && predator.position.Y + height / 2 >= backBufferData.Height)
+                        else if (predator.position.X - width / 2 <= 0 && predator.position.Y + height / 2 >= GraphicsDevice.PresentationParameters.BackBufferHeight)
                         {
-                            width = width / 2 + backBufferData.Width - (int)predator.position.X;
+                            width = width / 2 + GraphicsDevice.PresentationParameters.BackBufferWidth - (int)predator.position.X;
                             height = height / 2 + (int)predator.position.Y;
                             rectStartY = 0;
                         }
-                        else if (predator.position.X + width / 2 >= backBufferData.Width)
+                        else if (predator.position.X + width / 2 >= GraphicsDevice.PresentationParameters.BackBufferWidth)
                         {
-                            width = width / 2 + backBufferData.Width - (int)predator.position.X;
+                            width = width / 2 + GraphicsDevice.PresentationParameters.BackBufferWidth- (int)predator.position.X;
                         }
-                        else if (predator.position.Y + height / 2 >= backBufferData.Height)
+                        else if (predator.position.Y + height / 2 >= GraphicsDevice.PresentationParameters.BackBufferHeight)
                         {
-                            height = height / 2 + backBufferData.Height - (int)predator.position.Y;
+                            height = height / 2 + GraphicsDevice.PresentationParameters.BackBufferHeight - (int)predator.position.Y;
                         }
                         if (rectStartY <= 0)
                         {
@@ -251,15 +251,15 @@ namespace PredatorPrey
                         height = Parameters.preyVisionHeight;
                         rectStartX = (int)prey.position.X - width / 2;
                         rectStartY = (int)prey.position.Y - height / 2;
-                        if (prey.position.X + width / 2 > backBufferData.Width && prey.position.Y + height / 2 > backBufferData.Height)
+                        if (prey.position.X + width / 2 > GraphicsDevice.PresentationParameters.BackBufferWidth && prey.position.Y + height / 2 > GraphicsDevice.PresentationParameters.BackBufferHeight)
                         {
-                            width = width / 2 + backBufferData.Width - (int)prey.position.X;
-                            height = height / 2 + backBufferData.Height - (int)prey.position.Y;
+                            width = width / 2 + GraphicsDevice.PresentationParameters.BackBufferWidth - (int)prey.position.X;
+                            height = height / 2 + GraphicsDevice.PresentationParameters.BackBufferHeight - (int)prey.position.Y;
                         }
-                        else if (prey.position.X - width / 2 < 0 && prey.position.Y + height / 2 > backBufferData.Height)
+                        else if (prey.position.X - width / 2 < 0 && prey.position.Y + height / 2 > GraphicsDevice.PresentationParameters.BackBufferHeight)
                         {
                             width = width / 2 + (int)prey.position.X;
-                            height = height / 2 + backBufferData.Height - (int)prey.position.Y;
+                            height = height / 2 + GraphicsDevice.PresentationParameters.BackBufferHeight - (int)prey.position.Y;
                             rectStartX = 0;
                         }
                         else if (prey.position.X - width / 2 < 0 && prey.position.Y - height / 2 < 0)
@@ -269,19 +269,19 @@ namespace PredatorPrey
                             width = width / 2 + (int)prey.position.X;
                             height = height / 2 + (int)prey.position.Y;
                         }
-                        else if (prey.position.X - width / 2 < 0 && prey.position.Y + height / 2 > backBufferData.Height)
+                        else if (prey.position.X - width / 2 < 0 && prey.position.Y + height / 2 > GraphicsDevice.PresentationParameters.BackBufferHeight)
                         {
-                            width = width / 2 + backBufferData.Width - (int)prey.position.X;
+                            width = width / 2 + GraphicsDevice.PresentationParameters.BackBufferWidth - (int)prey.position.X;
                             height = height / 2 + (int)prey.position.Y;
                             rectStartY = 0;
                         }
-                        else if (prey.position.X + width / 2 > backBufferData.Width)
+                        else if (prey.position.X + width / 2 > GraphicsDevice.PresentationParameters.BackBufferWidth)
                         {
-                            width = width / 2 + backBufferData.Width - (int)prey.position.X;
+                            width = width / 2 + GraphicsDevice.PresentationParameters.BackBufferWidth - (int)prey.position.X;
                         }
-                        else if (prey.position.Y + height / 2 > backBufferData.Height)
+                        else if (prey.position.Y + height / 2 > GraphicsDevice.PresentationParameters.BackBufferHeight)
                         {
-                            height = height / 2 + backBufferData.Height - (int)prey.position.Y;
+                            height = height / 2 + GraphicsDevice.PresentationParameters.BackBufferHeight - (int)prey.position.Y;
                         }
                         if (rectStartY < 0)
                         {
@@ -300,6 +300,14 @@ namespace PredatorPrey
                         if (eyes.size() > 0)
                         {
                             prey.leftSideSpeed = 1;
+                        }
+
+                        for (int i = 0; i < height * width; i++)
+                        {
+                            if (visionRect[i] != new Color(68, 34, 136))
+                            {
+                                Console.WriteLine("We Found Something!");
+                            }
                         }
                         // step1: gather this prey's visual percepts
 
@@ -406,7 +414,7 @@ namespace PredatorPrey
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Green);
+            GraphicsDevice.Clear(new Color(68, 34, 136));
 
             spriteBatch.Begin();
 
