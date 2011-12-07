@@ -67,10 +67,6 @@ namespace PredatorPrey
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            graphics.PreferredBackBufferWidth = 500;
-            graphics.PreferredBackBufferHeight = 500;
-            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -94,9 +90,9 @@ namespace PredatorPrey
             for (int i = 1; i <= Parameters.numberOfWolves; i++)
             {
                 // random position
-                //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
-                //                               Parameters.random.Next(Parameters.worldHeight));
-                Vector2 pos = new Vector2(i*100, i*100);
+                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                                               Parameters.random.Next(Parameters.worldHeight));
+                //Vector2 pos = new Vector2(i*100, i*100);
                 predatorList.Add(new Wulffies(pos));
             }
 
@@ -105,8 +101,7 @@ namespace PredatorPrey
                 // random position
                 Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                                                 Parameters.random.Next(Parameters.worldHeight));
-
-
+                //Vector2 pos = new Vector2(130, 130);
                 preyList.Add(new Fluffies(pos));
 
             }
