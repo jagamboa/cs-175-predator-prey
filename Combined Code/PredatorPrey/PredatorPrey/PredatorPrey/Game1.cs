@@ -36,8 +36,8 @@ namespace PredatorPrey
         //
 
         // variables for toolkit
-        List<Predator> predatorList;
-        List<Prey> preyList;
+        List<Wulffies> predatorList;
+        List<Fluffies> preyList;
         int updates = 0;
         int bestPredatorIndex = 0;
         int bestPredatorFitness = 0;
@@ -88,8 +88,8 @@ namespace PredatorPrey
             Parameters.worldWidth = GraphicsDevice.Viewport.Width;
             Parameters.worldHeight = GraphicsDevice.Viewport.Height;
 
-            predatorList = new List<Predator>(Parameters.numberOfWolves);
-            preyList = new List<Prey>(Parameters.numberOfSheep);
+            predatorList = new List<Wulffies>(Parameters.numberOfWolves);
+            preyList = new List<Fluffies>(Parameters.numberOfSheep);
 
             for (int i = 1; i <= Parameters.numberOfWolves; i++)
             {
@@ -97,7 +97,7 @@ namespace PredatorPrey
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                               Parameters.random.Next(Parameters.worldHeight));
                 Vector2 pos = new Vector2(i*100, i*100);
-                predatorList.Add(new Predator(pos));
+                predatorList.Add(new Wulffies(pos));
             }
 
             for (int i = 0; i < Parameters.numberOfSheep; i++)
@@ -106,8 +106,12 @@ namespace PredatorPrey
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                                Parameters.random.Next(Parameters.worldHeight));
 
+<<<<<<< .mine
+                preyList.Add(new Fluffies(pos));
+=======
                 Vector2 pos = new Vector2(130, 130);
                 preyList.Add(new Prey(pos));
+>>>>>>> .r26
             }
 
             // Initialize Vision
@@ -328,6 +332,7 @@ namespace PredatorPrey
                                 // step1: kill the sheep
                                 preyList.RemoveAt(j);
                                 // step2: change any fitness/eat count values accordingly
+                                predatorList[i].eat();
                             }
                         }
 
@@ -413,7 +418,7 @@ namespace PredatorPrey
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Gray);
+            GraphicsDevice.Clear(Color.Green);
 
             spriteBatch.Begin();
 
@@ -444,11 +449,11 @@ namespace PredatorPrey
 
             // render text info to screen
 
-            spriteBatch.DrawString(font, "Predator", predatorText1, Color.Tomato);
+            //spriteBatch.DrawString(font, "Predator", predatorText1, Color.Tomato);
             //spriteBatch.DrawString(font, "Generation: " + predatorGenAlg.generationCount, predatorText2, Color.Tomato);
             //spriteBatch.DrawString(font, "Best Fitness: " + predatorGenAlg.bestFitness, predatorText3, Color.Tomato);
             //spriteBatch.DrawString(font, "Average Fitness: " + predatorGenAlg.getAverageFitness(), predatorText4, Color.Tomato);
-            spriteBatch.DrawString(font, "Sheep", preyText1, Color.DarkOrange);
+            //spriteBatch.DrawString(font, "Sheep", preyText1, Color.DarkOrange);
             //spriteBatch.DrawString(font, "Generation: " + sheepGenAlg.generationCount, sheepText2, Color.DarkOrange);
             //spriteBatch.DrawString(font, "Best Fitness: " + sheepGenAlg.bestFitness, sheepText3, Color.DarkOrange);
             //spriteBatch.DrawString(font, "Average Fitness: " + sheepGenAlg.getAverageFitness(), sheepText4, Color.DarkOrange);

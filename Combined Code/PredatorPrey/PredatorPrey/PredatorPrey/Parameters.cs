@@ -47,5 +47,7 @@ namespace PredatorPrey
         public const int preyVisionWidth = 50;
         public const int preyVisionHeight = 50;
 
+        //Duration of eating
+        public const int eatTime = 20;
     }
 }
