@@ -14,6 +14,8 @@ namespace PredatorPrey
 
         public int fitness { get; private set; }
 
+        public int eatDuration;
+
         // the weights of the Creature's neural network
         public List<double> genes
         {
@@ -66,6 +68,8 @@ namespace PredatorPrey
         public void eat()
         {
             hunger += Parameters.eatingAddition;
+            eatDuration = Parameters.eatTime;
+            eating = true;
         }
 
         public void starve()
@@ -116,6 +120,16 @@ namespace PredatorPrey
 
         public void update(VisionContainer vc)
         {
+            // Stop the creature (fluffies or wulffies)
+            if (eatDuration > 0)
+            {
+                eatDuration--;
+                if (eatDuration == 0)
+                {
+                    eating = false;
+                }
+                return;
+            }
             // calculate the rotation
             double rotationChange = leftSideSpeed - rightSideSpeed;
             double movementSpeed = leftSideSpeed + rightSideSpeed;
