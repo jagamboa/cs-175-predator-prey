@@ -11,7 +11,7 @@ namespace PredatorPrey
         SteeringRule()
         {
             // create new neural network
-            ruleNet = new NeuralNetwork(Parameters.maxVisionInput + Parameters.maxHearInput, 3,
+            ruleNet = new NeuralNetwork(Parameters.maxVisionInput + Parameters.maxHearInput, Parameters.inputsPerSensedObject,
                 Parameters.avoid_numOfHiddenLayers, Parameters.avoid_numOfNeuronsPerLayer);
 
             // replace default weights with custom weights
