@@ -52,13 +52,27 @@ namespace PredatorPrey
         public const int eatTime = 20;
 
         //constants for rules
+        public const int preyNumberOfRules = 3;
+        public const int predatorNumberOfRules = 1;
         public const int inputsPerSensedObject = 3;
         public const int maxVisionInput = 15 * inputsPerSensedObject;
         public const int maxHearInput = 15 * inputsPerSensedObject;
+
+        //behavior selection
+        public const int behav_numOfHiddenLayers = 1;
+        public const int behav_numOfNeuronsPerLayer = 5;
 
         // avoidance
         public const int avoid_numOfHiddenLayers = 1;
         public const int avoid_numOfNeuronsPerLayer = 10;
 
+        // steering
+        public const int steer_numOfHiddenLayers = 1;
+        public const int steer_numOfNeuronsPerLayer = 10;
+
+        // goal
+        public const int goal_numberOfExtraInputs = 1;
+        public const int goal_numOfHiddenLayers = 1;
+        public const int goal_numOfNeuronsPerLayer = 10;
     }
 }

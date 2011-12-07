@@ -6,9 +6,11 @@ using Microsoft.Xna.Framework;
 
 namespace PredatorPrey
 {
-    class AvoidanceRule : Rule
+    class AvoidanceRule
     {
-        AvoidanceRule()
+        private NeuralNetwork ruleNet;
+
+        public AvoidanceRule()
         {
             // create new neural network
             ruleNet = new NeuralNetwork(Parameters.maxVisionInput + Parameters.maxHearInput, Parameters.inputsPerSensedObject,
@@ -25,7 +27,7 @@ namespace PredatorPrey
             ruleNet.replaceWeights(newWeights);
         }
 
-        public override Vector2 run(VisionContainer vc, AudioContainer ac)
+        public Vector2 run(VisionContainer vc, AudioContainer ac)
         {
             List<Vector2> visionPos = new List<Vector2>(vc.size());
             List<Vector2> hearPos = new List<Vector2>(ac.size());
@@ -84,12 +86,6 @@ namespace PredatorPrey
             Vector2.Multiply(result, (float)(outputs[3] * Parameters.maxMoveSpeed));
 
             return result;
-        }
-
-
-        public override Vector2 run(Vector2 goal)
-        {
-            throw new NotImplementedException();
         }
     }
 }

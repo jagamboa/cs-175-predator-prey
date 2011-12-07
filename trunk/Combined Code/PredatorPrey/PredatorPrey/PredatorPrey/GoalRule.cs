@@ -6,13 +6,15 @@ using Microsoft.Xna.Framework;
 
 namespace PredatorPrey
 {
-    class GoalRule : Rule
+    class GoalRule
     {
-        GoalRule()
+        private NeuralNetwork ruleNet;
+
+        public GoalRule()
         {
             // create new neural network
-            ruleNet = new NeuralNetwork(Parameters.inputsPerSensedObject, Parameters.inputsPerSensedObject,
-                Parameters.avoid_numOfHiddenLayers, Parameters.avoid_numOfNeuronsPerLayer);
+            ruleNet = new NeuralNetwork(Parameters.inputsPerSensedObject + Parameters.goal_numberOfExtraInputs, 
+                Parameters.inputsPerSensedObject, Parameters.avoid_numOfHiddenLayers, Parameters.avoid_numOfNeuronsPerLayer);
 
             // replace default weights with custom weights
             int totalNumberOfWeights = ruleNet.getTotalNumberOfWeights();
@@ -25,7 +27,7 @@ namespace PredatorPrey
             ruleNet.replaceWeights(newWeights);
         }
 
-        public override Vector2 run(Vector2 pos)
+        public Vector2 run(Vector2 pos)
         {
             List<double> inputs = new List<double>(Parameters.inputsPerSensedObject);
 
@@ -48,11 +50,6 @@ namespace PredatorPrey
             Vector2.Multiply(result, (float)(outputs[3] * Parameters.maxMoveSpeed));
 
             return result;
-        }
-
-        public override Vector2 run(VisionContainer vc, AudioContainer ac)
-        {
-            throw new NotImplementedException();
         }
     }
 }
