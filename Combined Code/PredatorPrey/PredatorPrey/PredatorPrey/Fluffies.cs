@@ -71,6 +71,7 @@ namespace PredatorPrey
 
             //step4: update velocity, position, and direction
             Vector2 acceleration = new Vector2((float) outputs[0], (float) outputs[1]);
+            //Vector2 acceleration = new Vector2((float)ruleVectors[0].X, (float)ruleVectors[0].Y);
             if (acceleration.Length() != 0)
                 acceleration = Vector2.Normalize(acceleration);
             acceleration = Vector2.Clamp(acceleration, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),
