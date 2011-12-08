@@ -16,17 +16,18 @@ namespace PredatorPrey
     {
         public const int boxNum1 = 1;
         public const int boxNum2 = 10;
-        public const double histThreshold = .1;
+        public const double histThreshold = 3;
         List<int[,]> initialHistograms;
         List<Classification> types;
         List<Vector2> directions;
+        Color purple;
         public ShapeMatcher(List<Texture2D> initialTextures)
         {
 
             types = new List<Classification>();
             types.Add(Classification.Predator);
             types.Add(Classification.Prey);
-            
+            purple = new Color(255, 0, 255);
             directions = new List<Vector2>();
             directions.Add(new Vector2(0));
             directions.Add(new Vector2((float)Math.PI/4));
@@ -44,13 +45,14 @@ namespace PredatorPrey
                 int max = Math.Max(width, height);
                 int temp = width*height;
                 Color[] list = new Color[temp];
-                initialTextures[0].GetData<Color>(list,0,temp);
+                initialTextures[i].GetData<Color>(list,0,temp);
                 int[,] tempImage = new int[max, max];
+                Color black1 = new Color(1, 1, 1);
                 if (width == max)
                 {
                     for (int j=0; j < list.Length; j++)
                     {
-                        if (list[j].Equals(Color.Black))
+                        if (list[j].Equals(black1))
                             tempImage[j % width, j / width+((max-height)/2)] = 1;
                     }
                 }
@@ -58,11 +60,12 @@ namespace PredatorPrey
                 {
                     for (int j=0; j < list.Length; j++)
                     {
-                        if (list[j].Equals(Color.Black))
+                        if (list[j].Equals(black1))
                             tempImage[j % width+((max-width)/2), j / width] = 1;
                     }
                 }
                 initialHistograms.Add(createHistogram(tempImage,max,max));
+                
 
                 /*int[,] rotatedImage = new int[max,max];
                 double angle;
@@ -104,7 +107,7 @@ namespace PredatorPrey
                 {
                     if (count == countStop)
                     {
-                        visionArea[count] = Color.Red;
+                        visionArea[count] = purple;
                         if(width!=0 && height !=0)
                             container.add(detect(creat, visionArea, topMostPoint,bottomMostPoint,leftMostPoint,rightMostPoint,width,height));
                         count= countStop+1;
@@ -125,7 +128,7 @@ namespace PredatorPrey
                 }
 
                 if (visionArea[count].R + visionArea[count].G + visionArea[count].B >= 1 &&
-                    visionArea[count].R + visionArea[count].G + visionArea[count].B <= 240)
+                    visionArea[count].R + visionArea[count].G + visionArea[count].B <= 350)
                 {
                     if (inObject)
                     {
@@ -137,7 +140,7 @@ namespace PredatorPrey
                             bottomMostPoint = count;
                         else if (count / width < topMostPoint/width)
                             topMostPoint = count;
-                        visionArea[count] = Color.Red;
+                        visionArea[count] = purple;
                         count = findNext(count, previousDirection, visionArea, width, countStop);
                         
                     }
@@ -166,7 +169,7 @@ namespace PredatorPrey
             {
                 //previousDirection.X != 1 && 
                 if (visionArea[count + 1].R + visionArea[count + 1].G + visionArea[count + 1].B >= 1 &&
-                    visionArea[count + 1].R + visionArea[count + 1].G + visionArea[count + 1].B <= 240)
+                    visionArea[count + 1].R + visionArea[count + 1].G + visionArea[count + 1].B <= 350)
                 {
                     return count+1;
                 }
@@ -175,7 +178,7 @@ namespace PredatorPrey
             try{
                 //previousDirection.Y == -1 &&
                  if (visionArea[count - width].R + visionArea[count - width].G + visionArea[count - width].B >= 1 &&
-                     visionArea[count - width].R + visionArea[count - width].G + visionArea[count - width].B <= 240)
+                     visionArea[count - width].R + visionArea[count - width].G + visionArea[count - width].B <= 350)
                 {
                     return count - width;
                 }
@@ -184,7 +187,7 @@ namespace PredatorPrey
             try{
                 //(previousDirection.X != 1 && previousDirection.Y == -1) 
                 if (visionArea[count - width + 1].R + visionArea[count - width + 1].G + visionArea[count - width + 1].B >= 1 &&
-                    visionArea[count - width + 1].R + visionArea[count - width + 1].G + visionArea[count - width + 1].B <= 240)
+                    visionArea[count - width + 1].R + visionArea[count - width + 1].G + visionArea[count - width + 1].B <= 350)
                 {
                     return count - width + 1;
                 }
@@ -193,7 +196,7 @@ namespace PredatorPrey
             try{
                 //previousDirection.Y == 1 && 
                 if (visionArea[count + width].R + visionArea[count + width].G + visionArea[count + width].B >= 1 &&
-                    visionArea[count + width].R + visionArea[count + width].G + visionArea[count + width].B <= 240)
+                    visionArea[count + width].R + visionArea[count + width].G + visionArea[count + width].B <= 350)
                 {
                     return count + width;
                 }
@@ -201,7 +204,7 @@ namespace PredatorPrey
             try{
                 //(previousDirection.X != 1 && previousDirection.Y == 1) && 
             if (visionArea[count + width + 1].R + visionArea[count + width + 1].G + visionArea[count + width + 1].B >= 1 &&
-                visionArea[count + width + 1].R + visionArea[count + width + 1].G + visionArea[count + width + 1].B <= 240)
+                visionArea[count + width + 1].R + visionArea[count + width + 1].G + visionArea[count + width + 1].B <= 350)
                 {
                     return count + width + 1;
                 }
@@ -209,7 +212,7 @@ namespace PredatorPrey
             try{
                 //(previousDirection.X != -1 && previousDirection.Y == -1) && 
                 if (visionArea[count - width - 1].R + visionArea[count - width - 1].G + visionArea[count - width - 1].B >= 1 &&
-                    visionArea[count - width - 1].R + visionArea[count - width - 1].G + visionArea[count - width - 1].B <= 240)
+                    visionArea[count - width - 1].R + visionArea[count - width - 1].G + visionArea[count - width - 1].B <= 350)
                 {
                     return count - width - 1;
                 }
@@ -217,7 +220,7 @@ namespace PredatorPrey
             try{
                 //(previousDirection.X != -1 && previousDirection.Y == 1) && 
                 if (visionArea[count + width - 1].R + visionArea[count + width - 1].G + visionArea[count + width - 1].B >= 1 &&
-                    visionArea[count + width - 1].R + visionArea[count + width - 1].G + visionArea[count + width - 1].B <= 240)
+                    visionArea[count + width - 1].R + visionArea[count + width - 1].G + visionArea[count + width - 1].B <= 350)
                 {
                     return count + width - 1;
                 }
@@ -225,7 +228,7 @@ namespace PredatorPrey
             try{
                 //previousDirection.X != -1 && 
                 if (visionArea[count - 1].R + visionArea[count - 1].G + visionArea[count - 1].B >= 1 &&
-                    visionArea[count - 1].R + visionArea[count - 1].G + visionArea[count - 1].B <= 240)
+                    visionArea[count - 1].R + visionArea[count - 1].G + visionArea[count - 1].B <= 350)
                 {
                     return count-1;
                 }
@@ -254,27 +257,34 @@ namespace PredatorPrey
             ObjectSeen bestObject = null;
             double tempHist;
 
-            int width = right%imageWidth-left%imageWidth;
-            int height = bottom/imageHeight-top/imageHeight;
+            int width = right%imageWidth-left%imageWidth+1;
+            int height = bottom/imageWidth-top/imageWidth +1;
             int max = Math.Max(width, height);
             int[,] tempImage = new int[max,max];
-            
+            int start = ((top / imageWidth) * imageWidth + left % imageWidth);
             if (width == max)
             {
-                for (int j=0; j < visionArea2.Length; j++)
+                for (int y = 0; y < max; y++)
                 {
-                    if (visionArea2[j].Equals(Color.Black))
-                        tempImage[j % width, j / width + ((max - height) / 2)] = 1;
+                    for (int j = start; j < start + width; j++)
+                    {
+                        if (visionArea2[j].Equals(purple))
+                            tempImage[j - start, y + ((max - height) / 2)] = 1;
+                    }
                 }
             }
             else
             {
-                for (int j=0; j < visionArea2.Length; j++)
+                for (int y = 0; y < height; y++)
                 {
-                    if (visionArea2[j].Equals(Color.Black))
-                        tempImage[j % width + ((max - width) / 2), j / width] = 1;
+                    for (int j = start; j < start +width; j++)
+                    {
+                        if (visionArea2[j+(y*imageWidth)].Equals(purple))
+                            tempImage[j - start +((max - width) / 2), y] = 1;
+                    }
                 }
             }
+            
             if (max != 0)
             {
                 tempImage = createHistogram(tempImage, max, max);
