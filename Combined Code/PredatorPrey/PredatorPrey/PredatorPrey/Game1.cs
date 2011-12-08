@@ -106,7 +106,7 @@ namespace PredatorPrey
                 // random position
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                                Parameters.random.Next(Parameters.worldHeight));
-                Vector2 pos = new Vector2(270, 230);
+                Vector2 pos = new Vector2(270 + i * 100, 230 + i * 100);
                 fluffiesList.Add(new Fluffies(pos));
             }
 
@@ -310,22 +310,31 @@ namespace PredatorPrey
                         //{
                         //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(predator.position, prey.position), Vector2.Normalize(predator.velocity)));
                         //}
-                        if (Vector2.Subtract(wulffiesList[0].position, prey.position).Length() <
-                            Vector2.Subtract(wulffiesList[1].position, prey.position).Length())
+                        //if (Vector2.Subtract(wulffiesList[0].position, prey.position).Length() <
+                        //    Vector2.Subtract(wulffiesList[1].position, prey.position).Length())
+                        //{
+                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
+                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[1].position, prey.position), Vector2.Normalize(wulffiesList[1].velocity)));
+                        //}
+                        //else
+                        //{
+                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[1].position, prey.position), Vector2.Normalize(wulffiesList[1].velocity)));
+                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
+                        //}
+
+                        foreach (Creature fluffie in fluffiesList)
                         {
-                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
-                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[1].position, prey.position), Vector2.Normalize(wulffiesList[1].velocity)));
+                            if (fluffie != prey)
+                            {
+                                eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
+                            }
                         }
-                        else
-                        {
-                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[1].position, prey.position), Vector2.Normalize(wulffiesList[1].velocity)));
-                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
-                        }
+
                         prey.wrap(eyes, temp_ac);
-                        if (eyes.size() > 0)
-                        {
-                            prey.leftSideSpeed = 1;
-                        }
+                        //if (eyes.size() > 0)
+                        //{
+                        //    prey.leftSideSpeed = 1;
+                        //}
 
                         //for (int i = 0; i < height * width; i++)
                         //{

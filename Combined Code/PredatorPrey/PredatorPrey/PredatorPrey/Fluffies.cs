@@ -21,7 +21,7 @@ namespace PredatorPrey
 
             avoid = new AvoidanceRule();
             steer = new SteeringRule();
-            //align = new AlignmentRule();
+            align = new AlignmentRule();
             //goal = new GoalRule();
             currentGoal = new Vector2(position.X, position.Y);
             good = false;
@@ -53,7 +53,7 @@ namespace PredatorPrey
 
             ruleVectors.Add(avoid.run(vc, ac));
             ruleVectors.Add(steer.run(vc));
-            //ruleVectors.Add(align.run(vc));
+            ruleVectors.Add(align.run(vc));
             //ruleVectors.Add(goal.run(currentGoal, hunger));
 
             //step3: pass vectors into neural network to get outputs
@@ -76,7 +76,7 @@ namespace PredatorPrey
             //Vector2.Multiply(result, (float)(outputs[3] * Parameters.maxMoveSpeed));
 
             //step4: update velocity, position, and direction
-            Vector2 acceleration = new Vector2((float) ruleVectors[1].X, (float) ruleVectors[1].Y);
+            Vector2 acceleration = new Vector2((float) ruleVectors[2].X, (float) ruleVectors[2].Y);
             if (acceleration.Length() != 0)
                 acceleration = Vector2.Normalize(acceleration);
             acceleration = Vector2.Clamp(acceleration, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),
@@ -95,7 +95,7 @@ namespace PredatorPrey
             if (velocity != Vector2.Zero)
             {
                 Vector2 direction = Vector2.Normalize(velocity);
-                rotation = Math.Atan2((Vector2.UnitY.X - direction.X), (Vector2.UnitY.Y - direction.Y));
+                rotation = Math.Atan2(direction.Y, direction.X) - Math.PI/2;
             }
 
             base.wrap(vc, ac);
