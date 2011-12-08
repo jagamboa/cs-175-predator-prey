@@ -20,7 +20,7 @@ namespace PredatorPrey
                 Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
 
             avoid = new AvoidanceRule();
-            //steer = new SteeringRule();
+            steer = new SteeringRule();
             //align = new AlignmentRule();
             //goal = new GoalRule();
             currentGoal = new Vector2(position.X, position.Y);
@@ -52,7 +52,7 @@ namespace PredatorPrey
             List<Vector2> ruleVectors = new List<Vector2>(Parameters.preyNumberOfRules);
 
             ruleVectors.Add(avoid.run(vc, ac));
-            //ruleVectors.Add(steer.run(vc));
+            ruleVectors.Add(steer.run(vc));
             //ruleVectors.Add(align.run(vc));
             //ruleVectors.Add(goal.run(currentGoal, hunger));
 

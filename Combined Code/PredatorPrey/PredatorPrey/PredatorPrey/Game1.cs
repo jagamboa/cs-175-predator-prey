@@ -307,9 +307,20 @@ namespace PredatorPrey
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
                         eyes = new VisionContainer();
-                        foreach (Creature predator in wulffiesList)
+                        //foreach (Creature predator in wulffiesList)
+                        //{
+                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(predator.position, prey.position), Vector2.Normalize(predator.velocity)));
+                        //}
+                        if (Vector2.Subtract(wulffiesList[0].position, prey.position).Length() <
+                            Vector2.Subtract(wulffiesList[1].position, prey.position).Length())
                         {
-                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(predator.position, prey.position), Vector2.Normalize(predator.velocity)));
+                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
+                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[1].position, prey.position), Vector2.Normalize(wulffiesList[1].velocity)));
+                        }
+                        else
+                        {
+                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[1].position, prey.position), Vector2.Normalize(wulffiesList[1].velocity)));
+                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
                         }
                         prey.wrap(eyes, temp_ac);
                         if (eyes.size() > 0)

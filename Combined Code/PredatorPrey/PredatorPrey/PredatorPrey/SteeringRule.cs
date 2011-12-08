@@ -21,43 +21,32 @@ namespace PredatorPrey
             List<double> newWeights = ruleNet.getListOfWeights();
 
             int i;
-            newWeights[0] = 0;
-            for (i = 1; i < Parameters.maxVisionInput + 1; i++)
-            {
-                if (i % 2 != 0)
-                {
-                    newWeights[i] = 1;
-                }
-                else
-                {
-                    newWeights[i] = 0;
-                }
-            }
-
-            newWeights[i] = 0;
-            for (i = i + 1; i < 2 * (Parameters.maxVisionInput + 1); i++)
+            int scale;
+            for (i = 0, scale = 0; i < Parameters.maxVisionInput; i++, scale++)
             {
                 if (i % 2 == 0)
                 {
-                    newWeights[i] = 1;
+                    newWeights[i] = 1 * ((float)Parameters.maxVisionInput - scale) / Parameters.maxVisionInput;
                 }
                 else
                 {
                     newWeights[i] = 0;
                 }
             }
+            newWeights[i] = 0;
 
+            for (i = i + 1, scale = 0; i < 2 * Parameters.maxVisionInput + 1; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    newWeights[i] = 1 * ((float)Parameters.maxVisionInput - scale) / Parameters.maxVisionInput;
+                }
+                else
+                {
+                    newWeights[i] = 0;
+                }
+            }
             newWeights[i] = 0;
-            i++;
-            newWeights[i] = 1;
-            i++;
-            newWeights[i] = 0;
-            i++;
-            newWeights[i] = 0;
-            i++;
-            newWeights[i] = 0;
-            i++;
-            newWeights[i] = 1;
 
             ruleNet.replaceWeights(newWeights);
         }
@@ -90,7 +79,7 @@ namespace PredatorPrey
             }
 
             if (inputs.Count() != (Parameters.maxVisionInput))
-                Console.WriteLine("miscounted: expected (" + (Parameters.maxVisionInput + Parameters.maxHearInput) +
+                Console.WriteLine("miscounted: expected (" + Parameters.maxVisionInput +
                     "); actual (" + inputs.Count() + ")");
 
             List<double> outputs = ruleNet.run(inputs);

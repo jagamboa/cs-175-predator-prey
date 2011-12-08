@@ -9,11 +9,11 @@ namespace PredatorPrey
     class AvoidanceRule
     {
         private NeuralNetwork ruleNet;
-
+        private int totalInput = Parameters.maxVisionInput + Parameters.maxHearInput;
         public AvoidanceRule()
         {
             // create new neural network
-            ruleNet = new NeuralNetwork(Parameters.maxVisionInput + Parameters.maxHearInput, Parameters.inputsPerSensedObject,
+            ruleNet = new NeuralNetwork(totalInput, Parameters.inputsPerSensedObject,
                 Parameters.avoid_numOfHiddenLayers, Parameters.avoid_numOfNeuronsPerLayer);
 
             // replace default weights with custom weights
@@ -21,11 +21,12 @@ namespace PredatorPrey
             List<double> newWeights = ruleNet.getListOfWeights();
 
             int i;
-            for (i = 0; i < Parameters.maxVisionInput + Parameters.maxHearInput; i++)
+            int scale;
+            for (i = 0, scale = 0; i < totalInput; i++, scale++)
             {
                 if (i % 2 == 0)
                 {
-                    newWeights[i] = -1;
+                    newWeights[i] = -1 * ((float)totalInput - scale) / totalInput;
                 }
                 else
                 {
@@ -34,11 +35,11 @@ namespace PredatorPrey
             }
             newWeights[i] = 0;
 
-            for (i = i + 1; i < 2 * (Parameters.maxVisionInput + Parameters.maxHearInput) + 1; i++)
+            for (i = i + 1, scale = 0; i < 2 * totalInput + 1; i++)
             {
                 if (i % 2 == 0)
                 {
-                    newWeights[i] = -1;
+                    newWeights[i] = -1 * ((float)totalInput - scale) / totalInput;
                 }
                 else
                 {
@@ -46,18 +47,6 @@ namespace PredatorPrey
                 }
             }
             newWeights[i] = 0;
-            //i++;
-            //newWeights[i] = -1;
-            //i++;
-            //newWeights[i] = 0;
-            //i++;
-            //newWeights[i] = 0;
-            //i++;
-            //newWeights[i] = 0;
-            //i++;
-            //newWeights[i] = -1;
-            //i++;
-            //newWeights[i] = 0;
 
             ruleNet.replaceWeights(newWeights);
         }
@@ -79,7 +68,7 @@ namespace PredatorPrey
                 hearPos.Add(ac.getHeardObject(i));
             }
 
-            List<double> inputs = new List<double>(Parameters.maxVisionInput + Parameters.maxHearInput);
+            List<double> inputs = new List<double>(totalInput);
             for (int i = 0; i < vc.size() + ac.size(); i++)
             {
                 Vector2 pos;
@@ -99,13 +88,13 @@ namespace PredatorPrey
             }
 
             // fill remaining inputs with 0's
-            for (int i = inputs.Count(); i < Parameters.maxVisionInput + Parameters.maxHearInput; i++)
+            for (int i = inputs.Count(); i < totalInput; i++)
             {
                 inputs.Add(0);
             }
 
-            if (inputs.Count() != (Parameters.maxVisionInput + Parameters.maxHearInput))
-                Console.WriteLine("miscounted: expected (" + (Parameters.maxVisionInput + Parameters.maxHearInput) +
+            if (inputs.Count() != totalInput)
+                Console.WriteLine("miscounted: expected (" + totalInput +
                     "); actual (" + inputs.Count() + ")");
 
             List<double> outputs = ruleNet.run(inputs);
