@@ -302,12 +302,6 @@ namespace PredatorPrey
                         }
                         visionRect = new Color[height * width];
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
-                        for (int i = 0; i < height * width; i++)
-                        {
-                            if (i % width == 0)
-                                Console.WriteLine("");
-                            Console.Write((visionRect[i].R + visionRect[i].G + visionRect[i].B) + "\t");
-                        }
                         eyes = sm.findObjects(prey, visionRect, width, height);
                         eyes = new VisionContainer();
                         //foreach (Creature predator in wulffiesList)

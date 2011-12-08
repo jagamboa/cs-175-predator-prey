@@ -115,6 +115,7 @@ namespace PredatorPrey
                         if (count == visionArea.Length)
                             break;
                     }
+
                         /*
                     else if(visionArea[count].Equals(Color.Red))
                     {
