@@ -18,9 +18,11 @@ namespace PredatorPrey
         public const float crossoverRate = 0.7F;
         public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
+
         public const int numberOfWolves = 0;
         public const int numberOfSheep = 3;
         public const int numberOfUpdates = 200;
+
         public const float maxRotation = 0.1F;
         public const float maxMoveSpeed = 2F;
         public const float maxAcceleration = .005F;
