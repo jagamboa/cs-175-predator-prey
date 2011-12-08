@@ -32,7 +32,7 @@ namespace PredatorPrey
         public Vector2 initPos;
         public Vector2 initDirection;
         public Vector2 position;
-        public Vector2 direction;
+        public Vector2 velocity;
 
         public double rotation;
 
@@ -52,7 +52,7 @@ namespace PredatorPrey
             initDirection = new Vector2((float)-Math.Sin(rotation), (float)Math.Cos(rotation));
 
             this.position = new Vector2(initPos.X, initPos.Y);
-            this.direction = new Vector2(initDirection.X, initDirection.Y);
+            this.velocity = new Vector2(initDirection.X, initDirection.Y);
 
             hunger = Parameters.startingHunger;
             eating = false;
@@ -89,8 +89,8 @@ namespace PredatorPrey
             fitness = 0;
             position.X = initPos.X;
             position.Y = initPos.Y;
-            direction.X = initDirection.X;
-            direction.Y = initDirection.Y;
+            velocity.X = initDirection.X;
+            velocity.Y = initDirection.Y;
             leftSideSpeed = 0;
             rightSideSpeed = 0;
         }
@@ -110,7 +110,7 @@ namespace PredatorPrey
             position.X = Parameters.random.Next(Parameters.worldWidth);
             position.Y = Parameters.random.Next(Parameters.worldHeight);
 
-            direction = initDirection;
+            velocity = initDirection;
         }
 
         //this is to calculate the personal fitness function
@@ -120,40 +120,8 @@ namespace PredatorPrey
             return 0;
         }
 
-        public virtual void update(VisionContainer vc, AudioContainer ac)
+        public virtual void wrap(VisionContainer vc, AudioContainer ac)
         {
-            // calculate the rotation
-            double rotationChange = leftSideSpeed - rightSideSpeed;
-            double movementSpeed = leftSideSpeed + rightSideSpeed;
-
-            if (movementSpeed > Parameters.maxMoveSpeed)
-            {
-                movementSpeed = Parameters.maxMoveSpeed;
-            }
-
-            // ensure the creature does not turn faster than is allowed
-            if (rotationChange < -Parameters.maxRotation)
-            {
-                rotationChange = -Parameters.maxRotation;
-            }
-            else if (rotationChange > Parameters.maxRotation)
-            {
-                rotationChange = Parameters.maxRotation;
-            }
-
-            // update the direction the creature is facing
-
-            rotation += rotationChange;
-
-            direction.X = (float)-Math.Sin(rotation);
-            direction.Y = (float)Math.Cos(rotation);
-
-            //double newrotation = getAngle();
-
-            // update the creature's position
-            position.X += (float)(direction.X * movementSpeed);
-            position.Y += (float)(direction.Y * movementSpeed);
-
             // wrap around world if necessary
             if (position.X > Parameters.worldWidth)
                 position.X = -Parameters.worldWidth;

@@ -244,7 +244,7 @@ namespace PredatorPrey
                         visionRect = new Color[height*width];
                         GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
                         eyes =sm.findObjects(predator, visionRect, width, height);
-                        predator.update(eyes, temp_ac);
+                        predator.wrap(eyes, temp_ac);
                         // step1: gather this predator's visual percepts
 
                         // step2: give the predator it's visual percepts and update's it's state (hunger, position, fitness, etc)
@@ -302,7 +302,7 @@ namespace PredatorPrey
                         visionRect = new Color[height * width];
                         GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
-                        prey.update(eyes, temp_ac);
+                        prey.wrap(eyes, temp_ac);
                         //if (eyes.size() > 0)
                         //{
                         //    prey.leftSideSpeed = 1;
@@ -329,7 +329,7 @@ namespace PredatorPrey
                         {
                             int positionX = (int)(preyList[j].position.X -predatorList[i].position.X);
                             int positionY = (int)(preyList[j].position.Y -predatorList[i].position.Y);
-                            if (Vector2.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch && positionX*predatorList[i].direction.X>0 && positionY*predatorList[i].direction.Y>0)
+                            if (Vector2.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch && positionX*predatorList[i].velocity.X>0 && positionY*predatorList[i].velocity.Y>0)
                             {
                                 // step1: kill the sheep
                                 preyList[i].die();
@@ -430,7 +430,7 @@ namespace PredatorPrey
             {
                 if (i == bestPredatorIndex) // draw the best predator
                 {
-                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.Tomato, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.CadetBlue, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
                 else // draw the other predators
                 {

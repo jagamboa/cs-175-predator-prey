@@ -15,7 +15,7 @@ namespace PredatorPrey
                     Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
         }
 
-        public override void update(VisionContainer vc, AudioContainer ac)
+        public override void wrap(VisionContainer vc, AudioContainer ac)
         {
             // step1: update values that change with time (hunger)
 
