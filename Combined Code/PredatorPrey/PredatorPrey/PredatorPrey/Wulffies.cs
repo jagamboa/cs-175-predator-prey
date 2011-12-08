@@ -15,6 +15,7 @@ namespace PredatorPrey
             brain = new NeuralNetwork(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject, Parameters.inputsPerSensedObject,
                     Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
             good = false;
+            score = 0;
         }
 
         public override void wrap(VisionContainer vc, AudioContainer ac)

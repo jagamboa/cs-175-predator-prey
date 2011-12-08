@@ -25,6 +25,7 @@ namespace PredatorPrey
             //goal = new GoalRule();
             currentGoal = new Vector2(position.X, position.Y);
             good = false;
+            score = 0;
         }
 
         public override void wrap(VisionContainer vc, AudioContainer ac)
