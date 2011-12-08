@@ -19,8 +19,8 @@ namespace PredatorPrey
         public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
 
-        public const int numberOfWolves = 3;
-        public const int numberOfSheep = 3;
+        public const int numberOfWolves = 10;
+        public const int numberOfSheep = 50;
         public const int numberOfUpdates = 2000;
 
         public const float maxRotation = 0.1F;

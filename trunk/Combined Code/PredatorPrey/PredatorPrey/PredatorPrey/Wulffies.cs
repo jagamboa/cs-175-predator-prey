@@ -120,7 +120,10 @@ namespace PredatorPrey
         public int calculateFitness()
         {
             // step1: ???????
-
+            // how hungry
+            // number of threats
+            // number of food
+            // distance to closest food
             return 0;
         }
 
