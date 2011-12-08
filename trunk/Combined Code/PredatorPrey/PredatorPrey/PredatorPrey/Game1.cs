@@ -244,7 +244,7 @@ namespace PredatorPrey
                         }
 
                         visionRect = new Color[height*width];
-                        GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
+                        render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
                         eyes =sm.findObjects(predator, visionRect, width, height);
                         predator.wrap(eyes, temp_ac);
                         // step1: gather this predator's visual percepts
