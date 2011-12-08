@@ -49,8 +49,8 @@ namespace PredatorPrey
             rotation = Parameters.random.NextDouble() * Math.PI * 2;
 
             initPos = position;
-            initDirection = new Vector2((float)-Math.Sin(rotation), (float)Math.Cos(rotation));
-
+            //initDirection = new Vector2((float)-Math.Sin(rotation), (float)Math.Cos(rotation));
+            initDirection = new Vector2(1);
             this.position = new Vector2(initPos.X, initPos.Y);
             this.velocity = new Vector2(initDirection.X, initDirection.Y);
 
