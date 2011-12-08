@@ -276,6 +276,27 @@ namespace PredatorPrey
 
                         eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffiesList[0].position, predator.position), Vector2.Normalize(fluffiesList[0].velocity)));
 
+                        SortedList<float, ObjectSeen> sort = new SortedList<float, ObjectSeen>();
+                        foreach (Creature wulffie in wulffiesList)
+                        {
+                            if (wulffie != predator)
+                            {
+                                sort.Add(Vector2.Subtract(wulffie.position, predator.position).Length(),
+                                    new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, predator.position), Vector2.Normalize(wulffie.velocity)));
+                            }
+                        }
+                        foreach (Creature fluffie in fluffiesList)
+                        {
+
+                            sort.Add(Vector2.Subtract(fluffie.position, predator.position).Length(),
+                                new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, predator.position), Vector2.Normalize(fluffie.velocity)));
+                        }
+
+                        for (int i = 0; i < sort.Values.Count; i++)
+                        {
+                            eyes.add(sort.Values[i]);
+                        }
+
                         predator.wrap(eyes, temp_ac);
                         // step1: gather this predator's visual percepts
 
@@ -351,33 +372,24 @@ namespace PredatorPrey
                         //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
                         //}
 
+                        SortedList<float, ObjectSeen> sort = new SortedList<float, ObjectSeen>();
+                        foreach (Creature wulffie in wulffiesList)
+                        {
+                            sort.Add(Vector2.Subtract(wulffie.position, prey.position).Length(),
+                                new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, prey.position), Vector2.Normalize(wulffie.velocity)));
+                        }
                         foreach (Creature fluffie in fluffiesList)
                         {
                             if (fluffie != prey)
                             {
-                                if (eyes.size() == 0)
-                                    eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
-                                else
-                                {
-                                    if (Vector2.Subtract(eyes.getSeenObject(0).position, prey.position).Length() >
-                                        Vector2.Subtract(fluffie.position, prey.position).Length())
-                                    {
-                                        ObjectSeen temp = eyes.getSeenObject(0);
-                                        eyes.reset();
-                                        eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
-                                        eyes.add(temp);
-                                    }
-                                    else
-                                    {
-                                        eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
-                                    }
-                                }
+                                sort.Add(Vector2.Subtract(fluffie.position, prey.position).Length(),
+                                    new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
                             }
                         }
 
-                        foreach (Creature wulffie in wulffiesList)
+                        for (int i = 0; i < sort.Values.Count; i++)
                         {
-
+                            eyes.add(sort.Values[i]);
                         }
 
                         prey.wrap(eyes, temp_ac);
