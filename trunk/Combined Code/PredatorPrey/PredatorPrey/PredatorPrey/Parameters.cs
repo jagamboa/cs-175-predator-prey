@@ -13,16 +13,17 @@ namespace PredatorPrey
         public const int numberOfOutputs = 2;
         public const int numberOfHiddenLayers = 0;
         public const int numberOfNeuronsPerHiddenLayer = 6;
-        public const double responseCurve = 1;
-        public const double bias = -1;
-        public const double crossoverRate = 0.7;
-        public const double mutationRate = 0.3;
+        public const float responseCurve = 1F;
+        public const float bias = -1F;
+        public const float crossoverRate = 0.7F;
+        public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
         public const int numberOfWolves = 4;
         public const int numberOfSheep = 1;
         public const int numberOfUpdates = 2000;
-        public const double maxRotation = 0.1;
-        public const double maxMoveSpeed = 2;
+        public const float maxRotation = 0.1F;
+        public const float maxMoveSpeed = 2F;
+        public const float maxAcceleration = .25F;
         public const int minDistanceToTouch = 20;
 
         public static int worldWidth;
@@ -31,14 +32,14 @@ namespace PredatorPrey
         public static Random random;
 
         //these are values for the creatures
-        public const double startingHunger = 5;
+        public const float startingHunger = 5F;
         public const int eatingAddition = 1;
-        public const double starvingSubtract =.1;
+        public const float starvingSubtract =.1F;
 
         //these are values for the weights that determin the fitness function
-        public const double hungerWeight = .5;
-        public const double numberOfWolvesWeight = .2;
-        public const double closestWolfWeight = .3;
+        public const float hungerWeight = .5F;
+        public const float numberOfWolvesWeight = .2F;
+        public const float closestWolfWeight = .3F;
 
         //these are for size of vision
         public const int predatorVisionWidth = 40;
@@ -78,5 +79,8 @@ namespace PredatorPrey
         public const int goal_numberOfExtraInputs = 1;
         public const int goal_numOfHiddenLayers = 1;
         public const int goal_numOfNeuronsPerLayer = 10;
+
+        // steering modification
+        public const float accel_clampVal = 0.015F;
     }
 }

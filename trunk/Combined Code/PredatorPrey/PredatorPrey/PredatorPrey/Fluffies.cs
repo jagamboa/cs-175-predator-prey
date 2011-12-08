@@ -26,7 +26,7 @@ namespace PredatorPrey
             currentGoal = new Vector2(position.X, position.Y);
         }
 
-        public override void update(VisionContainer vc, AudioContainer ac)
+        public override void wrap(VisionContainer vc, AudioContainer ac)
         {
             //step1: update values that change with time (hunger)
             
@@ -81,10 +81,24 @@ namespace PredatorPrey
             //Vector2.Multiply(result, (float)(outputs[3] * Parameters.maxMoveSpeed));
 
             //step4: update velocity, position, and direction
-            leftSideSpeed = outputs[0];
-            rightSideSpeed = outputs[1];
+            Vector2 acceleration = new Vector2((float) outputs[0], (float) outputs[1]);
+            acceleration = Vector2.Normalize(acceleration);
+            acceleration = Vector2.Clamp(acceleration, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),
+                new Vector2(Parameters.accel_clampVal, Parameters.accel_clampVal));
+            acceleration = acceleration * Parameters.maxAcceleration;
 
-            base.update(vc, ac);
+            velocity = acceleration + velocity;
+
+            if (velocity.Length() > Parameters.maxMoveSpeed)
+            {
+                velocity = Vector2.Normalize(velocity) * Parameters.maxMoveSpeed;
+            }
+
+            position = position + velocity;
+
+            rotation = Math.Atan2((Vector2.UnitX.X - velocity.X), (Vector2.UnitX.Y - velocity.Y));
+
+            base.wrap(vc, ac);
         }
 
         public void updateWeights()
