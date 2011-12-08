@@ -451,11 +451,6 @@ namespace PredatorPrey
                             {
                                 // step1: kill the sheep
                                 fluffiesList[j].die();
-                                for (int s = 0; s < fluffiesList.Count; s++)
-                                {
-                                    fluffiesList[s].score++;
-                                }
-                                fluffiesList[j].score = 0;
                                 // step2: change any fitness/eat count values accordingly
                                 wulffiesList[i].eat();
                                 wulffiesList[i].score++;

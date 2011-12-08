@@ -117,14 +117,41 @@ namespace PredatorPrey
             //              ???????
         }
 
-        public int calculateFitness()
+        public override int calculateFitness(VisionContainer vc)
         {
-            // step1: ???????
-            // how hungry
-            // number of threats
-            // number of food
-            // distance to closest food
-            return 0;
+            int numberOfSheep = 0;
+            int closestSheep = int.MaxValue;
+
+            for (int i = 0; i < vc.size(); i++)
+            {
+                if (vc.getSeenObject(i).type == Classification.Prey)
+                {
+                    numberOfSheep++;
+                    int distance = (int)Vector2.Subtract(vc.getSeenObject(i).position, position).Length();
+
+                    if (distance < closestSheep)
+                        closestSheep = distance;
+                }
+            }
+
+            fitness = (int)(Parameters.initFitness + hunger * Parameters.hungerWeight + 
+                Parameters.numberOfSheepWeight * numberOfSheep);
+
+            if (closestSheep < Parameters.closestSheepMaxPenalty)
+            {
+                fitness += Parameters.closestFoodWeight * closestSheep;
+            }
+            else
+            {
+                fitness -= Parameters.closestSheepMaxPenalty;
+            }
+
+            if (fitness < Parameters.minFitness)
+                fitness = Parameters.minFitness;
+            else if (fitness > Parameters.maxFitness)
+                fitness = Parameters.maxFitness;
+
+            return fitness;
         }
 
         public override void eat()

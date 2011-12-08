@@ -21,7 +21,7 @@ namespace PredatorPrey
 
         public const int numberOfWolves = 0;
         public const int numberOfSheep = 30;
-        public const int numberOfUpdates = 2000;
+        public const int numberOfUpdates = 200;
 
         public const float maxRotation = 0.1F;
         public const float maxMoveSpeed = 2F;
@@ -44,9 +44,19 @@ namespace PredatorPrey
         public const float starving =.1F;
 
         //these are values for the weights that determin the fitness function
-        public const float hungerWeight = .5F;
-        public const float numberOfWolvesWeight = .2F;
-        public const float closestWolfWeight = .3F;
+        public const int hungerWeight = -10;
+        public const int numberOfWolvesWeight = -3;
+        public const int closestWolfDist = 50;
+        public const int closestWolfWeight = 50;
+        public const int numberOfFoodWeight = 3;
+        public const int closestFoodWeight = -1;
+        public const int closestFoodMaxPenalty = 50;
+        public const int numberOfSheepWeight = 3;
+        public const int closestSheepWeight = -1;
+        public const int closestSheepMaxPenalty = 50;
+        public const int maxFitness = 300;
+        public const int initFitness = 100;
+        public const int minFitness = 0;
 
         //these are for size of vision
         //these were used for object detection
