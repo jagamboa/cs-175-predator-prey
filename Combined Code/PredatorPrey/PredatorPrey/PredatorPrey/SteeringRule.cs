@@ -61,16 +61,16 @@ namespace PredatorPrey
 
             List<Vector2> visionPos = new List<Vector2>(vc.size());
 
-            for (int i = 0; i < Math.Min(Parameters.maxVisionInput, vc.size()); i++)
+            for (int i = 0; i < Math.Min(Parameters.maxVisionInput/Parameters.inputsPerSensedObject, vc.size()); i++)
             {
                 if (vc.getSeenObject(i).type == acceptType)
                     visionPos.Add(vc.getSeenObject(i).position);
             }
 
             List<double> inputs = new List<double>(Parameters.maxVisionInput);
-            for (int i = 0; i < vc.size(); i++)
+            for (int i = 0; i < visionPos.Count; i++)
             {
-                Vector2 pos = vc.getSeenObject(i).position;
+                Vector2 pos = visionPos[i];
 
                 inputs.Add(pos.X);
                 inputs.Add(pos.Y);

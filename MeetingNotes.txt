@@ -31,6 +31,12 @@ After calculating the movement vector of each rule:
 	new location
 - store the fitness level of whatever state the creature finally moves to
 
+---Fitness---
+// how hungry
+// number of threats
+// number of food
+// distance to closest food
+
 
 ---Vision---
 - for each creature, define where it is, what direction (estimated) it is

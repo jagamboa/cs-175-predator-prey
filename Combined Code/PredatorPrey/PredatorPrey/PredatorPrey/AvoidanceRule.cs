@@ -63,14 +63,14 @@ namespace PredatorPrey
             List<Vector2> visionPos = new List<Vector2>(vc.size());
             List<Vector2> hearPos = new List<Vector2>(ac.size());
 
-            for (int i = 0; i < Math.Min(Parameters.maxVisionInput, vc.size()); i++)
+            for (int i = 0; i < Math.Min(Parameters.maxVisionInput / Parameters.inputsPerSensedObject, vc.size()); i++)
             {
                 if (acceptType == Classification.Unknown || acceptType == vc.getSeenObject(i).type)
                 {
                     visionPos.Add(vc.getSeenObject(i).position);
                 }
             }
-            for (int i = 0; i < Math.Min(Parameters.maxHearInput, ac.size()); i++)
+            for (int i = 0; i < Math.Min(Parameters.maxHearInput / Parameters.inputsPerSensedObject, ac.size()); i++)
             {
                 hearPos.Add(ac.getHeardObject(i));
             }

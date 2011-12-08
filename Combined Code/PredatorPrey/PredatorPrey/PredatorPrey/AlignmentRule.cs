@@ -61,7 +61,7 @@ namespace PredatorPrey
 
             List<Vector2> visionDir = new List<Vector2>(vc.size());
 
-            for (int i = 0; i < Math.Min(Parameters.maxVisionInput, vc.size()); i++)
+            for (int i = 0; i < Math.Min(Parameters.maxVisionInput / Parameters.inputsPerSensedObject, vc.size()); i++)
             {
                 if (vc.getSeenObject(i).type == acceptType)
                     visionDir.Add(vc.getSeenObject(i).direction);

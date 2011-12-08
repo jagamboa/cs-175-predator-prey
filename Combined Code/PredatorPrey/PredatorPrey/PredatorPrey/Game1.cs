@@ -242,8 +242,8 @@ namespace PredatorPrey
                             rectStartX = 0;
                         }
 
-                        visionRect = new Color[height*width];
-                        render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
+                        //visionRect = new Color[height*width];
+                        //render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
                         //eyes =sm.findObjects(predator, visionRect, width, height);
 
 
@@ -349,8 +349,8 @@ namespace PredatorPrey
                             width = width / 2 + (int)prey.position.X;
                             rectStartX = 0;
                         }
-                        visionRect = new Color[height * width];
-                        render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
+                        //visionRect = new Color[height * width];
+                        //render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         //eyes = sm.findObjects(prey, visionRect, width, height);
                         eyes = new VisionContainer();
 
