@@ -18,12 +18,47 @@ namespace PredatorPrey
 
             // replace default weights with custom weights
             int totalNumberOfWeights = ruleNet.getTotalNumberOfWeights();
-            List<double> newWeights = new List<double>(totalNumberOfWeights);
+            List<double> newWeights = ruleNet.getListOfWeights();
 
-            for (int i = 0; i < totalNumberOfWeights; i++)
+            int i;
+            newWeights[0] = 0;
+            for (i = 1; i < Parameters.maxVisionInput + 1; i++)
             {
-                newWeights.Add(1);
+                if (i % 2 != 0)
+                {
+                    newWeights[i] = 1;
+                }
+                else
+                {
+                    newWeights[i] = 0;
+                }
             }
+
+            newWeights[i] = 0;
+            for (i = i + 1; i < 2 * (Parameters.maxVisionInput + 1); i++)
+            {
+                if (i % 2 == 0)
+                {
+                    newWeights[i] = 1;
+                }
+                else
+                {
+                    newWeights[i] = 0;
+                }
+            }
+
+            newWeights[i] = 0;
+            i++;
+            newWeights[i] = 1;
+            i++;
+            newWeights[i] = 0;
+            i++;
+            newWeights[i] = 0;
+            i++;
+            newWeights[i] = 0;
+            i++;
+            newWeights[i] = 1;
+
             ruleNet.replaceWeights(newWeights);
         }
 
@@ -44,14 +79,8 @@ namespace PredatorPrey
             {
                 Vector2 pos = vc.getSeenObject(i).position;
 
-                double magnitudeInput = pos.Length() / Parameters.preyMaxVisionDist;
-
-                if (pos != Vector2.Zero)
-                    pos = Vector2.Normalize(pos);
-
                 inputs.Add(pos.X);
                 inputs.Add(pos.Y);
-                inputs.Add(magnitudeInput);
             }
 
             // fill remaining inputs with 0's
@@ -60,18 +89,13 @@ namespace PredatorPrey
                 inputs.Add(0);
             }
 
-            if (inputs.Count() != (Parameters.maxVisionInput + Parameters.maxHearInput))
+            if (inputs.Count() != (Parameters.maxVisionInput))
                 Console.WriteLine("miscounted: expected (" + (Parameters.maxVisionInput + Parameters.maxHearInput) +
                     "); actual (" + inputs.Count() + ")");
 
             List<double> outputs = ruleNet.run(inputs);
 
             Vector2 result = new Vector2((float)outputs[0], (float)outputs[1]);
-
-            if (result != Vector2.Zero)
-                result.Normalize();
-
-            Vector2.Multiply(result, (float)(outputs[3] * Parameters.maxMoveSpeed));
 
             return result;
         }

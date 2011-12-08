@@ -18,12 +18,17 @@ namespace PredatorPrey
 
             // replace default weights with custom weights
             int totalNumberOfWeights = ruleNet.getTotalNumberOfWeights();
-            List<double> newWeights = new List<double>(totalNumberOfWeights);
+            List<double> newWeights = ruleNet.getListOfWeights();
 
-            for (int i = 0; i < totalNumberOfWeights; i++)
-            {
-                newWeights.Add(1);
-            }
+            newWeights[1] = 1;
+            newWeights[2] = 0;
+            newWeights[5] = 0;
+            newWeights[6] = 1;
+            newWeights[9] = 1;
+            newWeights[10] = 0;
+            newWeights[12] = 0;
+            newWeights[13] = 1;
+
             ruleNet.replaceWeights(newWeights);
         }
 
@@ -31,24 +36,13 @@ namespace PredatorPrey
         {
             List<double> inputs = new List<double>(Parameters.inputsPerSensedObject);
 
-            double magnitudeInput = pos.Length() / Parameters.preyMaxVisionDist;
-
-            if (pos != Vector2.Zero)
-                pos = Vector2.Normalize(pos);
-
             inputs.Add(pos.X);
             inputs.Add(pos.Y);
-            inputs.Add(magnitudeInput);
-            inputs.Add(hunger / Parameters.startingHunger);
+            inputs.Add(hunger);
 
             List<double> outputs = ruleNet.run(inputs);
 
             Vector2 result = new Vector2((float)outputs[0], (float)outputs[1]);
-
-            if (result != Vector2.Zero)
-                result.Normalize();
-
-            Vector2.Multiply(result, (float)(outputs[2] * Parameters.maxMoveSpeed));
 
             return result;
         }
