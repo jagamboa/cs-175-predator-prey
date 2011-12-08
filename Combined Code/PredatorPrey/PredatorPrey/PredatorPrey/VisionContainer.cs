@@ -32,6 +32,10 @@ namespace PredatorPrey
         {
             return objectsSeen.Count;
         }
+        public void sort(Vector2 viewerPos)
+        {
+            objectsSeen.Sort(new ObjectSeenComparer(viewerPos));
+        }
     }
 
     class ObjectSeen

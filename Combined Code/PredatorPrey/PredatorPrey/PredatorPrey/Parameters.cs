@@ -49,12 +49,21 @@ namespace PredatorPrey
         public const float closestWolfWeight = .3F;
 
         //these are for size of vision
-        public const int predatorVisionWidth = 20;
+        //these were used for object detection
+        /*
+        public const int predatorVisionWidth = 30;
         public const int predatorVisionHeight = 30;
         public const int predatorVisionOffset = predatorVisionHeight/2;
-        public const int preyVisionWidth = 20;
-        public const int preyVisionHeight = 20;
+        public const int preyVisionWidth = 30;
+        public const int preyVisionHeight = 30;
         public const int preyMaxVisionDist = 25;
+        */
+        public const int wulffiesVisionThreashold = 100;
+        public const int fluffiesVisionThreashold = 100;
+
+        public const int boxNum1 = 1;
+        public const int boxNum2 = 10;
+        public const double histThreshold = 3;
 
         //Duration of eating
         public const int eatTime = 20;
