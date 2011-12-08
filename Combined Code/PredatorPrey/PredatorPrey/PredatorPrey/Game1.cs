@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,8 +39,8 @@ namespace PredatorPrey
         //
 
         // variables for toolkit
-        List<Wulffies> predatorList;
-        List<Fluffies> preyList;
+        List<Wulffies> wulffiesList;
+        List<Fluffies> fluffiesList;
         int updates = 0;
         int bestPredatorIndex = 0;
         int bestPredatorFitness = 0;
@@ -87,8 +88,8 @@ namespace PredatorPrey
             Parameters.worldWidth = GraphicsDevice.Viewport.Width;
             Parameters.worldHeight = GraphicsDevice.Viewport.Height;
 
-            predatorList = new List<Wulffies>(Parameters.numberOfWolves);
-            preyList = new List<Fluffies>(Parameters.numberOfSheep);
+            wulffiesList = new List<Wulffies>(Parameters.numberOfWolves);
+            fluffiesList = new List<Fluffies>(Parameters.numberOfSheep);
 
             for (int i = 0; i < Parameters.numberOfWolves; i++)
             {
@@ -97,7 +98,7 @@ namespace PredatorPrey
                 //                               Parameters.random.Next(Parameters.worldHeight));
                 //Vector2 pos = new Vector2(i*100, i*100);
                 Vector2 pos = new Vector2(250 - i * 100, 130 + i * 0);
-                predatorList.Add(new Wulffies(pos));
+                wulffiesList.Add(new Wulffies(pos));
             }
 
             for (int i = 0; i < Parameters.numberOfSheep; i++)
@@ -106,7 +107,7 @@ namespace PredatorPrey
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                                Parameters.random.Next(Parameters.worldHeight));
                 Vector2 pos = new Vector2(200, 130);
-                preyList.Add(new Fluffies(pos));
+                fluffiesList.Add(new Fluffies(pos));
 
             }
 
@@ -190,7 +191,7 @@ namespace PredatorPrey
                     int rectStartY;
                     int width;
                     int height;
-                    foreach (Creature predator in predatorList)
+                    foreach (Creature predator in wulffiesList)
                     {
                         //the creatures will not be able to see past the edge of the screen
                         //therefore this checks if it's vision intersects with any of the walls
@@ -252,7 +253,7 @@ namespace PredatorPrey
 
                         // step3: the predator runs it's weight improvement routine (through the nerual net)
                     }
-                    foreach (Creature prey in preyList)
+                    foreach (Creature prey in fluffiesList)
                     {
                         width = Parameters.preyVisionWidth;
                         height = Parameters.preyVisionHeight;
@@ -331,25 +332,25 @@ namespace PredatorPrey
                     }
 
                     // check if any predators ate any prey
-                    for (int i = 0; i < predatorList.Count; i++)
+                    for (int i = 0; i < wulffiesList.Count; i++)
                     {
-                        for (int j = 0; j < preyList.Count; j++)
+                        for (int j = 0; j < fluffiesList.Count; j++)
                         {
-                            int positionX = (int)(preyList[j].position.X -predatorList[i].position.X);
-                            int positionY = (int)(preyList[j].position.Y -predatorList[i].position.Y);
-                            if (Vector2.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch && positionX*predatorList[i].velocity.X>0 && positionY*predatorList[i].velocity.Y>0)
+                            int positionX = (int)(fluffiesList[j].position.X -wulffiesList[i].position.X);
+                            int positionY = (int)(fluffiesList[j].position.Y -wulffiesList[i].position.Y);
+                            if (Vector2.Distance(wulffiesList[i].position, fluffiesList[j].position) < Parameters.minDistanceToTouch && positionX*wulffiesList[i].velocity.X>0 && positionY*wulffiesList[i].velocity.Y>0)
                             {
                                 // step1: kill the sheep
                                 preyList[j].die();
                                 // step2: change any fitness/eat count values accordingly
-                                predatorList[i].eat();
+                                wulffiesList[i].eat();
                             }
                         }
 
                         // keeps track of the index of the best predator
-                        if (predatorList[i].fitness > bestPredatorFitness)
+                        if (wulffiesList[i].fitness > bestPredatorFitness)
                         {
-                            bestPredatorFitness = predatorList[i].fitness;
+                            bestPredatorFitness = wulffiesList[i].fitness;
                             bestPredatorIndex = i;
                         }
                     }
@@ -370,11 +371,11 @@ namespace PredatorPrey
                     //
 
                     // keeps track of the index of the best prey
-                    for (int i = 0; i < preyList.Count; i++)
+                    for (int i = 0; i < fluffiesList.Count; i++)
                     {
-                        if (preyList[i].fitness > bestPreyFitness)
+                        if (fluffiesList[i].fitness > bestPreyFitness)
                         {
-                            bestPreyFitness = preyList[i].fitness;
+                            bestPreyFitness = fluffiesList[i].fitness;
                             bestPreyIndex = i;
                         }
                     }
@@ -385,21 +386,130 @@ namespace PredatorPrey
                 else
                 {
                     // CONSOLE OUTPUT
-                        // output any statistis that should be outputted after each generation here
+                    // output any statistis that should be outputted after each generation here
 
                     // UPDATE PREDATORS
-                        // step1: gather semi-supervised data
+                    // step1: gather semi-supervised data
+                    // step2: run semi-supervised routine, output new weights
+                    // step3: mutate new weights and place them back in predators (Creature.genes)
+                    List<Wulffies> newWulffies = new List<Wulffies>();
+                    while (newWulffies.Count < Parameters.numberOfWolves)
+                    {
+                        float f1 = (float)Parameters.random.NextDouble();
+                        float f2 = (float)Parameters.random.NextDouble();
+                        Vector2 v2 = new Vector2(f1, f2);
+                        Wulffies w = new Wulffies(v2);
+                        List<double> newWeights = w.genes;
+                        List<double> closest = new List<double>();
+                        List<int> closestID = new List<int>();
+                        for (int x = 0; x < wulffiesList.Count; x++)
+                        {
+                            List<double> xWeights = wulffiesList[x].genes;
+                            double sum = 0;
+                            for (int y = 0; y < newWeights.Count; y++)
+                            {
+                                sum = sum + ((newWeights[y] - xWeights[y]) * (newWeights[y] - xWeights[y]));
+                            }
+                            double distance = Math.Sqrt(sum);
+                            if (closest.Count < Parameters.k)
+                            {
+                                closest.Add(distance);
+                                closestID.Add(x);
+                            }
+                            else
+                            {
+                                foreach (double d in closest)
+                                {
+                                    if (distance < d)
+                                    {
+                                        closest.Remove(d);
+                                        closest.Add(distance);
+                                        closestID.Add(x);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        int countPlus = 0;
+                        int countMinus = 0;
+                        foreach (int i in closestID)
+                        {
+                            if (wulffiesList[i].good)
+                            {
+                                countPlus++;
+                            }
+                            else
+                            {
+                                countMinus++;
+                            }
+                        }
+                        if (countPlus > countMinus)
+                        {
+                            newWulffies.Add(w);
+                        }
+                    }
 
-                        // step2: run semi-supervised routine, output new weights
-
-                        // step3: mutate new weights and place them back in predators (Creature.genes)
 
                     // UPDATE PREY
-                        // step1: gather semi-supervised data
-
-                        // step2: run semi-supervised routine, output new weights
-
-                        // step3: mutate new weights and place them back in prey (Creatures.genes)
+                    // step1: gather semi-supervised data
+                    // step2: run semi-supervised routine, output new weights
+                    // step3: mutate new weights and place them back in prey (Creatures.genes)
+                    List<Fluffies> newFluffies = new List<Fluffies>();
+                    while (newFluffies.Count < Parameters.numberOfSheep)
+                    {
+                        float f1 = (float)Parameters.random.NextDouble();
+                        float f2 = (float)Parameters.random.NextDouble();
+                        Vector2 v2 = new Vector2(f1, f2);
+                        Fluffies f = new Fluffies(v2);
+                        List<double> newWeights = f.genes;
+                        List<double> closest = new List<double>();
+                        List<int> closestID = new List<int>();
+                        for (int x = 0; x < fluffiesList.Count; x++)
+                        {
+                            List<double> xWeights = fluffiesList[x].genes;
+                            double sum = 0;
+                            for (int y = 0; y < newWeights.Count; y++)
+                            {
+                                sum = sum + ((newWeights[y] - xWeights[y]) * (newWeights[y] - xWeights[y]));
+                            }
+                            double distance = Math.Sqrt(sum);
+                            if (closest.Count < Parameters.k)
+                            {
+                                closest.Add(distance);
+                                closestID.Add(x);
+                            }
+                            else
+                            {
+                                foreach (double d in closest)
+                                {
+                                    if (distance < d)
+                                    {
+                                        closest.Remove(d);
+                                        closest.Add(distance);
+                                        closestID.Add(x);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        int countPlus = 0;
+                        int countMinus = 0;
+                        foreach (int i in closestID)
+                        {
+                            if (fluffiesList[i].good)
+                            {
+                                countPlus++;
+                            }
+                            else
+                            {
+                                countMinus++;
+                            }
+                        }
+                        if (countPlus > countMinus)
+                        {
+                            newFluffies.Add(f);
+                        }
+                    }
 
 
                     // reset simulation for next generation
@@ -407,11 +517,11 @@ namespace PredatorPrey
                     bestPredatorFitness = 0;
                     bestPredatorIndex = 0;
 
-                    foreach (Creature predator in predatorList)
+                    foreach (Creature predator in wulffiesList)
                     {
                         predator.reset();
                     }
-                    foreach (Creature sheep in preyList)
+                    foreach (Creature sheep in fluffiesList)
                     {
                         sheep.reset();
                     }
@@ -434,7 +544,7 @@ namespace PredatorPrey
             spriteBatch.Begin();
 
             // draw the predators
-            for (int i = 0; i < predatorList.Count; i++)
+            for (int i = 0; i < wulffiesList.Count; i++)
             {
                 if (i == bestPredatorIndex) // draw the best predator
                 {
@@ -447,16 +557,16 @@ namespace PredatorPrey
                 }
             }
             // draw the prey
-            for (int i = 0; i < preyList.Count; i++)
+            for (int i = 0; i < fluffiesList.Count; i++)
             {
                 if (i == bestPreyIndex) // draw the best prey
                 {
-                    spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.White, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    spriteBatch.Draw(preySprite, fluffiesList[i].getPosition(), null, Color.White, (float)fluffiesList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                     Console.WriteLine("I'm a Prey and I'm @ (" + preyList[i].getPosition().X + ", " + preyList[i].getPosition().Y + ")");
                 }
                 else // draw the other prey
                 {
-                    spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.White, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    spriteBatch.Draw(preySprite, fluffiesList[i].getPosition(), null, Color.White, (float)fluffiesList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
             }
 
