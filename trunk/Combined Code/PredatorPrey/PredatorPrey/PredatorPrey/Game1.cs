@@ -97,7 +97,7 @@ namespace PredatorPrey
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                               Parameters.random.Next(Parameters.worldHeight));
                 //Vector2 pos = new Vector2(i*100, i*100);
-                Vector2 pos = new Vector2(250 - i * 100, 130 + i * 0);
+                Vector2 pos = new Vector2(250 - i * 100 - i, 130 + i * 0);
                 wulffiesList.Add(new Wulffies(pos));
             }
 
