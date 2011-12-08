@@ -299,14 +299,16 @@ namespace PredatorPrey
                             width = width / 2 + (int)prey.position.X;
                             rectStartX = 0;
                         }
+                        //width = 10;
+                        //height = 20;
                         visionRect = new Color[height * width];
-                        GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
+                        render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
                         prey.wrap(eyes, temp_ac);
-                        //if (eyes.size() > 0)
-                        //{
-                        //    prey.leftSideSpeed = 1;
-                        //}
+                        if (eyes.size() > 0)
+                        {
+                            prey.leftSideSpeed = 1;
+                        }
 
                         //for (int i = 0; i < height * width; i++)
                         //{
@@ -421,7 +423,7 @@ namespace PredatorPrey
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.SetRenderTarget(render);
-            GraphicsDevice.Clear(new Color(68, 34, 136));
+            GraphicsDevice.Clear(new Color(168, 134, 236));
 
             spriteBatch.Begin();
 
@@ -430,11 +432,12 @@ namespace PredatorPrey
             {
                 if (i == bestPredatorIndex) // draw the best predator
                 {
-                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.CadetBlue, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.White, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    //spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.CadetBlue, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
                 else // draw the other predators
                 {
-                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.Turquoise, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.White, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
             }
             // draw the prey
@@ -443,6 +446,7 @@ namespace PredatorPrey
                 if (i == bestPreyIndex) // draw the best prey
                 {
                     spriteBatch.Draw(preySprite, preyList[i].getPosition(), null, Color.White, (float)preyList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    Console.WriteLine("I'm a Prey and I'm @ (" + preyList[i].getPosition().X + ", " + preyList[i].getPosition().Y + ")");
                 }
                 else // draw the other prey
                 {

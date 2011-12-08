@@ -14,7 +14,7 @@ namespace PredatorPrey
 {
     class ShapeMatcher
     {
-        public const int boxNum1 = 10;
+        public const int boxNum1 = 1;
         public const int boxNum2 = 10;
         public const double histThreshold = .1;
         List<int[,]> initialHistograms;
@@ -93,9 +93,9 @@ namespace PredatorPrey
             int count = 0;
             int countStop=0;
             Vector2 previousDirection = Vector2.Zero;
-            int leftMostPoint = 100;
+            int leftMostPoint = int.MaxValue;
             int rightMostPoint = 0;
-            int topMostPoint = 100;
+            int topMostPoint = int.MaxValue;
             int bottomMostPoint = 0;
             bool inObject = false;
             while (count < visionArea.Length)
@@ -105,85 +105,53 @@ namespace PredatorPrey
                     if (count == countStop)
                     {
                         visionArea[count] = Color.Red;
-                        container.add(detect(creat, visionArea, topMostPoint,bottomMostPoint,leftMostPoint,rightMostPoint,width,height));
+                        if(width!=0 && height !=0)
+                            container.add(detect(creat, visionArea, topMostPoint,bottomMostPoint,leftMostPoint,rightMostPoint,width,height));
                         count= countStop+1;
                         inObject = false;
+                        if (count == visionArea.Length)
+                            break;
                     }
+                        /*
                     else if(visionArea[count].Equals(Color.Red))
                     {
-                        container.add(detect(creat, visionArea, topMostPoint, bottomMostPoint, leftMostPoint, rightMostPoint, width, height));
+                        if(width!=0&&height!=0)
+                            container.add(detect(creat, visionArea, topMostPoint, bottomMostPoint, leftMostPoint, rightMostPoint,width, height));
                         count = countStop + 1;
                         inObject = false;
-                    }
+                        if (count == visionArea.Length)
+                            break;
+                    }*/
                 }
 
-                if (visionArea[count].R + visionArea[count].G + visionArea[count].B >740)
+                if (visionArea[count].R + visionArea[count].G + visionArea[count].B >= 1 &&
+                    visionArea[count].R + visionArea[count].G + visionArea[count].B <= 240)
                 {
                     if (inObject)
                     {
-                        if (count % width > rightMostPoint)
+                        if (count % width > rightMostPoint%width)
                             rightMostPoint = count;
-                        else if (count % width < leftMostPoint)
+                        else if (count % width < leftMostPoint%width)
                             leftMostPoint = count;
-                        if (count / width > bottomMostPoint)
+                        if (count / width > bottomMostPoint/width)
                             bottomMostPoint = count;
-                        else if (count / width < topMostPoint)
+                        else if (count / width < topMostPoint/width)
                             topMostPoint = count;
-
-                        if (previousDirection.X != 1 && visionArea[count + 1].R + visionArea[count + 1].G + visionArea[count + 1].B > 740)
-                        {
-                            count++;
-                        }
-                        else if (previousDirection.Y == -1 && visionArea[count - width].R + visionArea[count - width].G + visionArea[count - width].B > 740)
-                        {
-                            count = count - width;
-                        }
-                        else if ((previousDirection.X != 1 && previousDirection.Y == -1) && visionArea[count - width + 1].R + visionArea[count - width + 1].G + visionArea[count - width + 1].B > 740)
-                        {
-                            count = count - width + 1;
-                        }
-                        else if (previousDirection.Y == 1 && visionArea[count + width].R + visionArea[count + width].G + visionArea[count + width].B > 740)
-                        {
-                            count = count + width;
-                        }
-                        else if ((previousDirection.X != 1 && previousDirection.Y == 1) && visionArea[count + width + 1].R + visionArea[count + width + 1].G + visionArea[count + width + 1].B > 740)
-                        {
-                            count = count + width + 1;
-                        }
-                        else if ((previousDirection.X != -1 && previousDirection.Y == -1) && visionArea[count - width - 1].R + visionArea[count - width - 1].G + visionArea[count - width - 1].B > 740)
-                        {
-                            count = count - width - 1;
-                        }
-                        else if ((previousDirection.X != -1 && previousDirection.Y == 1) && visionArea[count + width - 1].R + visionArea[count + width - 1].G + visionArea[count + width - 1].B > 740)
-                        {
-                            count = count + width - 1;
-                        }
-                        else if (previousDirection.X != -1 && visionArea[count - 1].R + visionArea[count - 1].G + visionArea[count - 1].B > 740)
-                        {
-                            count--;
-                        }
-                        else if (visionArea[count + width].G - visionArea[count + width].B > 200)
-                        {
-                            for (int i = 1; i <= 10; i++)
-                            {
-                                if (count + i * width < visionArea.Count() && visionArea[count + i * width].A + visionArea[count + i * width].G + visionArea[count + i * width].B > 740)
-                                {
-                                    count = count + i * width;
-                                }
-                            }
-                        }
-                        else
-                            count = countStop;
                         visionArea[count] = Color.Red;
+                        count = findNext(count, previousDirection, visionArea, width, countStop);
+                        
                     }
                     else
                     {
-                        countStop = count;
-                        inObject = true;
-                        leftMostPoint = count;
-                        rightMostPoint = count;
-                        topMostPoint = count;
-                        bottomMostPoint = count;
+                            
+                            countStop = count;
+                            inObject = true;
+                            leftMostPoint = count;
+                            rightMostPoint = count;
+                            topMostPoint = count;
+                            bottomMostPoint = count;
+                            count = findNext(count, previousDirection, visionArea, width, countStop);
+
                     }
                 }
                 else
@@ -192,15 +160,105 @@ namespace PredatorPrey
             return container;
         }
 
-        private ObjectSeen detect(Creature creat, Color[] visionArea2, int top, int bottom, int left, int right, int areaWidth, int areaHeight)
+        private int findNext(int count, Vector2 previousDirection, Color[] visionArea, int width, int countStop)
+        {
+            try
+            {
+                //previousDirection.X != 1 && 
+                if (visionArea[count + 1].R + visionArea[count + 1].G + visionArea[count + 1].B >= 1 &&
+                    visionArea[count + 1].R + visionArea[count + 1].G + visionArea[count + 1].B <= 240)
+                {
+                    return count+1;
+                }
+            }
+            catch(IndexOutOfRangeException e){}
+            try{
+                //previousDirection.Y == -1 &&
+                 if (visionArea[count - width].R + visionArea[count - width].G + visionArea[count - width].B >= 1 &&
+                     visionArea[count - width].R + visionArea[count - width].G + visionArea[count - width].B <= 240)
+                {
+                    return count - width;
+                }
+            }
+            catch(IndexOutOfRangeException e){}
+            try{
+                //(previousDirection.X != 1 && previousDirection.Y == -1) 
+                if (visionArea[count - width + 1].R + visionArea[count - width + 1].G + visionArea[count - width + 1].B >= 1 &&
+                    visionArea[count - width + 1].R + visionArea[count - width + 1].G + visionArea[count - width + 1].B <= 240)
+                {
+                    return count - width + 1;
+                }
+            }
+            catch(IndexOutOfRangeException e){}
+            try{
+                //previousDirection.Y == 1 && 
+                if (visionArea[count + width].R + visionArea[count + width].G + visionArea[count + width].B >= 1 &&
+                    visionArea[count + width].R + visionArea[count + width].G + visionArea[count + width].B <= 240)
+                {
+                    return count + width;
+                }
+            }catch(IndexOutOfRangeException e){}
+            try{
+                //(previousDirection.X != 1 && previousDirection.Y == 1) && 
+            if (visionArea[count + width + 1].R + visionArea[count + width + 1].G + visionArea[count + width + 1].B >= 1 &&
+                visionArea[count + width + 1].R + visionArea[count + width + 1].G + visionArea[count + width + 1].B <= 240)
+                {
+                    return count + width + 1;
+                }
+            }catch(IndexOutOfRangeException e){}
+            try{
+                //(previousDirection.X != -1 && previousDirection.Y == -1) && 
+                if (visionArea[count - width - 1].R + visionArea[count - width - 1].G + visionArea[count - width - 1].B >= 1 &&
+                    visionArea[count - width - 1].R + visionArea[count - width - 1].G + visionArea[count - width - 1].B <= 240)
+                {
+                    return count - width - 1;
+                }
+            }catch(IndexOutOfRangeException e){}
+            try{
+                //(previousDirection.X != -1 && previousDirection.Y == 1) && 
+                if (visionArea[count + width - 1].R + visionArea[count + width - 1].G + visionArea[count + width - 1].B >= 1 &&
+                    visionArea[count + width - 1].R + visionArea[count + width - 1].G + visionArea[count + width - 1].B <= 240)
+                {
+                    return count + width - 1;
+                }
+            }catch(IndexOutOfRangeException e){}
+            try{
+                //previousDirection.X != -1 && 
+                if (visionArea[count - 1].R + visionArea[count - 1].G + visionArea[count - 1].B >= 1 &&
+                    visionArea[count - 1].R + visionArea[count - 1].G + visionArea[count - 1].B <= 240)
+                {
+                    return count-1;
+                }
+            }catch(IndexOutOfRangeException e){}
+            try
+            {
+                if (visionArea[count + width].G - visionArea[count + width].B > 200)
+                {
+                    for (int i = 1; i <= 10; i++)
+                    {
+                        if (count + i * width < visionArea.Count() && visionArea[count + i * width].A + visionArea[count + i * width].G + visionArea[count + i * width].B == 6)
+                        {
+                            return count + i * width;
+                        }
+                    }
+                    return countStop;
+                }
+            }
+            catch (IndexOutOfRangeException e) { }
+                return countStop;
+        }
+
+        private ObjectSeen detect(Creature creat, Color[] visionArea2, int top, int bottom, int left, int right, int imageWidth, int imageHeight)
         {
             double best = int.MaxValue;
             ObjectSeen bestObject = null;
             double tempHist;
-            int width = right-left;
-            int height = bottom-top;
+
+            int width = right%imageWidth-left%imageWidth;
+            int height = bottom/imageHeight-top/imageHeight;
             int max = Math.Max(width, height);
-            int[,] tempImage = new int[width,height];
+            int[,] tempImage = new int[max,max];
+            
             if (width == max)
             {
                 for (int j=0; j < visionArea2.Length; j++)
@@ -217,18 +275,22 @@ namespace PredatorPrey
                         tempImage[j % width + ((max - width) / 2), j / width] = 1;
                 }
             }
-            tempImage = createHistogram(tempImage, max, max);
-            for (int i = 0; i < initialHistograms.Count; i++)
+            if (max != 0)
             {
-                tempHist = compareHistograms(tempImage, initialHistograms[i]);
-                if(tempHist<best)
+                tempImage = createHistogram(tempImage, max, max);
+                for (int i = 0; i < initialHistograms.Count; i++)
                 {
-                    best = tempHist;
-                    bestObject = new ObjectSeen(types[i / 8], new Vector2(Math.Abs(creat.getPosition().X - (left + width / 2)), Math.Abs(creat.getPosition().Y - (top + height / 2))), directions[i % 8]);
+                    tempHist = compareHistograms(tempImage, initialHistograms[i]);
+                    if (tempHist < best)
+                    {
+                        best = tempHist;
+                        bestObject = new ObjectSeen(types[i / 8], new Vector2(Math.Abs(creat.getPosition().X - (left + width / 2)), Math.Abs(creat.getPosition().Y - (top + height / 2))), directions[i % 8]);
+                    }
                 }
+                if (best > histThreshold)
+                    bestObject.type = Classification.Unknown;
             }
-            if (best > histThreshold)
-                bestObject.type = Classification.Unknown;
+
             return bestObject;
         }
 

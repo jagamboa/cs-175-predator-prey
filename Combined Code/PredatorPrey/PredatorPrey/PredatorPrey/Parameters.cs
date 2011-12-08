@@ -18,7 +18,7 @@ namespace PredatorPrey
         public const float crossoverRate = 0.7F;
         public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
-        public const int numberOfWolves = 4;
+        public const int numberOfWolves = 0;
         public const int numberOfSheep = 1;
         public const int numberOfUpdates = 2000;
         public const float maxRotation = 0.1F;
@@ -42,11 +42,11 @@ namespace PredatorPrey
         public const float closestWolfWeight = .3F;
 
         //these are for size of vision
-        public const int predatorVisionWidth = 40;
-        public const int predatorVisionHeight = 50;
+        public const int predatorVisionWidth = 20;
+        public const int predatorVisionHeight = 30;
         public const int predatorVisionOffset = predatorVisionHeight/2;
-        public const int preyVisionWidth = 50;
-        public const int preyVisionHeight = 50;
+        public const int preyVisionWidth = 20;
+        public const int preyVisionHeight = 20;
         public const int preyMaxVisionDist = 25;
 
         //Duration of eating
