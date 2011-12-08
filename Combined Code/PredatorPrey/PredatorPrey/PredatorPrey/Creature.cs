@@ -48,7 +48,7 @@ namespace PredatorPrey
         public Creature(Vector2 position)
         {
             //brain = new NeuralNetwork();
-            rotation = 0;//Parameters.random.NextDouble() * Math.PI * 2;
+            rotation = Math.PI/4;//Parameters.random.NextDouble() * Math.PI * 2;
 
             initPos = position;
             initDirection = new Vector2((float)-Math.Sin(rotation), (float)Math.Cos(rotation));
