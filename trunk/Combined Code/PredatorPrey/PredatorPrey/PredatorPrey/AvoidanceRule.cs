@@ -29,6 +29,9 @@ namespace PredatorPrey
 
         public Vector2 run(VisionContainer vc, AudioContainer ac)
         {
+            if (vc.size() == 0 && ac.size() == 0)
+                return Vector2.Zero;
+
             List<Vector2> visionPos = new List<Vector2>(vc.size());
             List<Vector2> hearPos = new List<Vector2>(ac.size());
 
@@ -59,7 +62,7 @@ namespace PredatorPrey
                 double magnitudeInput = pos.Length() / Parameters.preyMaxVisionDist;
 
                 if (pos != Vector2.Zero)
-                    pos.Normalize();
+                    pos = Vector2.Normalize(pos);
 
                 inputs.Add(pos.X);
                 inputs.Add(pos.Y);

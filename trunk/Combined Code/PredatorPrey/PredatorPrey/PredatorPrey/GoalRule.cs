@@ -27,18 +27,19 @@ namespace PredatorPrey
             ruleNet.replaceWeights(newWeights);
         }
 
-        public Vector2 run(Vector2 pos)
+        public Vector2 run(Vector2 pos, double hunger)
         {
             List<double> inputs = new List<double>(Parameters.inputsPerSensedObject);
 
             double magnitudeInput = pos.Length() / Parameters.preyMaxVisionDist;
 
             if (pos != Vector2.Zero)
-                pos.Normalize();
+                pos = Vector2.Normalize(pos);
 
             inputs.Add(pos.X);
             inputs.Add(pos.Y);
             inputs.Add(magnitudeInput);
+            inputs.Add(hunger / Parameters.startingHunger);
 
             List<double> outputs = ruleNet.run(inputs);
 
@@ -47,7 +48,7 @@ namespace PredatorPrey
             if (result != Vector2.Zero)
                 result.Normalize();
 
-            Vector2.Multiply(result, (float)(outputs[3] * Parameters.maxMoveSpeed));
+            Vector2.Multiply(result, (float)(outputs[2] * Parameters.maxMoveSpeed));
 
             return result;
         }
