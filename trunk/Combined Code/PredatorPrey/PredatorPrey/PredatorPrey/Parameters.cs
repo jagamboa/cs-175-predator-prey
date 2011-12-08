@@ -19,8 +19,8 @@ namespace PredatorPrey
         public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
 
-        public const int numberOfWolves = 10;
-        public const int numberOfSheep = 50;
+        public const int numberOfWolves = 0;
+        public const int numberOfSheep = 30;
         public const int numberOfUpdates = 2000;
 
         public const float maxRotation = 0.1F;
@@ -58,10 +58,10 @@ namespace PredatorPrey
         public const int preyVisionHeight = 30;
         public const int preyMaxVisionDist = 25;
         */
-        public const int wulffiesVisionThreashold = 100;
-        public const int fluffiesVisionThreashold = 100;
+        public const int wulffiesVisionThreashold = 200;
+        public const int fluffiesVisionThreashold = 200;
 
-        public const int boxNum1 = 1;
+        public const int boxNum1 = 10;
         public const int boxNum2 = 10;
         public const double histThreshold = 3;
 
