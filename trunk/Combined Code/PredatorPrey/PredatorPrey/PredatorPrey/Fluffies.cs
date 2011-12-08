@@ -16,13 +16,13 @@ namespace PredatorPrey
 
         public Fluffies(Vector2 position) : base(position)
         {
-            brain = new NeuralNetwork(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject, 2,
+            brain = new NeuralNetwork(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject, 3,
                 Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
 
             avoid = new AvoidanceRule();
-            steer = new SteeringRule();
-            align = new AlignmentRule();
-            goal = new GoalRule();
+            //steer = new SteeringRule();
+            //align = new AlignmentRule();
+            //goal = new GoalRule();
             currentGoal = new Vector2(position.X, position.Y);
         }
 
@@ -51,9 +51,9 @@ namespace PredatorPrey
             List<Vector2> ruleVectors = new List<Vector2>(Parameters.preyNumberOfRules);
 
             ruleVectors.Add(avoid.run(vc, ac));
-            ruleVectors.Add(steer.run(vc));
-            ruleVectors.Add(align.run(vc));
-            ruleVectors.Add(goal.run(currentGoal, hunger));
+            //ruleVectors.Add(steer.run(vc));
+            //ruleVectors.Add(align.run(vc));
+            //ruleVectors.Add(goal.run(currentGoal, hunger));
 
             //step3: pass vectors into neural network to get outputs
             List<double> inputs = new List<double>(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject);
@@ -61,17 +61,11 @@ namespace PredatorPrey
             {
                 Vector2 pos = ruleVectors[i];
 
-                double magnitudeInput = pos.Length() / Parameters.preyMaxVisionDist;
-
-                if (pos != Vector2.Zero)
-                    pos = Vector2.Normalize(pos);
-
                 inputs.Add(pos.X);
                 inputs.Add(pos.Y);
-                inputs.Add(magnitudeInput);
             }
 
-            List<double> outputs = brain.run(inputs);
+            //List<double> outputs = brain.run(inputs);
 
             //Vector2 result = new Vector2((float)outputs[0], (float)outputs[1]);
 
@@ -81,8 +75,9 @@ namespace PredatorPrey
             //Vector2.Multiply(result, (float)(outputs[3] * Parameters.maxMoveSpeed));
 
             //step4: update velocity, position, and direction
-            Vector2 acceleration = new Vector2((float) outputs[0], (float) outputs[1]);
-            acceleration = Vector2.Normalize(acceleration);
+            Vector2 acceleration = new Vector2((float) ruleVectors[0].X, (float) ruleVectors[0].Y);
+            if (acceleration.Length() != 0)
+                acceleration = Vector2.Normalize(acceleration);
             acceleration = Vector2.Clamp(acceleration, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),
                 new Vector2(Parameters.accel_clampVal, Parameters.accel_clampVal));
             acceleration = acceleration * Parameters.maxAcceleration;
@@ -96,7 +91,11 @@ namespace PredatorPrey
 
             position = position + velocity;
 
-            rotation = Math.Atan2((Vector2.UnitX.X - velocity.X), (Vector2.UnitX.Y - velocity.Y));
+            if (velocity != Vector2.Zero)
+            {
+                Vector2 direction = Vector2.Normalize(velocity);
+                rotation = Math.Atan2((Vector2.UnitY.X - direction.X), (Vector2.UnitY.Y - direction.Y));
+            }
 
             base.wrap(vc, ac);
         }

@@ -79,9 +79,9 @@ namespace PredatorPrey
                             "\nold weight count: " + totalNumberOfWeights + ", new weight count: " + newWeights.Count);
             }
 
-            foreach (NeuronLayer neuronLayer in networkLayers)
+            for (int i = 0; i < networkLayers.Count; i++)
             {
-                neuronLayer.replaceWeights(newWeights);
+                networkLayers[i].replaceWeights(newWeights);
             }
         }
 
@@ -113,30 +113,30 @@ namespace PredatorPrey
             return outputs;
         }
 
-        // runs inputs through the neural network and returns a list of outputs
-        public List<Vector2> run(List<Vector2> inputs)
-        {
-            if (inputs.Count != numberOfInputs)
-            {
-                throw new ArgumentException("The number of inputs passed to this neural network (" + inputs.Count +
-                                            ") does not match the number of inputs this network accepts (" + numberOfInputs + ")");
-            }
+        //// runs inputs through the neural network and returns a list of outputs
+        //public List<Vector2> run(List<Vector2> inputs)
+        //{
+        //    if (inputs.Count != numberOfInputs)
+        //    {
+        //        throw new ArgumentException("The number of inputs passed to this neural network (" + inputs.Count +
+        //                                    ") does not match the number of inputs this network accepts (" + numberOfInputs + ")");
+        //    }
 
-            List<Vector2> outputs = networkLayers[0].run(inputs);
+        //    List<Vector2> outputs = networkLayers[0].run(inputs);
 
-            for (int i = 1; i < numberOfHiddenLayers + 1; i++)
-            {
-                outputs = networkLayers[i].run(outputs);
-            }
+        //    for (int i = 1; i < numberOfHiddenLayers + 1; i++)
+        //    {
+        //        outputs = networkLayers[i].run(outputs);
+        //    }
 
-            if (outputs.Count != numberOfOutputs)
-            {
-                throw new Exception("The number of outputs returned by this neural network (" + outputs.Count +
-                                    ") does not match the number of outputs this network should return (" + numberOfOutputs + ")");
-            }
+        //    if (outputs.Count != numberOfOutputs)
+        //    {
+        //        throw new Exception("The number of outputs returned by this neural network (" + outputs.Count +
+        //                            ") does not match the number of outputs this network should return (" + numberOfOutputs + ")");
+        //    }
 
-            return outputs;
-        }
+        //    return outputs;
+        //}
 
     }
 }

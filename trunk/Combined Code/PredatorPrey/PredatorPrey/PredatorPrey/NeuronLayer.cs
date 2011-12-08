@@ -26,9 +26,9 @@ namespace PredatorPrey
         // replaces the weights of each neuron in this layer with new ones
         public void replaceWeights(List<double> newWeights)
         {
-            foreach (Neuron neuron in neurons)
+            for (int i = 0; i < neurons.Count; i++)
             {
-                neuron.replaceWeights(newWeights);
+                neurons[i].replaceWeights(newWeights);
             }
         }
 
@@ -46,18 +46,18 @@ namespace PredatorPrey
             return output;
         }
 
-        // runs input through this layer of neurons and returns a list of
-        // all the outputs
-        public List<Vector2> run(List<Vector2> inputs)
-        {
-            List<Vector2> output = new List<Vector2>(numberOfNeurons);
+        //// runs input through this layer of neurons and returns a list of
+        //// all the outputs
+        //public List<Vector2> run(List<Vector2> inputs)
+        //{
+        //    List<Vector2> output = new List<Vector2>(numberOfNeurons);
 
-            foreach (Neuron neuron in neurons)
-            {
-                output.Add(neuron.run(inputs));
-            }
+        //    foreach (Neuron neuron in neurons)
+        //    {
+        //        output.Add(neuron.run(inputs));
+        //    }
 
-            return output;
-        }
+        //    return output;
+        //}
     }
 }

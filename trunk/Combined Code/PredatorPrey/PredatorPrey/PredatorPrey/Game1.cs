@@ -90,12 +90,13 @@ namespace PredatorPrey
             predatorList = new List<Wulffies>(Parameters.numberOfWolves);
             preyList = new List<Fluffies>(Parameters.numberOfSheep);
 
-            for (int i = 1; i <= Parameters.numberOfWolves; i++)
+            for (int i = 0; i < Parameters.numberOfWolves; i++)
             {
                 // random position
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                               Parameters.random.Next(Parameters.worldHeight));
-                Vector2 pos = new Vector2(i*100, i*100);
+                //Vector2 pos = new Vector2(i*100, i*100);
+                Vector2 pos = new Vector2(250 - i * 100, 130 + i * 0);
                 predatorList.Add(new Wulffies(pos));
             }
 
@@ -104,7 +105,7 @@ namespace PredatorPrey
                 // random position
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                                Parameters.random.Next(Parameters.worldHeight));
-                Vector2 pos = new Vector2(130, 130);
+                Vector2 pos = new Vector2(200, 130);
                 preyList.Add(new Fluffies(pos));
 
             }
@@ -304,6 +305,11 @@ namespace PredatorPrey
                         visionRect = new Color[height * width];
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
+                        eyes = new VisionContainer();
+                        foreach (Creature predator in predatorList)
+                        {
+                            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(predator.position, prey.position), Vector2.Normalize(predator.velocity)));
+                        }
                         prey.wrap(eyes, temp_ac);
                         if (eyes.size() > 0)
                         {
@@ -334,7 +340,7 @@ namespace PredatorPrey
                             if (Vector2.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch && positionX*predatorList[i].velocity.X>0 && positionY*predatorList[i].velocity.Y>0)
                             {
                                 // step1: kill the sheep
-                                preyList[i].die();
+                                preyList[j].die();
                                 // step2: change any fitness/eat count values accordingly
                                 predatorList[i].eat();
                             }

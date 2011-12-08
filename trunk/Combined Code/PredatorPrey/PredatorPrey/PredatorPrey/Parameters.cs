@@ -18,7 +18,7 @@ namespace PredatorPrey
         public const float crossoverRate = 0.7F;
         public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
-        public const int numberOfWolves = 0;
+        public const int numberOfWolves = 2;
         public const int numberOfSheep = 1;
         public const int numberOfUpdates = 2000;
         public const float maxRotation = 0.1F;
@@ -55,7 +55,7 @@ namespace PredatorPrey
         //constants for rules
         public const int preyNumberOfRules = 4;
         public const int predatorNumberOfRules = 1;
-        public const int inputsPerSensedObject = 3;
+        public const int inputsPerSensedObject = 2;
         public const int maxVisionInput = 15 * inputsPerSensedObject;
         public const int maxHearInput = 15 * inputsPerSensedObject;
 
@@ -64,23 +64,23 @@ namespace PredatorPrey
         public const int behav_numOfNeuronsPerLayer = 5;
 
         // avoidance
-        public const int avoid_numOfHiddenLayers = 1;
-        public const int avoid_numOfNeuronsPerLayer = 10;
+        public const int avoid_numOfHiddenLayers = 0;
+        public const int avoid_numOfNeuronsPerLayer = 2;
 
         // steering
-        public const int steer_numOfHiddenLayers = 1;
-        public const int steer_numOfNeuronsPerLayer = 10;
+        public const int steer_numOfHiddenLayers = 0;
+        public const int steer_numOfNeuronsPerLayer = 2;
 
         // alignment
-        public const int align_numOfHiddenLayers = 1;
-        public const int align_numOfNeuronsPerLayer = 10;
+        public const int align_numOfHiddenLayers = 0;
+        public const int align_numOfNeuronsPerLayer = 2;
 
         // goal
         public const int goal_numberOfExtraInputs = 1;
         public const int goal_numOfHiddenLayers = 1;
-        public const int goal_numOfNeuronsPerLayer = 10;
+        public const int goal_numOfNeuronsPerLayer = 2;
 
         // steering modification
-        public const float accel_clampVal = 0.015F;
+        public const float accel_clampVal = 0.9F;//0.015F;
     }
 }
