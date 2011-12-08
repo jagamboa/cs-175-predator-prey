@@ -21,40 +21,33 @@ namespace PredatorPrey
             List<double> newWeights = ruleNet.getListOfWeights();
 
             int i;
-            for (i = 1; i < Parameters.maxVisionInput + 1; i++)
-            {
-                if (i % 2 != 0)
-                {
-                    newWeights[i] = 1;
-                }
-                else
-                {
-                    newWeights[i] = 0;
-                }
-            }
-
-            for (i = i + 1; i < 2 * (Parameters.maxVisionInput + 1); i++)
+            int scale;
+            for (i = 0, scale = 0; i < Parameters.maxVisionInput; i++, scale++)
             {
                 if (i % 2 == 0)
                 {
-                    newWeights[i] = 1;
+                    newWeights[i] = 1 * ((float)Parameters.maxVisionInput - scale) / Parameters.maxVisionInput;
                 }
                 else
                 {
                     newWeights[i] = 0;
                 }
             }
-
-            i++;
-            newWeights[i] = 1;
-            i++;
             newWeights[i] = 0;
-            i += 2;
-            newWeights[i] = 0;
-            i++;
-            newWeights[i] = 1;
 
-            
+            for (i = i + 1, scale = 0; i < 2 * Parameters.maxVisionInput + 1; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    newWeights[i] = 1 * ((float)Parameters.maxVisionInput - scale) / Parameters.maxVisionInput;
+                }
+                else
+                {
+                    newWeights[i] = 0;
+                }
+            }
+            newWeights[i] = 0;
+
             ruleNet.replaceWeights(newWeights);
         }
 
@@ -71,9 +64,9 @@ namespace PredatorPrey
             }
 
             List<double> inputs = new List<double>(Parameters.maxVisionInput);
-            for (int i = 0; i < vc.size(); i++)
+            for (int i = 0; i < visionDir.Count; i++)
             {
-                Vector2 pos = vc.getSeenObject(i).position;
+                Vector2 pos = visionDir[i];
 
                 inputs.Add(pos.X);
                 inputs.Add(pos.Y);

@@ -52,7 +52,7 @@ namespace PredatorPrey
             initPos = position;
             initDirection = new Vector2((float)-Math.Sin(rotation), (float)Math.Cos(rotation));
             this.position = new Vector2(initPos.X, initPos.Y);
-            this.velocity = Vector2.Zero;
+            this.velocity = new Vector2((float)(2 * Parameters.random.NextDouble() - 1), (float)(2 * Parameters.random.NextDouble() - 1));
 
             hunger = Parameters.startingHunger;
             eating = false;
