@@ -69,6 +69,10 @@ namespace PredatorPrey
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.ApplyChanges();
+            IsFixedTimeStep = false;
         }
 
         /// <summary>
@@ -79,9 +83,6 @@ namespace PredatorPrey
         /// </summary>
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferHeight = 720;
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.ApplyChanges();
             Parameters.random = new Random();
             Parameters.worldWidth = GraphicsDevice.Viewport.Width;
             Parameters.worldHeight = GraphicsDevice.Viewport.Height;
@@ -302,18 +303,18 @@ namespace PredatorPrey
                         GraphicsDevice.GetBackBufferData<Color>(new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
                         prey.update(eyes, temp_ac);
-                        if (eyes.size() > 0)
-                        {
-                            prey.leftSideSpeed = 1;
-                        }
+                        //if (eyes.size() > 0)
+                        //{
+                        //    prey.leftSideSpeed = 1;
+                        //}
 
-                        for (int i = 0; i < height * width; i++)
-                        {
-                            if (visionRect[i] != new Color(68, 34, 136))
-                            {
-                                Console.WriteLine("We Found Something!");
-                            }
-                        }
+                        //for (int i = 0; i < height * width; i++)
+                        //{
+                        //    if (visionRect[i] != new Color(68, 34, 136))
+                        //    {
+                        //        Console.WriteLine("We Found Something!");
+                        //    }
+                        //}
                         // step1: gather this prey's visual percepts
 
                         // step2: give the prey it's visual percepts and update's it's state (hunger, position, fitness, etc)
@@ -331,7 +332,7 @@ namespace PredatorPrey
                             if (Vector2.Distance(predatorList[i].position, preyList[j].position) < Parameters.minDistanceToTouch && positionX*predatorList[i].direction.X>0 && positionY*predatorList[i].direction.Y>0)
                             {
                                 // step1: kill the sheep
-                                preyList.RemoveAt(j);
+                                preyList[i].die();
                                 // step2: change any fitness/eat count values accordingly
                                 predatorList[i].eat();
                             }

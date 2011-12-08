@@ -6,15 +6,15 @@ using Microsoft.Xna.Framework;
 
 namespace PredatorPrey
 {
-    class SteeringRule
+    class AlignmentRule
     {
         private NeuralNetwork ruleNet;
 
-        public SteeringRule()
+        public AlignmentRule()
         {
             // create new neural network
             ruleNet = new NeuralNetwork(Parameters.maxVisionInput, Parameters.inputsPerSensedObject,
-                Parameters.steer_numOfHiddenLayers, Parameters.steer_numOfNeuronsPerLayer);
+                Parameters.align_numOfHiddenLayers, Parameters.align_numOfNeuronsPerLayer);
 
             // replace default weights with custom weights
             int totalNumberOfWeights = ruleNet.getTotalNumberOfWeights();
@@ -32,11 +32,11 @@ namespace PredatorPrey
             if (vc.size() == 0)
                 return Vector2.Zero;
 
-            List<Vector2> visionPos = new List<Vector2>(vc.size());
+            List<Vector2> visionDir = new List<Vector2>(vc.size());
 
             for (int i = 0; i < Math.Min(Parameters.maxVisionInput, vc.size()); i++)
             {
-                visionPos.Add(vc.getSeenObject(i).position);
+                visionDir.Add(vc.getSeenObject(i).direction);
             }
 
             List<double> inputs = new List<double>(Parameters.maxVisionInput);

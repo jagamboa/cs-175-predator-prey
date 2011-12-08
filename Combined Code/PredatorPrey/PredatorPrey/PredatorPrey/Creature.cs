@@ -41,6 +41,7 @@ namespace PredatorPrey
 
         public double hunger;
         public bool eating;
+        public bool isAlive { get; protected set; }
 
         public Creature(Vector2 position)
         {
@@ -55,6 +56,7 @@ namespace PredatorPrey
 
             hunger = Parameters.startingHunger;
             eating = false;
+            isAlive = true;
             fitness = 0;
             leftSideSpeed = 0;
             rightSideSpeed = 0;
@@ -146,7 +148,7 @@ namespace PredatorPrey
             direction.X = (float)-Math.Sin(rotation);
             direction.Y = (float)Math.Cos(rotation);
 
-            double newrotation = getAngle();
+            //double newrotation = getAngle();
 
             // update the creature's position
             position.X += (float)(direction.X * movementSpeed);
