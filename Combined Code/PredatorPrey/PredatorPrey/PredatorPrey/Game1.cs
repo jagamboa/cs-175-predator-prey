@@ -307,7 +307,7 @@ namespace PredatorPrey
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         eyes = sm.findObjects(prey, visionRect, width, height);
                         eyes = new VisionContainer();
-                        foreach (Creature predator in predatorList)
+                        foreach (Creature predator in wulffiesList)
                         {
                             eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(predator.position, prey.position), Vector2.Normalize(predator.velocity)));
                         }
@@ -341,7 +341,7 @@ namespace PredatorPrey
                             if (Vector2.Distance(wulffiesList[i].position, fluffiesList[j].position) < Parameters.minDistanceToTouch && positionX*wulffiesList[i].velocity.X>0 && positionY*wulffiesList[i].velocity.Y>0)
                             {
                                 // step1: kill the sheep
-                                preyList[j].die();
+                                fluffiesList[j].die();
                                 // step2: change any fitness/eat count values accordingly
                                 wulffiesList[i].eat();
                             }
@@ -548,12 +548,12 @@ namespace PredatorPrey
             {
                 if (i == bestPredatorIndex) // draw the best predator
                 {
-                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.White, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    spriteBatch.Draw(predatorSprite, wulffiesList[i].getPosition(), null, Color.White, (float)wulffiesList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                     //spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.CadetBlue, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
                 else // draw the other predators
                 {
-                    spriteBatch.Draw(predatorSprite, predatorList[i].getPosition(), null, Color.White, (float)predatorList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
+                    spriteBatch.Draw(predatorSprite, wulffiesList[i].getPosition(), null, Color.White, (float)wulffiesList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
                 }
             }
             // draw the prey
@@ -562,7 +562,7 @@ namespace PredatorPrey
                 if (i == bestPreyIndex) // draw the best prey
                 {
                     spriteBatch.Draw(preySprite, fluffiesList[i].getPosition(), null, Color.White, (float)fluffiesList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
-                    Console.WriteLine("I'm a Prey and I'm @ (" + preyList[i].getPosition().X + ", " + preyList[i].getPosition().Y + ")");
+                    Console.WriteLine("I'm a Prey and I'm @ (" + fluffiesList[i].getPosition().X + ", " + fluffiesList[i].getPosition().Y + ")");
                 }
                 else // draw the other prey
                 {
