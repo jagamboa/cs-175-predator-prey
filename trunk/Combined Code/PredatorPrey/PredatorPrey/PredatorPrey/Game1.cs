@@ -94,19 +94,17 @@ namespace PredatorPrey
             for (int i = 0; i < Parameters.numberOfWolves; i++)
             {
                 // random position
-                //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
-                //                               Parameters.random.Next(Parameters.worldHeight));
-                //Vector2 pos = new Vector2(i*100, i*100);
-                Vector2 pos = new Vector2(250 + i * 100 - i, 230 + i * 100);
+                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                                               Parameters.random.Next(Parameters.worldHeight));
+
                 wulffiesList.Add(new Wulffies(pos));
             }
 
             for (int i = 0; i < Parameters.numberOfSheep; i++)
             {
                 // random position
-                //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
-                //                                Parameters.random.Next(Parameters.worldHeight));
-                Vector2 pos = new Vector2(270 + i * 100, 230 + i * 100);
+                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                                                Parameters.random.Next(Parameters.worldHeight));
                 fluffiesList.Add(new Fluffies(pos));
             }
 
@@ -145,6 +143,7 @@ namespace PredatorPrey
             List<Texture2D> l = new List<Texture2D>();
             l.Add(predatorSprite);
             l.Add(preySprite);
+
             sm = new ShapeMatcher(l);
         }
 
@@ -184,7 +183,7 @@ namespace PredatorPrey
                 if (updates < Parameters.numberOfUpdates)
                 {
                     Color[] visionRect;
-                    VisionContainer eyes;
+                    VisionContainer eyes = new VisionContainer();
                     AudioContainer temp_ac = new AudioContainer();
                     int rectStartX;
                     int rectStartY;
@@ -194,6 +193,7 @@ namespace PredatorPrey
                     {
                         //the creatures will not be able to see past the edge of the screen
                         //therefore this checks if it's vision intersects with any of the walls
+                        /*
                         width = Parameters.predatorVisionWidth;
                         height = Parameters.predatorVisionHeight;
                         rectStartX = (int)predator.position.X - width/2;
@@ -242,13 +242,33 @@ namespace PredatorPrey
                             rectStartX = 0;
                         }
 
+                        visionRect = new Color[height*width];
+                        render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
+                        eyes =sm.findObjects(predator, visionRect, width, height,(int)predator.position.X - rectStartX,(int)predator.position.Y-rectStartY);
+                        */
+                        List<Creature> visableCreats = new List<Creature>();
+                        int i;
+                        eyes = new VisionContainer();
+                        for (i = 0; i < wulffiesList.Count; i++)
+                        {
+                            if (predator.position != wulffiesList[i].position && Vector2.Distance(predator.position, wulffiesList[i].position) < Parameters.wulffiesVisionThreashold)
+                            {
+                               eyes.add(sm.compareCreats(wulffiesList[i], predatorSprite));
+
+                            }
+                        }
+                        for (i = 0; i < fluffiesList.Count; i++)
+                        {
+                            if (Vector2.Distance(predator.position, fluffiesList[i].position) < Parameters.wulffiesVisionThreashold)
+                            {
+                                eyes.add(sm.compareCreats(fluffiesList[i], preySprite));
+                            }
+                        }
+                        eyes.sort(predator.position);
                         //visionRect = new Color[height*width];
                         //render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
                         //eyes =sm.findObjects(predator, visionRect, width, height);
 
-
-
-                        eyes = new VisionContainer();
 
                         //foreach (Creature wulffie in wulffiesList)
                         //{
@@ -273,7 +293,7 @@ namespace PredatorPrey
                         //        }
                         //    }
                         //}
-
+                        /*
                         List<ObjectSeen> sort = new List<ObjectSeen>();
                         foreach (Creature wulffie in wulffiesList)
                         {
@@ -293,7 +313,7 @@ namespace PredatorPrey
                         {
                             eyes.add(sort[i]);
                         }
-
+                         * */
                         predator.wrap(eyes, temp_ac);
                         // step1: gather this predator's visual percepts
 
@@ -303,6 +323,7 @@ namespace PredatorPrey
                     }
                     foreach (Creature prey in fluffiesList)
                     {
+                        /*
                         width = Parameters.preyVisionWidth;
                         height = Parameters.preyVisionHeight;
                         rectStartX = (int)prey.position.X - width / 2;
@@ -349,11 +370,34 @@ namespace PredatorPrey
                             width = width / 2 + (int)prey.position.X;
                             rectStartX = 0;
                         }
+<<<<<<< .mine
+                        visionRect = new Color[height * width];
+                        render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
+                         * eyes = sm.findObjects(prey, visionRect, width, height,(int)prey.position.X-rectStartX, (int)prey.position.Y-rectStartY);
+                        */
+                        eyes.reset();
+                        List<Creature> visableCreats = new List<Creature>();
+                        int i;
+                        for (i = 0; i < wulffiesList.Count; i++)
+                        {
+                            if (Vector2.Distance(prey.position, wulffiesList[i].position) < Parameters.fluffiesVisionThreashold)
+                            {
+                                eyes.add(sm.compareCreats(wulffiesList[i],predatorSprite));
+                            }
+                        }
+                        for (i = 0; i < fluffiesList.Count; i++)
+                        {
+                            if (prey.position != fluffiesList[i].position && Vector2.Distance(prey.position, fluffiesList[i].position) < Parameters.fluffiesVisionThreashold)
+                            {
+                                eyes.add(sm.compareCreats(fluffiesList[i], preySprite));
+                            }
+                        }
+                        eyes.sort(prey.position);
+                        
                         //visionRect = new Color[height * width];
                         //render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         //eyes = sm.findObjects(prey, visionRect, width, height);
-                        eyes = new VisionContainer();
-
+                        /*
                         List<ObjectSeen> sort = new List<ObjectSeen>();
                         foreach (Creature wulffie in wulffiesList)
                         {
@@ -367,13 +411,14 @@ namespace PredatorPrey
                                 sort.Add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), 
                                                                                 Vector2.Normalize(fluffie.velocity)));
                             }
-                        }
+                        }*/
+                        /*
                         sort.Sort(new ObjectSeenComparer(prey.position));
 
                         for (int i = 0; i < sort.Count; i++)
                         {
                             eyes.add(sort[i]);
-                        }
+                        }*/
 
                         prey.wrap(eyes, temp_ac);
                         //if (eyes.size() > 0)
@@ -585,7 +630,7 @@ namespace PredatorPrey
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.SetRenderTarget(render);
-            GraphicsDevice.Clear(new Color(168, 134, 236));
+            GraphicsDevice.Clear(new Color(168, 134, 50));
 
             spriteBatch.Begin();
 

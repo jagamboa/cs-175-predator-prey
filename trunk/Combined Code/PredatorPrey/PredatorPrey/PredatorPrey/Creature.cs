@@ -48,12 +48,12 @@ namespace PredatorPrey
         public Creature(Vector2 position)
         {
             //brain = new NeuralNetwork();
-            rotation = Math.PI/4;//Parameters.random.NextDouble() * Math.PI * 2;
+            rotation = 0;//Parameters.random.NextDouble() * Math.PI * 2;
 
             initPos = position;
             initDirection = new Vector2((float)-Math.Sin(rotation), (float)Math.Cos(rotation));
             this.position = new Vector2(initPos.X, initPos.Y);
-            this.velocity = new Vector2((float)(2 * Parameters.random.NextDouble() - 1), (float)(2 * Parameters.random.NextDouble() - 1));
+            this.velocity = Vector2.Zero;// new Vector2((float)(2 * Parameters.random.NextDouble() - 1), (float)(2 * Parameters.random.NextDouble() - 1));
 
             hunger = Parameters.startingHunger;
             eating = false;
