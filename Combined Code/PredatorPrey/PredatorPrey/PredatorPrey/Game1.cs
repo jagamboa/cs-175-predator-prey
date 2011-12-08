@@ -598,11 +598,7 @@ namespace PredatorPrey
                             newWulffies.Add(w);
                         }
                     }
-            
-
             */        
-           
-
                     // reset simulation for next generation
                     updates = 0;
                     bestPredatorFitness = 0;
@@ -653,8 +649,7 @@ namespace PredatorPrey
                 if (i == bestPreyIndex) // draw the best prey
                 {
                     spriteBatch.Draw(preySprite, fluffiesList[i].getPosition(), null, Color.White, (float)fluffiesList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
-                    Console.WriteLine("I'm a Prey and I'm @ (" + fluffiesList[i].getPosition().X + ", " + fluffiesList[i].getPosition().Y + ")");
-                }
+                    }
                 else // draw the other prey
                 {
                     spriteBatch.Draw(preySprite, fluffiesList[i].getPosition(), null, Color.White, (float)fluffiesList[i].getAngle(), centerPoint, 1, SpriteEffects.None, 0);
