@@ -274,27 +274,24 @@ namespace PredatorPrey
                         //    }
                         //}
 
-                        eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffiesList[0].position, predator.position), Vector2.Normalize(fluffiesList[0].velocity)));
-
-                        SortedList<float, ObjectSeen> sort = new SortedList<float, ObjectSeen>();
+                        List<ObjectSeen> sort = new List<ObjectSeen>();
                         foreach (Creature wulffie in wulffiesList)
                         {
                             if (wulffie != predator)
                             {
-                                sort.Add(Vector2.Subtract(wulffie.position, predator.position).Length(),
-                                    new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, predator.position), Vector2.Normalize(wulffie.velocity)));
+                                sort.Add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, predator.position), Vector2.Normalize(wulffie.velocity)));
                             }
                         }
                         foreach (Creature fluffie in fluffiesList)
                         {
 
-                            sort.Add(Vector2.Subtract(fluffie.position, predator.position).Length(),
-                                new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, predator.position), Vector2.Normalize(fluffie.velocity)));
+                            sort.Add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, predator.position), Vector2.Normalize(fluffie.velocity)));
                         }
+                        sort.Sort(new ObjectSeenComparer(predator.position));
 
-                        for (int i = 0; i < sort.Values.Count; i++)
+                        for (int i = 0; i < sort.Count; i++)
                         {
-                            eyes.add(sort.Values[i]);
+                            eyes.add(sort[i]);
                         }
 
                         predator.wrap(eyes, temp_ac);
@@ -356,40 +353,26 @@ namespace PredatorPrey
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                         //eyes = sm.findObjects(prey, visionRect, width, height);
                         eyes = new VisionContainer();
-                        //foreach (Creature predator in wulffiesList)
-                        //{
-                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(predator.position, prey.position), Vector2.Normalize(predator.velocity)));
-                        //}
-                        //if (Vector2.Subtract(wulffiesList[0].position, prey.position).Length() <
-                        //    Vector2.Subtract(wulffiesList[1].position, prey.position).Length())
-                        //{
-                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
-                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[1].position, prey.position), Vector2.Normalize(wulffiesList[1].velocity)));
-                        //}
-                        //else
-                        //{
-                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[1].position, prey.position), Vector2.Normalize(wulffiesList[1].velocity)));
-                        //    eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffiesList[0].position, prey.position), Vector2.Normalize(wulffiesList[0].velocity)));
-                        //}
 
-                        SortedList<float, ObjectSeen> sort = new SortedList<float, ObjectSeen>();
+                        List<ObjectSeen> sort = new List<ObjectSeen>();
                         foreach (Creature wulffie in wulffiesList)
                         {
-                            sort.Add(Vector2.Subtract(wulffie.position, prey.position).Length(),
-                                new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, prey.position), Vector2.Normalize(wulffie.velocity)));
+                            sort.Add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, prey.position), 
+                                                                               Vector2.Normalize(wulffie.velocity)));
                         }
                         foreach (Creature fluffie in fluffiesList)
                         {
                             if (fluffie != prey)
                             {
-                                sort.Add(Vector2.Subtract(fluffie.position, prey.position).Length(),
-                                    new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
+                                sort.Add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), 
+                                                                                Vector2.Normalize(fluffie.velocity)));
                             }
                         }
+                        sort.Sort(new ObjectSeenComparer(prey.position));
 
-                        for (int i = 0; i < sort.Values.Count; i++)
+                        for (int i = 0; i < sort.Count; i++)
                         {
-                            eyes.add(sort.Values[i]);
+                            eyes.add(sort[i]);
                         }
 
                         prey.wrap(eyes, temp_ac);
