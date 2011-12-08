@@ -14,7 +14,7 @@ namespace PredatorPrey
         public Boolean good;
         public int score;
 
-        public int fitness { get; private set; }
+        public int fitness;
 
         public int eatDuration;
 
@@ -58,7 +58,7 @@ namespace PredatorPrey
             hunger = Parameters.startingHunger;
             eating = false;
             isAlive = true;
-            fitness = 0;
+            fitness = Parameters.initFitness;
             leftSideSpeed = 0;
             rightSideSpeed = 0;
         }
@@ -93,11 +93,10 @@ namespace PredatorPrey
 
         public void reset()
         {
-            fitness = 0;
+            fitness = Parameters.initFitness;
             position.X = initPos.X;
             position.Y = initPos.Y;
-            velocity.X = 0;
-            velocity.Y = 0;
+            velocity = new Vector2((float)(2 * Parameters.random.NextDouble() - 1), (float)(2 * Parameters.random.NextDouble() - 1));
             leftSideSpeed = 0;
             rightSideSpeed = 0;
         }
@@ -122,7 +121,7 @@ namespace PredatorPrey
 
         //this is to calculate the personal fitness function
         //but must be overrided in the prey and predetor classes
-        public virtual double calculateFitness()
+        public virtual int calculateFitness(VisionContainer vc)
         {
             return 0;
         }

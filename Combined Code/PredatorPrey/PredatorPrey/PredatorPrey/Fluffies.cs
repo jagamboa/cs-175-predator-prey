@@ -49,6 +49,10 @@ namespace PredatorPrey
             else
                 starve();
 
+            // update the score
+            if (isAlive)
+                score++;
+
             //step2: use prey rules (extract data from VisionContainer) to create a list of movement vectors
             List<Vector2> ruleVectors = new List<Vector2>(Parameters.preyNumberOfRules);
 
@@ -108,11 +112,63 @@ namespace PredatorPrey
 
         //this is just my first idea, feel free to change it if you think of something
         //also the weights are just temporary values right now
-        public override double calculateFitness()
+        public override int calculateFitness(VisionContainer vc)
         {
-            double numberOfWolves = 0;
-            double closestWolf = 0;
-            return Parameters.hungerWeight * base.hunger + Parameters.numberOfWolvesWeight * numberOfWolves + Parameters.closestWolfWeight * closestWolf;
+            int numberOfWolves = 0;
+            int closestWolf = int.MaxValue;
+            int numberOfFood = 0;
+            int closestFood = int.MaxValue;
+
+            for (int i = 0; i < vc.size(); i++)
+            {
+                if (vc.getSeenObject(i).type == Classification.Predator)
+                {
+                    numberOfWolves++;
+                    int distance = (int)Vector2.Subtract(vc.getSeenObject(i).position, position).Length();
+
+                    if (distance < closestWolf)
+                        closestWolf = distance;
+                }
+                else if (vc.getSeenObject(i).type == Classification.Food)
+                {
+                    numberOfFood++;
+                    int distance = (int)Vector2.Subtract(vc.getSeenObject(i).position, position).Length();
+
+                    if (distance < closestFood)
+                        closestFood = distance;
+                }
+            }
+
+            fitness = (int)(Parameters.initFitness + numberOfWolves * Parameters.numberOfWolvesWeight + 
+                        hunger * Parameters.hungerWeight + Parameters.numberOfFoodWeight * numberOfFood);
+
+            if (closestWolf > Parameters.closestWolfDist)
+            {
+                if (closestWolf > 2 * Parameters.closestWolfDist)
+                    fitness += Parameters.closestWolfWeight;
+                else
+                    fitness += Parameters.closestWolfWeight - closestWolf;
+            }
+            else
+            {
+                fitness -= Parameters.closestWolfWeight - closestWolf;
+            }
+
+            if (closestFood < Parameters.closestFoodMaxPenalty)
+            {
+                fitness += Parameters.closestFoodWeight * closestFood;
+            }
+            else
+            {
+                fitness -= Parameters.closestFoodMaxPenalty;
+            }
+
+            if (fitness < Parameters.minFitness)
+                fitness = Parameters.minFitness;
+            else if (fitness > Parameters.maxFitness)
+                fitness = Parameters.maxFitness;
+
+            return fitness;
         }
 
         public void die()

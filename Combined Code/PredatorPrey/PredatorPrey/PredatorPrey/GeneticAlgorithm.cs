@@ -69,62 +69,80 @@ namespace PredatorPrey
                 int momIndex;
                 int dadIndex;
 
-                selectParents(out momIndex, out dadIndex);
-
-                Boolean done = false;
-                while (!done)
+                bool allBad = true;
+                foreach (Creature c in oldPopulation)
                 {
+                    if (c.good)
+                    {
+                        allBad = false;
+                        break;
+                    }
+                }
+
+                if (allBad)
+                {
+                    selectParents(out momIndex, out dadIndex);
                     Genome baby = makeBaby(momIndex, dadIndex);
 
-                    List<double> newWeights = baby.genes;
-                    List<double> closest = new List<double>();
-                    List<int> closestID = new List<int>();
-                    for (int x = 0; x < oldPopulation.Count; x++)
+                    oldPopulation[i].genes = baby.genes;
+                }
+                else
+                {
+                    Boolean done = false;
+                    while (!done)
                     {
-                        List<double> xWeights = oldPopulation[x].genes;
-                        double sum = 0;
-                        for (int y = 0; y < newWeights.Count; y++)
+                        selectParents(out momIndex, out dadIndex);
+                        Genome baby = makeBaby(momIndex, dadIndex);
+
+                        List<double> newWeights = baby.genes;
+                        List<double> closest = new List<double>();
+                        List<int> closestID = new List<int>();
+                        for (int x = 0; x < oldPopulation.Count; x++)
                         {
-                            sum = sum + ((newWeights[y] - xWeights[y]) * (newWeights[y] - xWeights[y]));
-                        }
-                        double distance = Math.Sqrt(sum);
-                        if (closest.Count < Parameters.k)
-                        {
-                            closest.Add(distance);
-                            closestID.Add(x);
-                        }
-                        else
-                        {
-                            foreach (double d in closest)
+                            List<double> xWeights = oldPopulation[x].genes;
+                            double sum = 0;
+                            for (int y = 0; y < newWeights.Count; y++)
                             {
-                                if (distance < d)
+                                sum = sum + ((newWeights[y] - xWeights[y]) * (newWeights[y] - xWeights[y]));
+                            }
+                            double distance = Math.Sqrt(sum);
+                            if (closest.Count < Parameters.k)
+                            {
+                                closest.Add(distance);
+                                closestID.Add(x);
+                            }
+                            else
+                            {
+                                foreach (double d in closest)
                                 {
-                                    closest.Remove(d);
-                                    closest.Add(distance);
-                                    closestID.Add(x);
-                                    break;
+                                    if (distance < d)
+                                    {
+                                        closest.Remove(d);
+                                        closest.Add(distance);
+                                        closestID.Add(x);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
-                    int countPlus = 0;
-                    int countMinus = 0;
-                    foreach (int a in closestID)
-                    {
-                        if (oldPopulation[a].good)
+                        int countPlus = 0;
+                        int countMinus = 0;
+                        foreach (int a in closestID)
                         {
-                            countPlus++;
+                            if (oldPopulation[a].good)
+                            {
+                                countPlus++;
+                            }
+                            else
+                            {
+                                countMinus++;
+                            }
                         }
-                        else
+                        if (countPlus >= countMinus)
                         {
-                            countMinus++;
+                            oldPopulation[i].genes = baby.genes;
+                            done = true;
                         }
-                    }
-                    // NEED TO CHANGE TO >=
-                    if (countPlus < countMinus)
-                    {
-                        oldPopulation[i].genes = baby.genes;
-                        done = true;
                     }
                 }
             }
@@ -143,7 +161,7 @@ namespace PredatorPrey
 
             for (int i = 0; i < population.Count; i++)
             {
-                int fitness = oldPopulation[i].fitness;
+                int fitness = oldPopulation[i].score;
                 population[i].updateFitness(fitness);
 
                 if (fittestCreatureIndex == -1)
