@@ -97,7 +97,7 @@ namespace PredatorPrey
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                               Parameters.random.Next(Parameters.worldHeight));
                 //Vector2 pos = new Vector2(i*100, i*100);
-                Vector2 pos = new Vector2(250 - i * 100 - i, 130 + i * 0);
+                Vector2 pos = new Vector2(250 + i * 100 - i, 230 + i * 100);
                 wulffiesList.Add(new Wulffies(pos));
             }
 
@@ -244,7 +244,38 @@ namespace PredatorPrey
 
                         visionRect = new Color[height*width];
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
-                        eyes =sm.findObjects(predator, visionRect, width, height);
+                        //eyes =sm.findObjects(predator, visionRect, width, height);
+
+
+
+                        eyes = new VisionContainer();
+
+                        //foreach (Creature wulffie in wulffiesList)
+                        //{
+                        //    if (wulffie != predator)
+                        //    {
+                        //        if (eyes.size() == 0)
+                        //            eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, predator.position), Vector2.Normalize(wulffie.velocity)));
+                        //        else
+                        //        {
+                        //            if (Vector2.Subtract(eyes.getSeenObject(0).position, predator.position).Length() >
+                        //                Vector2.Subtract(wulffie.position, predator.position).Length())
+                        //            {
+                        //                ObjectSeen temp = eyes.getSeenObject(0);
+                        //                eyes.reset();
+                        //                eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, predator.position), Vector2.Normalize(wulffie.velocity)));
+                        //                eyes.add(temp);
+                        //            }
+                        //            else
+                        //            {
+                        //                eyes.add(new ObjectSeen(Classification.Predator, Vector2.Subtract(wulffie.position, predator.position), Vector2.Normalize(wulffie.velocity)));
+                        //            }
+                        //        }
+                        //    }
+                        //}
+
+                        eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffiesList[0].position, predator.position), Vector2.Normalize(fluffiesList[0].velocity)));
+
                         predator.wrap(eyes, temp_ac);
                         // step1: gather this predator's visual percepts
 
@@ -302,7 +333,7 @@ namespace PredatorPrey
                         }
                         visionRect = new Color[height * width];
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
-                        eyes = sm.findObjects(prey, visionRect, width, height);
+                        //eyes = sm.findObjects(prey, visionRect, width, height);
                         eyes = new VisionContainer();
                         //foreach (Creature predator in wulffiesList)
                         //{
@@ -324,8 +355,29 @@ namespace PredatorPrey
                         {
                             if (fluffie != prey)
                             {
-                                eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
+                                if (eyes.size() == 0)
+                                    eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
+                                else
+                                {
+                                    if (Vector2.Subtract(eyes.getSeenObject(0).position, prey.position).Length() >
+                                        Vector2.Subtract(fluffie.position, prey.position).Length())
+                                    {
+                                        ObjectSeen temp = eyes.getSeenObject(0);
+                                        eyes.reset();
+                                        eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
+                                        eyes.add(temp);
+                                    }
+                                    else
+                                    {
+                                        eyes.add(new ObjectSeen(Classification.Prey, Vector2.Subtract(fluffie.position, prey.position), Vector2.Normalize(fluffie.velocity)));
+                                    }
+                                }
                             }
+                        }
+
+                        foreach (Creature wulffie in wulffiesList)
+                        {
+
                         }
 
                         prey.wrap(eyes, temp_ac);

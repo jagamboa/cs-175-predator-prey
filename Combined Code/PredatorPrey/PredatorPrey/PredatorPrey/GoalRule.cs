@@ -20,14 +20,14 @@ namespace PredatorPrey
             int totalNumberOfWeights = ruleNet.getTotalNumberOfWeights();
             List<double> newWeights = ruleNet.getListOfWeights();
 
-            newWeights[1] = 1;
-            newWeights[2] = 0;
-            newWeights[5] = 0;
+            newWeights[0] = 1;
+            newWeights[1] = 0;
+            newWeights[2] = 1;
+            newWeights[3] = 0;
+            newWeights[4] = 0;
+            newWeights[5] = 1;
             newWeights[6] = 1;
-            newWeights[9] = 1;
-            newWeights[10] = 0;
-            newWeights[12] = 0;
-            newWeights[13] = 1;
+            newWeights[7] = 0;
 
             ruleNet.replaceWeights(newWeights);
         }

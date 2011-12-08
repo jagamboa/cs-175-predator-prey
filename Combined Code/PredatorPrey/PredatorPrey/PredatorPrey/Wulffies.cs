@@ -8,14 +8,25 @@ namespace PredatorPrey
 {
     class Wulffies : Creature
     {
-        
+        private AvoidanceRule avoid;
+        private AlignmentRule align;
+        private GoalRule goal;
+
+        private Vector2 currentGoal;
+
 
         public Wulffies(Vector2 position) : base(position)
         {
-            brain = new NeuralNetwork(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject, Parameters.inputsPerSensedObject,
+            brain = new NeuralNetwork(Parameters.predatorNumberOfRules * Parameters.inputsPerSensedObject, Parameters.inputsPerSensedObject,
                     Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
             good = false;
             score = 0;
+
+            avoid = new AvoidanceRule(Classification.Predator);
+            align = new AlignmentRule(Classification.Predator);
+            goal = new GoalRule();
+
+            currentGoal = Vector2.Zero;
         }
 
         public override void wrap(VisionContainer vc, AudioContainer ac)
@@ -40,16 +51,36 @@ namespace PredatorPrey
                 starve();
 
             // step2: use predator rules (extract data from VisionContainer) to create a list of movement vectors
+            List<Vector2> ruleVectors = new List<Vector2>(Parameters.predatorNumberOfRules);
+
+            ruleVectors.Add(avoid.run(vc, ac));
+            ruleVectors.Add(align.run(vc));
+
+            for (int i = 0; i < vc.size(); i++)
+            {
+                if (vc.getSeenObject(i).type == Classification.Prey)
+                {
+                    currentGoal = vc.getSeenObject(i).position;
+                    break;
+                }
+            }
+            ruleVectors.Add(Vector2.Multiply(goal.run(currentGoal, 0), (float)hunger));
 
             // step3: sum up movement vectors using stored weights
+            List<double> inputs = new List<double>(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject);
+            for (int i = 0; i < ruleVectors.Count; i++)
+            {
+                Vector2 pos = ruleVectors[i];
+
+                inputs.Add(pos.X);
+                inputs.Add(pos.Y);
+            }
+
+            List<double> outputs = brain.run(inputs);
 
             // step4: update velocity, position, and direction
 
-            Vector2 acceleration;
-            if (position.X == 149)
-                acceleration = new Vector2((float)0f, (float)0.5f);
-            else
-                acceleration = new Vector2(0.5f, 0f);
+            Vector2 acceleration = new Vector2((float)outputs[0], (float)outputs[1]);
 
             if (acceleration.Length() != 0)
                 acceleration = Vector2.Normalize(acceleration);
@@ -91,6 +122,12 @@ namespace PredatorPrey
             // step1: ???????
 
             return 0;
+        }
+
+        public override void eat()
+        {
+            currentGoal = Vector2.Zero;
+            base.eat();
         }
     }
 }

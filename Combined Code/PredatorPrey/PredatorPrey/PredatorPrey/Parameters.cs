@@ -19,13 +19,13 @@ namespace PredatorPrey
         public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
 
-        public const int numberOfWolves = 0;
-        public const int numberOfSheep = 3;
-        public const int numberOfUpdates = 200;
+        public const int numberOfWolves = 3;
+        public const int numberOfSheep = 1;
+        public const int numberOfUpdates = 2000;
 
         public const float maxRotation = 0.1F;
         public const float maxMoveSpeed = 2F;
-        public const float maxAcceleration = .005F;
+        public const float maxAcceleration = .25F;
         public const int minDistanceToTouch = 20;
 
         public const int k = 1;
@@ -39,8 +39,9 @@ namespace PredatorPrey
 
         //these are values for the creatures
         public const float startingHunger = 5F;
-        public const int eatingAddition = 1;
-        public const float starvingSubtract =.1F;
+        public const float maxHunger = 20F;
+        public const int eating = -1;
+        public const float starving =.1F;
 
         //these are values for the weights that determin the fitness function
         public const float hungerWeight = .5F;
@@ -60,7 +61,7 @@ namespace PredatorPrey
 
         //constants for rules
         public const int preyNumberOfRules = 4;
-        public const int predatorNumberOfRules = 1;
+        public const int predatorNumberOfRules = 3;
         public const int inputsPerSensedObject = 2;
         public const int maxVisionInput = 15 * inputsPerSensedObject;
         public const int maxHearInput = 15 * inputsPerSensedObject;
@@ -83,10 +84,10 @@ namespace PredatorPrey
 
         // goal
         public const int goal_numberOfExtraInputs = 1;
-        public const int goal_numOfHiddenLayers = 1;
+        public const int goal_numOfHiddenLayers = 0;
         public const int goal_numOfNeuronsPerLayer = 2;
 
         // steering modification
-        public const float accel_clampVal = 0.9F;//0.015F;
+        public const float accel_clampVal = 0.5F;//0.015F;
     }
 }
