@@ -8,11 +8,13 @@ namespace PredatorPrey
 {
     class Wulffies : Creature
     {
+        
 
         public Wulffies(Vector2 position) : base(position)
         {
             brain = new NeuralNetwork(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject, Parameters.inputsPerSensedObject,
                     Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
+            good = false;
         }
 
         public override void wrap(VisionContainer vc, AudioContainer ac)

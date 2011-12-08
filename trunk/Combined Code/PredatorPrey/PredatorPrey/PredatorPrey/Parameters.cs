@@ -26,6 +26,8 @@ namespace PredatorPrey
         public const float maxAcceleration = .25F;
         public const int minDistanceToTouch = 20;
 
+        public const int k = 1;
+
         public static int worldWidth;
         public static int worldHeight;
 

@@ -11,6 +11,7 @@ namespace PredatorPrey
     {
 
         public NeuralNetwork brain;
+        public Boolean good;
 
         public int fitness { get; private set; }
 
