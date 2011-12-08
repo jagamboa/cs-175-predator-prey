@@ -106,9 +106,8 @@ namespace PredatorPrey
                 // random position
                 //Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                 //                                Parameters.random.Next(Parameters.worldHeight));
-                Vector2 pos = new Vector2(200, 130);
+                Vector2 pos = new Vector2(270, 230);
                 fluffiesList.Add(new Fluffies(pos));
-
             }
 
             // Initialize Vision
