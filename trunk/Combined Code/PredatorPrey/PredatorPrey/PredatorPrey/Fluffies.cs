@@ -19,11 +19,11 @@ namespace PredatorPrey
             brain = new NeuralNetwork(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject, 3,
                 Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
 
-            avoid = new AvoidanceRule();
-            steer = new SteeringRule();
-            align = new AlignmentRule();
-            //goal = new GoalRule();
-            currentGoal = new Vector2(position.X, position.Y);
+            avoid = new AvoidanceRule(Classification.Unknown);
+            steer = new SteeringRule(Classification.Prey);
+            align = new AlignmentRule(Classification.Prey);
+            goal = new GoalRule();
+            currentGoal = new Vector2(500, 500);
             good = false;
             score = 0;
         }
@@ -55,7 +55,7 @@ namespace PredatorPrey
             ruleVectors.Add(avoid.run(vc, ac));
             ruleVectors.Add(steer.run(vc));
             ruleVectors.Add(align.run(vc));
-            //ruleVectors.Add(goal.run(currentGoal, hunger));
+            ruleVectors.Add(goal.run(Vector2.Multiply(Vector2.Subtract(currentGoal, position), 0), (float)hunger));
 
             //step3: pass vectors into neural network to get outputs
             List<double> inputs = new List<double>(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject);
@@ -67,17 +67,10 @@ namespace PredatorPrey
                 inputs.Add(pos.Y);
             }
 
-            //List<double> outputs = brain.run(inputs);
-
-            //Vector2 result = new Vector2((float)outputs[0], (float)outputs[1]);
-
-            //if (result != Vector2.Zero)
-            //    result.Normalize();
-
-            //Vector2.Multiply(result, (float)(outputs[3] * Parameters.maxMoveSpeed));
+            List<double> outputs = brain.run(inputs);
 
             //step4: update velocity, position, and direction
-            Vector2 acceleration = new Vector2((float) ruleVectors[2].X, (float) ruleVectors[2].Y);
+            Vector2 acceleration = new Vector2((float) outputs[0], (float) outputs[1]);
             if (acceleration.Length() != 0)
                 acceleration = Vector2.Normalize(acceleration);
             acceleration = Vector2.Clamp(acceleration, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),

@@ -9,9 +9,12 @@ namespace PredatorPrey
     class SteeringRule
     {
         private NeuralNetwork ruleNet;
+        private Classification acceptType;
 
-        public SteeringRule()
+        public SteeringRule(Classification acceptType)
         {
+            this.acceptType = acceptType;
+
             // create new neural network
             ruleNet = new NeuralNetwork(Parameters.maxVisionInput, Parameters.inputsPerSensedObject,
                 Parameters.steer_numOfHiddenLayers, Parameters.steer_numOfNeuronsPerLayer);
@@ -60,7 +63,8 @@ namespace PredatorPrey
 
             for (int i = 0; i < Math.Min(Parameters.maxVisionInput, vc.size()); i++)
             {
-                visionPos.Add(vc.getSeenObject(i).position);
+                if (vc.getSeenObject(i).type == acceptType)
+                    visionPos.Add(vc.getSeenObject(i).position);
             }
 
             List<double> inputs = new List<double>(Parameters.maxVisionInput);

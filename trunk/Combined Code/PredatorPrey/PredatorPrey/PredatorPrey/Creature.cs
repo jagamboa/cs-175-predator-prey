@@ -68,16 +68,22 @@ namespace PredatorPrey
             return brain.run(inputs);
         }
 
-        public void eat()
+        public virtual void eat()
         {
-            hunger += Parameters.eatingAddition;
+            hunger += Parameters.eating;
             eatDuration = Parameters.eatTime;
             eating = true;
+
+            if (hunger < 0)
+                hunger = 0;
         }
 
         public void starve()
         {
-            hunger -= Parameters.starvingSubtract;
+            hunger += Parameters.starving;
+
+            if (hunger > Parameters.maxHunger)
+                hunger = Parameters.maxHunger;
         }
 
         public int genomeLength()

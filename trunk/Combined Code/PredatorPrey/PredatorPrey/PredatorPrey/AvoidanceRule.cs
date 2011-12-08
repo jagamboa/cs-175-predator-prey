@@ -10,8 +10,12 @@ namespace PredatorPrey
     {
         private NeuralNetwork ruleNet;
         private int totalInput = Parameters.maxVisionInput + Parameters.maxHearInput;
-        public AvoidanceRule()
+        Classification acceptType;
+
+        public AvoidanceRule(Classification acceptType)
         {
+            this.acceptType = acceptType;
+
             // create new neural network
             ruleNet = new NeuralNetwork(totalInput, Parameters.inputsPerSensedObject,
                 Parameters.avoid_numOfHiddenLayers, Parameters.avoid_numOfNeuronsPerLayer);
@@ -61,7 +65,10 @@ namespace PredatorPrey
 
             for (int i = 0; i < Math.Min(Parameters.maxVisionInput, vc.size()); i++)
             {
-                visionPos.Add(vc.getSeenObject(i).position);
+                if (acceptType == Classification.Unknown || acceptType == vc.getSeenObject(i).type)
+                {
+                    visionPos.Add(vc.getSeenObject(i).position);
+                }
             }
             for (int i = 0; i < Math.Min(Parameters.maxHearInput, ac.size()); i++)
             {
@@ -69,7 +76,7 @@ namespace PredatorPrey
             }
 
             List<double> inputs = new List<double>(totalInput);
-            for (int i = 0; i < vc.size() + ac.size(); i++)
+            for (int i = 0; i < visionPos.Count + hearPos.Count; i++)
             {
                 Vector2 pos;
                 if (hearPos.Count == 0 || (visionPos.Count != 0 && visionPos[0].Length() < hearPos[0].Length()))

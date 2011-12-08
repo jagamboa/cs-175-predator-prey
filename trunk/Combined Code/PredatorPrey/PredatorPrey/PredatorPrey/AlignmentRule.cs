@@ -9,9 +9,12 @@ namespace PredatorPrey
     class AlignmentRule
     {
         private NeuralNetwork ruleNet;
+        private Classification acceptType;
 
-        public AlignmentRule()
+        public AlignmentRule(Classification acceptType)
         {
+            this.acceptType = acceptType;
+
             // create new neural network
             ruleNet = new NeuralNetwork(Parameters.maxVisionInput, Parameters.inputsPerSensedObject,
                 Parameters.align_numOfHiddenLayers, Parameters.align_numOfNeuronsPerLayer);
@@ -60,7 +63,8 @@ namespace PredatorPrey
 
             for (int i = 0; i < Math.Min(Parameters.maxVisionInput, vc.size()); i++)
             {
-                visionDir.Add(vc.getSeenObject(i).direction);
+                if (vc.getSeenObject(i).type == acceptType)
+                    visionDir.Add(vc.getSeenObject(i).direction);
             }
 
             List<double> inputs = new List<double>(Parameters.maxVisionInput);
@@ -78,8 +82,8 @@ namespace PredatorPrey
                 inputs.Add(0);
             }
 
-            if (inputs.Count() != (Parameters.maxVisionInput + Parameters.maxHearInput))
-                Console.WriteLine("miscounted: expected (" + (Parameters.maxVisionInput + Parameters.maxHearInput) +
+            if (inputs.Count() != Parameters.maxVisionInput)
+                Console.WriteLine("miscounted: expected (" + Parameters.maxVisionInput +
                     "); actual (" + inputs.Count() + ")");
 
             List<double> outputs = ruleNet.run(inputs);
