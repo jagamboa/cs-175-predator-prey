@@ -361,8 +361,14 @@ namespace PredatorPrey
                             {
                                 // step1: kill the sheep
                                 fluffiesList[j].die();
+                                for (int s = 0; s < fluffiesList.Count; s++)
+                                {
+                                    fluffiesList[s].score++;
+                                }
+                                fluffiesList[j].score = 0;
                                 // step2: change any fitness/eat count values accordingly
                                 wulffiesList[i].eat();
+                                wulffiesList[i].score++;
                             }
                         }
 
@@ -399,6 +405,21 @@ namespace PredatorPrey
                         }
                     }
 
+
+                    foreach (Wulffies w in wulffiesList)
+                    {
+                        if (w.score >= Parameters.wulffiesScore)
+                        {
+                            w.good = true;
+                        }
+                    }
+                    foreach (Fluffies f in fluffiesList)
+                    {
+                        if (f.score >= Parameters.fluffiesScore)
+                        {
+                            f.good = true;
+                        }
+                    }
                     // increment the tick counter
                     updates++;
                 }
@@ -411,13 +432,33 @@ namespace PredatorPrey
                     // step1: gather semi-supervised data
                     // step2: run semi-supervised routine, output new weights
                     // step3: mutate new weights and place them back in predators (Creature.genes)
+                    List<Creature> wulffiesListC = new List<Creature>();
+                    foreach (Wulffies w in wulffiesList)
+                    {
+                        wulffiesListC.Add((Creature)w);
+                    }
+                    GeneticAlgorithm ga = new GeneticAlgorithm(wulffiesListC);
+                    ga.nextGeneration(wulffiesListC);
+
+
+                    // UPDATE PREY
+                    // step1: gather semi-supervised data
+                    // step2: run semi-supervised routine, output new weights
+                    // step3: mutate new weights and place them back in prey (Creatures.genes)
+                    List<Creature> fluffiesListC = new List<Creature>();
+                    foreach (Fluffies w in fluffiesList)
+                    {
+                        fluffiesListC.Add((Creature)w);
+                    }
+                    GeneticAlgorithm ga2 = new GeneticAlgorithm(fluffiesListC);
+                    ga2.nextGeneration(fluffiesListC);
+
+
+
+/*
                     List<Wulffies> newWulffies = new List<Wulffies>();
                     while (newWulffies.Count < Parameters.numberOfWolves)
                     {
-                        float f1 = (float)Parameters.random.NextDouble();
-                        float f2 = (float)Parameters.random.NextDouble();
-                        Vector2 v2 = new Vector2(f1, f2);
-                        Wulffies w = new Wulffies(v2);
                         List<double> newWeights = w.genes;
                         List<double> closest = new List<double>();
                         List<int> closestID = new List<int>();
@@ -467,69 +508,10 @@ namespace PredatorPrey
                             newWulffies.Add(w);
                         }
                     }
+            
 
-
-                    // UPDATE PREY
-                    // step1: gather semi-supervised data
-                    // step2: run semi-supervised routine, output new weights
-                    // step3: mutate new weights and place them back in prey (Creatures.genes)
-                    List<Fluffies> newFluffies = new List<Fluffies>();
-                    while (newFluffies.Count < Parameters.numberOfSheep)
-                    {
-                        float f1 = (float)Parameters.random.NextDouble();
-                        float f2 = (float)Parameters.random.NextDouble();
-                        Vector2 v2 = new Vector2(f1, f2);
-                        Fluffies f = new Fluffies(v2);
-                        List<double> newWeights = f.genes;
-                        List<double> closest = new List<double>();
-                        List<int> closestID = new List<int>();
-                        for (int x = 0; x < fluffiesList.Count; x++)
-                        {
-                            List<double> xWeights = fluffiesList[x].genes;
-                            double sum = 0;
-                            for (int y = 0; y < newWeights.Count; y++)
-                            {
-                                sum = sum + ((newWeights[y] - xWeights[y]) * (newWeights[y] - xWeights[y]));
-                            }
-                            double distance = Math.Sqrt(sum);
-                            if (closest.Count < Parameters.k)
-                            {
-                                closest.Add(distance);
-                                closestID.Add(x);
-                            }
-                            else
-                            {
-                                foreach (double d in closest)
-                                {
-                                    if (distance < d)
-                                    {
-                                        closest.Remove(d);
-                                        closest.Add(distance);
-                                        closestID.Add(x);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        int countPlus = 0;
-                        int countMinus = 0;
-                        foreach (int i in closestID)
-                        {
-                            if (fluffiesList[i].good)
-                            {
-                                countPlus++;
-                            }
-                            else
-                            {
-                                countMinus++;
-                            }
-                        }
-                        if (countPlus > countMinus)
-                        {
-                            newFluffies.Add(f);
-                        }
-                    }
-
+            */        
+           
 
                     // reset simulation for next generation
                     updates = 0;

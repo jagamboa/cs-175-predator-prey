@@ -63,8 +63,6 @@ namespace PredatorPrey
             updateFitness(oldPopulation);
             generationCount++;
 
-            List<Genome> newPopulation = new List<Genome>(oldPopulation.Count);
-
             // breed new population
             for (int i = 0; i < oldPopulation.Count; i++)
             {
@@ -73,12 +71,63 @@ namespace PredatorPrey
 
                 selectParents(out momIndex, out dadIndex);
 
-                Genome baby = makeBaby(momIndex, dadIndex);
+                Boolean done = false;
+                while (!done)
+                {
+                    Genome baby = makeBaby(momIndex, dadIndex);
 
-                newPopulation.Add(baby);
-                oldPopulation[i].genes = baby.genes;
+                    List<double> newWeights = baby.genes;
+                    List<double> closest = new List<double>();
+                    List<int> closestID = new List<int>();
+                    for (int x = 0; x < oldPopulation.Count; x++)
+                    {
+                        List<double> xWeights = oldPopulation[x].genes;
+                        double sum = 0;
+                        for (int y = 0; y < newWeights.Count; y++)
+                        {
+                            sum = sum + ((newWeights[y] - xWeights[y]) * (newWeights[y] - xWeights[y]));
+                        }
+                        double distance = Math.Sqrt(sum);
+                        if (closest.Count < Parameters.k)
+                        {
+                            closest.Add(distance);
+                            closestID.Add(x);
+                        }
+                        else
+                        {
+                            foreach (double d in closest)
+                            {
+                                if (distance < d)
+                                {
+                                    closest.Remove(d);
+                                    closest.Add(distance);
+                                    closestID.Add(x);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    int countPlus = 0;
+                    int countMinus = 0;
+                    foreach (int a in closestID)
+                    {
+                        if (oldPopulation[a].good)
+                        {
+                            countPlus++;
+                        }
+                        else
+                        {
+                            countMinus++;
+                        }
+                    }
+                    // NEED TO CHANGE TO >=
+                    if (countPlus < countMinus)
+                    {
+                        oldPopulation[i].genes = baby.genes;
+                        done = true;
+                    }
+                }
             }
-
         }
 
         private void updateFitness(List<Creature> oldPopulation)
@@ -141,8 +190,8 @@ namespace PredatorPrey
             // if no member of the population has any fitness rating
             if (populationFitness == 0)
             {
-                momIndex = Parameters.random.Next(population.Count + 1);
-                dadIndex = Parameters.random.Next(population.Count + 1);
+                momIndex = Parameters.random.Next(population.Count);
+                dadIndex = Parameters.random.Next(population.Count);
                 return;
             }
 
