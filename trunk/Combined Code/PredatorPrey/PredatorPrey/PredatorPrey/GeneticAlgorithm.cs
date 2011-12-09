@@ -63,6 +63,11 @@ namespace PredatorPrey
             updateFitness(oldPopulation);
             generationCount++;
 
+            if (!Parameters.wulffiesLearn && oldPopulation[0] is Wulffies)
+                return;
+            if (!Parameters.fluffiesLearn && oldPopulation[0] is Fluffies)
+                return;
+
             // breed new population
             for (int i = 0; i < oldPopulation.Count; i++)
             {
