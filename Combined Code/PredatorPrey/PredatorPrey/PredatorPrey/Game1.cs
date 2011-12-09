@@ -41,6 +41,9 @@ namespace PredatorPrey
         // variables for toolkit
         List<Wulffies> wulffiesList;
         List<Fluffies> fluffiesList;
+        List<Fluffies> deadFluffiesList;
+        List<Wulffies> deadWulffiesList;
+        List<Grassies> grassiesList; 
         int updates = 0;
         int bestPredatorIndex = 0;
         int bestPredatorFitness = 0;
@@ -49,6 +52,7 @@ namespace PredatorPrey
 
         Texture2D predatorSprite;
         Texture2D preySprite;
+        Texture2D grassSprite;
         RenderTarget2D target; 
         SpriteFont font;
         Vector2 centerPoint = new Vector2(5, 10);
@@ -90,6 +94,9 @@ namespace PredatorPrey
 
             wulffiesList = new List<Wulffies>(Parameters.numberOfWolves);
             fluffiesList = new List<Fluffies>(Parameters.numberOfSheep);
+            deadFluffiesList = new List<Fluffies>();
+            deadWulffiesList = new List<Wulffies>();
+            grassiesList = new List<Grassies>();
 
             for (int i = 0; i < Parameters.numberOfWolves; i++)
             {
@@ -106,6 +113,14 @@ namespace PredatorPrey
                 Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
                                                 Parameters.random.Next(Parameters.worldHeight));
                 fluffiesList.Add(new Fluffies(pos));
+            }
+
+            for (int i = 0; i < Parameters.numberOfGrassies; i++)
+            {
+                // random position
+                Vector2 pos = new Vector2(Parameters.random.Next(Parameters.worldWidth),
+                                                Parameters.random.Next(Parameters.worldHeight));
+                grassiesList.Add(new Grassies(pos));
             }
 
             // Initialize Vision
@@ -138,6 +153,7 @@ namespace PredatorPrey
             predatorSprite = Content.Load<Texture2D>("Art/Wolf");
             preySprite = Content.Load<Texture2D>("Art/Sheep");
             font = Content.Load<SpriteFont>("Font");
+            grassSprite = Content.Load<Texture2D>("Art/Grass");
 
             //initialize the shapeMatcher with the textures
             List<Texture2D> l = new List<Texture2D>();
@@ -370,7 +386,7 @@ namespace PredatorPrey
                             width = width / 2 + (int)prey.position.X;
                             rectStartX = 0;
                         }
-<<<<<<< .mine
+                         * 
                         visionRect = new Color[height * width];
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height * width);
                          * eyes = sm.findObjects(prey, visionRect, width, height,(int)prey.position.X-rectStartX, (int)prey.position.Y-rectStartY);
@@ -447,10 +463,12 @@ namespace PredatorPrey
                         {
                             int positionX = (int)(fluffiesList[j].position.X -wulffiesList[i].position.X);
                             int positionY = (int)(fluffiesList[j].position.Y -wulffiesList[i].position.Y);
-                            if (Vector2.Distance(wulffiesList[i].position, fluffiesList[j].position) < Parameters.minDistanceToTouch && positionX*wulffiesList[i].velocity.X>0 && positionY*wulffiesList[i].velocity.Y>0)
+                            if (!wulffiesList[i].eating && Vector2.Distance(wulffiesList[i].position, fluffiesList[j].position) < Parameters.minDistanceToTouch && positionX*wulffiesList[i].velocity.X>0 && positionY*wulffiesList[i].velocity.Y>0)
                             {
                                 // step1: kill the sheep
                                 fluffiesList[j].die();
+                                deadFluffiesList.Add(fluffiesList[j]);
+                                fluffiesList.RemoveAt(j);
                                 // step2: change any fitness/eat count values accordingly
                                 wulffiesList[i].eat();
                                 wulffiesList[i].score++;
@@ -464,13 +482,6 @@ namespace PredatorPrey
                             bestPredatorIndex = i;
                         }
                     }
-
-                    // check if any prey has eaten food
-                    //
-                    //
-                    //
-                    //
-                    //
 
                     // perform any other enviromental state checks (collision, boundaries, etc)
                     //
@@ -517,11 +528,7 @@ namespace PredatorPrey
                     // step1: gather semi-supervised data
                     // step2: run semi-supervised routine, output new weights
                     // step3: mutate new weights and place them back in predators (Creature.genes)
-                    List<Creature> wulffiesListC = new List<Creature>();
-                    foreach (Wulffies w in wulffiesList)
-                    {
-                        wulffiesListC.Add((Creature)w);
-                    }
+                    List<Creature> wulffiesListC = new List<Creature>(Enumerable.Union<Creature>(wulffiesList, deadWulffiesList));
                     GeneticAlgorithm ga = new GeneticAlgorithm(wulffiesListC);
                     ga.nextGeneration(wulffiesListC);
 
@@ -530,16 +537,9 @@ namespace PredatorPrey
                     // step1: gather semi-supervised data
                     // step2: run semi-supervised routine, output new weights
                     // step3: mutate new weights and place them back in prey (Creatures.genes)
-                    List<Creature> fluffiesListC = new List<Creature>();
-                    foreach (Fluffies w in fluffiesList)
-                    {
-                        fluffiesListC.Add((Creature)w);
-                    }
+                    List<Creature> fluffiesListC = new List<Creature>(Enumerable.Union<Creature>(fluffiesList, deadFluffiesList));
                     GeneticAlgorithm ga2 = new GeneticAlgorithm(fluffiesListC);
                     ga2.nextGeneration(fluffiesListC);
-
-
-
 /*
                     List<Wulffies> newWulffies = new List<Wulffies>();
                     while (newWulffies.Count < Parameters.numberOfWolves)
@@ -626,6 +626,11 @@ namespace PredatorPrey
             spriteBatch.Begin();
 
             // draw the predators
+            for (int i = 0; i < grassiesList.Count; i++)
+            {
+                spriteBatch.Draw(grassSprite, grassiesList[i].position, Color.White);
+            }
+
             for (int i = 0; i < wulffiesList.Count; i++)
             {
                 if (i == bestPredatorIndex) // draw the best predator
