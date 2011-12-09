@@ -8,7 +8,7 @@ namespace PredatorPrey
 {
     class AvoidanceRule
     {
-        private NeuralNetwork ruleNet;
+        public NeuralNetwork ruleNet;
         private int totalInput = Parameters.maxVisionInput + Parameters.maxHearInput;
         Classification acceptType;
 

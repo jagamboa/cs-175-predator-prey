@@ -8,7 +8,7 @@ namespace PredatorPrey
 {
     class GoalRule
     {
-        private NeuralNetwork ruleNet;
+        public NeuralNetwork ruleNet;
 
         public GoalRule()
         {
