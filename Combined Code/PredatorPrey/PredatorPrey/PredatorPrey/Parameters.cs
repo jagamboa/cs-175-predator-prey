@@ -12,7 +12,7 @@ namespace PredatorPrey
         public const int weightRange = 1;
         public const float responseCurve = 1F;
         public const float bias = -1F;
-        public const float learningRate = 10000F;
+        public const float learningRate = 1000F;
 
         // genetic algorithm
         public const float crossoverRate = 0.7F;
@@ -31,8 +31,8 @@ namespace PredatorPrey
         public const int minDistanceToTouch = 20;
 
         public const int k = 1;
-        public const int fluffiesScore = 1;
-        public const int wulffiesScore = 1;
+        public const int fluffiesScore = 500;
+        public const int wulffiesScore = 100;
 
         public static int worldWidth;
         public static int worldHeight;
@@ -94,7 +94,7 @@ namespace PredatorPrey
         public const int maxHearInput = 15 * inputsPerSensedObject;
 
         //behavior selection
-        public const int behav_numOfHiddenLayers = 0;
+        public const int behav_numOfHiddenLayers = 1;
         public const int behav_numOfNeuronsPerLayer = 5;
 
         // avoidance
@@ -116,5 +116,10 @@ namespace PredatorPrey
 
         // steering modification
         public const float accel_clampVal = 0.15F;//0.015F;
+
+
+        // test run modifiers
+        public const bool wulffiesLearn = true;
+        public const bool fluffiesLearn = false;
     }
 }

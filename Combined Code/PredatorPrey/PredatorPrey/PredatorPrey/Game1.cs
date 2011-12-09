@@ -467,15 +467,21 @@ namespace PredatorPrey
 
                         
                     }
-                    foreach (Wulffies w in wulffiesList)
+                    if (Parameters.wulffiesLearn)
                     {
-                        // the predator runs it's weight improvement routine (through the nerual net)
-                        w.updateWeights();
+                        foreach (Wulffies w in wulffiesList)
+                        {
+                            // the predator runs it's weight improvement routine (through the nerual net)
+                            w.updateWeights();
+                        }
                     }
-                    foreach (Fluffies f in fluffiesList)
+                    if (Parameters.fluffiesLearn)
                     {
-                        // the prey runs it's weight improvement routine (through the nerual net)
-                        f.updateWeights();
+                        foreach (Fluffies f in fluffiesList)
+                        {
+                            // the prey runs it's weight improvement routine (through the nerual net)
+                            f.updateWeights();
+                        }
                     }
 
                     // check if any predators ate any prey
@@ -505,7 +511,7 @@ namespace PredatorPrey
                                     j--;
                                     // step2: change any fitness/eat count values accordingly
                                     wulffiesList[i].eat();
-                                    wulffiesList[i].score++;
+                                    wulffiesList[i].score += 50;
                                 }
                             }
                             // keeps track of the index of the best predator
@@ -535,7 +541,19 @@ namespace PredatorPrey
                         }
                     }
 
+                    // increment the tick counter
+                    updates++;
 
+                    // simulation output
+                    if (updates % Parameters.displayLivingTime == 0)
+                    {
+                        Console.WriteLine("Number of Living Fluffies:  " + fluffiesList.Count + "\n"
+                                           + "Number of Living Wulffies:  " + wulffiesList.Count + "\n");
+                    }
+                }
+                else
+                {
+                    // Classify as good or bad
                     foreach (Wulffies w in wulffiesList)
                     {
                         if (w.score >= Parameters.wulffiesScore)
@@ -551,18 +569,6 @@ namespace PredatorPrey
                         }
                     }
 
-                    // increment the tick counter
-                    updates++;
-
-                    // simulation output
-                    if (updates % Parameters.displayLivingTime == 0)
-                    {
-                        Console.WriteLine("Number of Living Fluffies:  " + fluffiesList.Count + "\n"
-                                           + "Number of Living Wulffies:  " + wulffiesList.Count + "\n");
-                    }
-                }
-                else
-                {
                     // UPDATE PREDATORS
                     List<Creature> wulffiesListC = new List<Creature>(Enumerable.Union<Creature>(wulffiesList, deadWulffiesList));
                     wulffiesGen.nextGeneration(wulffiesListC);
@@ -572,6 +578,10 @@ namespace PredatorPrey
                     foreach (Fluffies f in fluffiesList)
                     {
                         f.score = (int)Math.Max(0, f.score - f.hunger);
+                    }
+                    foreach (Wulffies w in wulffiesList)
+                    {
+                        w.score = (int)Math.Max(0, w.score - w.hunger);
                     }
 
                     List<Creature> fluffiesListC = new List<Creature>(Enumerable.Union<Creature>(fluffiesList, deadFluffiesList));
