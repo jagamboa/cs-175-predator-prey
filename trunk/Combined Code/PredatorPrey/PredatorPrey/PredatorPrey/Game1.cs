@@ -46,9 +46,9 @@ namespace PredatorPrey
         List<Grassies> grassiesList; 
         int updates = 0;
         int bestPredatorIndex = 0;
-        int bestPredatorFitness = 0;
+        double bestPredatorFitness = 0;
         int bestPreyIndex = 0;
-        int bestPreyFitness = Int32.MinValue;
+        double bestPreyFitness = Int32.MinValue;
 
         Texture2D predatorSprite;
         Texture2D preySprite;
@@ -207,6 +207,8 @@ namespace PredatorPrey
                     int height;
                     foreach (Creature predator in wulffiesList)
                     {
+                        // step1: gather this predator's visual percepts
+
                         //the creatures will not be able to see past the edge of the screen
                         //therefore this checks if it's vision intersects with any of the walls
                         /*
@@ -331,15 +333,16 @@ namespace PredatorPrey
                             eyes.add(sort[i]);
                         }
                          * */
-                        predator.wrap(eyes, temp_ac);
-                        // step1: gather this predator's visual percepts
+
 
                         // step2: give the predator it's visual percepts and update's it's state (hunger, position, fitness, etc)
+                        predator.wrap(eyes, temp_ac);
 
-                        // step3: the predator runs it's weight improvement routine (through the nerual net)
                     }
                     foreach (Creature prey in fluffiesList)
                     {
+                        // step1: gather this prey's visual percepts
+
                         /*
                         width = Parameters.preyVisionWidth;
                         height = Parameters.preyVisionHeight;
@@ -437,6 +440,9 @@ namespace PredatorPrey
                             eyes.add(sort[i]);
                         }*/
 
+
+                        // step2: give the prey it's visual percepts and update's it's state (hunger, position, fitness, etc)
+
                         prey.wrap(eyes, temp_ac);
                         //if (eyes.size() > 0)
                         //{
@@ -459,9 +465,18 @@ namespace PredatorPrey
                         }
                         // step1: gather this prey's visual percepts
 
-                        // step2: give the prey it's visual percepts and update's it's state (hunger, position, fitness, etc)
 
-                        // step3: the prey runs it's weight improvement routine (through the nerual net)
+                        
+                    }
+                    foreach (Wulffies w in wulffiesList)
+                    {
+                        // the predator runs it's weight improvement routine (through the nerual net)
+                        w.updateWeights();
+                    }
+                    foreach (Fluffies f in fluffiesList)
+                    {
+                        // the prey runs it's weight improvement routine (through the nerual net)
+                        f.updateWeights();
                     }
 
                     // check if any predators ate any prey
@@ -473,6 +488,7 @@ namespace PredatorPrey
                             wulffiesList[i].die();
                             deadWulffiesList.Add(wulffiesList[i]);
                             wulffiesList.RemoveAt(i);
+                            i--;
                         }
                         else
                         {

@@ -12,6 +12,8 @@ namespace PredatorPrey
 
         public List<double> weights { get; private set; }
 
+        public double output { get; private set; }
+
         public Neuron(int numberOfInputs)
         {
             this.numberOfInputs = numberOfInputs;
@@ -32,6 +34,15 @@ namespace PredatorPrey
             }
 
             newWeights.RemoveRange(0, numberOfInputs + 1);
+        }
+
+        // updates the weights based on the given delta
+        public void updateWeights(double delta)
+        {
+            for (int i = 0; i < weights.Count; i++)
+            {
+                weights[i] = weights[i] + delta;
+            }
         }
 
         // runs input through this neuron and returns the output signal
@@ -55,6 +66,8 @@ namespace PredatorPrey
             sumOfInputsAndWeights += weights[weights.Count - 1] * Parameters.bias;
 
             //return sigmoidFunction(sumOfInputsAndWeights);
+
+            output = sumOfInputsAndWeights;
             return sumOfInputsAndWeights;
         }
 
