@@ -82,8 +82,20 @@ namespace PredatorPrey
             List<double> outputs = brain.run(inputs);
 
             // step4: update velocity, position, and direction
-            //Vector2 acceleration = new Vector2((float)outputs[0], (float)outputs[1]);
-            Vector2 acceleration = new Vector2(ruleVectors[1].X, ruleVectors[1].Y);
+            Vector2 acceleration;
+            if (Parameters.predatorRule == 1)
+            {
+                acceleration = new Vector2(ruleVectors[0].X, ruleVectors[0].Y);
+            }
+            else if (Parameters.predatorRule == 2)
+            {
+                acceleration = new Vector2(ruleVectors[1].X, ruleVectors[1].Y);
+            }
+            else
+            {
+                acceleration = new Vector2((float)outputs[0], (float)outputs[1]);
+            }
+
             if (acceleration.Length() != 0)
                 acceleration = Vector2.Normalize(acceleration);
             acceleration = Vector2.Clamp(acceleration, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),

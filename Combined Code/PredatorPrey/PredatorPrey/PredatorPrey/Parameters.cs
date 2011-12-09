@@ -121,5 +121,20 @@ namespace PredatorPrey
         // test run modifiers
         public const bool wulffiesLearn = true;
         public const bool fluffiesLearn = true;
+
+        // predator
+        // 0 = run all rules + learning
+        // 1 = run only avoid rule (no learning)
+        // 2 = run only goal rule (no learning)
+        public const int predatorRule = 0;
+
+        // prey
+        // 0 = run all rules + learning
+        // 1 = run only avoid rule (no learning)
+        // 2 = run only steer rule (no learning)
+        // 3 = run only align rule (no learning)
+        // 4 = run only goal rule (no learning)
+        public const int preyRule = 0;
+
     }
 }
