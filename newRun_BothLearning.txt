@@ -1,0 +1,360 @@
+
+Number of Living Fluffies:  33
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  23
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  1
+Best Score:  980
+Worst Score:  131
+Avg Score:  549
+:::Wulffies:::
+Generation:  1
+Best Score:  200
+Worst Score:  0
+Avg Score:  115
+
+Number of Living Fluffies:  34
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  23
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  2
+Best Score:  999
+Worst Score:  49
+Avg Score:  576
+:::Wulffies:::
+Generation:  2
+Best Score:  250
+Worst Score:  0
+Avg Score:  120
+
+Number of Living Fluffies:  32
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  22
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  3
+Best Score:  995
+Worst Score:  18
+Avg Score:  539
+:::Wulffies:::
+Generation:  3
+Best Score:  200
+Worst Score:  50
+Avg Score:  120
+
+Number of Living Fluffies:  31
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  25
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  4
+Best Score:  989
+Worst Score:  44
+Avg Score:  553
+:::Wulffies:::
+Generation:  4
+Best Score:  200
+Worst Score:  0
+Avg Score:  115
+
+Number of Living Fluffies:  31
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  27
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  5
+Best Score:  999
+Worst Score:  44
+Avg Score:  554
+:::Wulffies:::
+Generation:  5
+Best Score:  200
+Worst Score:  0
+Avg Score:  85
+
+Number of Living Fluffies:  33
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  24
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  6
+Best Score:  996
+Worst Score:  26
+Avg Score:  536
+:::Wulffies:::
+Generation:  6
+Best Score:  200
+Worst Score:  0
+Avg Score:  110
+
+Number of Living Fluffies:  36
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  28
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  7
+Best Score:  999
+Worst Score:  74
+Avg Score:  583
+:::Wulffies:::
+Generation:  7
+Best Score:  200
+Worst Score:  0
+Avg Score:  90
+
+Number of Living Fluffies:  30
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  23
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  8
+Best Score:  987
+Worst Score:  10
+Avg Score:  514
+:::Wulffies:::
+Generation:  8
+Best Score:  200
+Worst Score:  0
+Avg Score:  100
+
+Number of Living Fluffies:  32
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  25
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  9
+Best Score:  993
+Worst Score:  38
+Avg Score:  571
+:::Wulffies:::
+Generation:  9
+Best Score:  200
+Worst Score:  0
+Avg Score:  100
+
+Number of Living Fluffies:  34
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  30
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  10
+Best Score:  996
+Worst Score:  66
+Avg Score:  559
+:::Wulffies:::
+Generation:  10
+Best Score:  200
+Worst Score:  0
+Avg Score:  65
+
+Number of Living Fluffies:  35
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  26
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  11
+Best Score:  989
+Worst Score:  115
+Avg Score:  565
+:::Wulffies:::
+Generation:  11
+Best Score:  250
+Worst Score:  0
+Avg Score:  105
+
+Number of Living Fluffies:  37
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  28
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  12
+Best Score:  998
+Worst Score:  78
+Avg Score:  615
+:::Wulffies:::
+Generation:  12
+Best Score:  250
+Worst Score:  0
+Avg Score:  80
+
+Number of Living Fluffies:  26
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  19
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  13
+Best Score:  989
+Worst Score:  30
+Avg Score:  460
+:::Wulffies:::
+Generation:  13
+Best Score:  250
+Worst Score:  0
+Avg Score:  120
+
+Number of Living Fluffies:  29
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  22
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  14
+Best Score:  945
+Worst Score:  29
+Avg Score:  483
+:::Wulffies:::
+Generation:  14
+Best Score:  250
+Worst Score:  50
+Avg Score:  110
+
+Number of Living Fluffies:  35
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  29
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  15
+Best Score:  990
+Worst Score:  15
+Avg Score:  541
+:::Wulffies:::
+Generation:  15
+Best Score:  250
+Worst Score:  0
+Avg Score:  95
+
+Number of Living Fluffies:  29
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  22
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  16
+Best Score:  940
+Worst Score:  23
+Avg Score:  500
+:::Wulffies:::
+Generation:  16
+Best Score:  200
+Worst Score:  0
+Avg Score:  110
+
+Number of Living Fluffies:  33
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  28
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  17
+Best Score:  983
+Worst Score:  40
+Avg Score:  519
+:::Wulffies:::
+Generation:  17
+Best Score:  200
+Worst Score:  0
+Avg Score:  90
+
+Number of Living Fluffies:  32
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  24
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  18
+Best Score:  991
+Worst Score:  73
+Avg Score:  538
+:::Wulffies:::
+Generation:  18
+Best Score:  200
+Worst Score:  0
+Avg Score:  110
+
+Number of Living Fluffies:  31
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  25
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  19
+Best Score:  989
+Worst Score:  33
+Avg Score:  532
+:::Wulffies:::
+Generation:  19
+Best Score:  200
+Worst Score:  0
+Avg Score:  95
+
+Number of Living Fluffies:  28
+Number of Living Wulffies:  10
+
+Number of Living Fluffies:  20
+Number of Living Wulffies:  10
+
+---End of Generation Statistics---
+:::Fluffies:::
+Generation:  20
+Best Score:  987
+Worst Score:  12
+Avg Score:  459
+:::Wulffies:::
+Generation:  20
+Best Score:  200
+Worst Score:  50
+Avg Score:  140
