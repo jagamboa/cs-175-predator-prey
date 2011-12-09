@@ -31,12 +31,11 @@ namespace PredatorPrey
         //
         ShapeMatcher sm;
 
-        // variables for Semi Supervised
-        //
-        //
-        //
-        //
-        //
+        // variables for Genetic Algorithm
+        GeneticAlgorithm wulffiesGen;
+        GeneticAlgorithm fluffiesGen;
+
+
 
         // variables for toolkit
         List<Wulffies> wulffiesList;
@@ -129,11 +128,11 @@ namespace PredatorPrey
             //
             //
 
-            // Initialize Semi Supervised
-            //
-            //
-            //
-            //
+            // Initialize Genetic Alg
+            List<Creature> wulffiesListC = new List<Creature>(Enumerable.Union<Creature>(wulffiesList, deadWulffiesList));
+            wulffiesGen = new GeneticAlgorithm(wulffiesListC);
+            List<Creature> fluffiesListC = new List<Creature>(Enumerable.Union<Creature>(fluffiesList, deadFluffiesList));
+            fluffiesGen = new GeneticAlgorithm(fluffiesListC);
 
             base.Initialize();
         }
@@ -181,20 +180,20 @@ namespace PredatorPrey
         {
             keyState = Keyboard.GetState();
 
-            if (keyState.IsKeyDown(Keys.Space) && !spaceDown)
-            {
-                spaceDown = true;
-                loop = !loop;
-                this.IsFixedTimeStep = !loop;
-                graphics.SynchronizeWithVerticalRetrace = !loop;
-            }
-            else if (keyState.IsKeyUp(Keys.Space))
-            {
-                spaceDown = false;
-            }
+            //if (keyState.IsKeyDown(Keys.Space) && !spaceDown)
+            //{
+            //    spaceDown = true;
+            //    loop = !loop;
+            //    this.IsFixedTimeStep = !loop;
+            //    graphics.SynchronizeWithVerticalRetrace = !loop;
+            //}
+            //else if (keyState.IsKeyUp(Keys.Space))
+            //{
+            //    spaceDown = false;
+            //}
 
-            do
-            {
+            //do
+            //{
                 // if the simulation has not timed out
                 if (updates < Parameters.numberOfUpdates)
                 {
@@ -551,85 +550,48 @@ namespace PredatorPrey
                             f.good = true;
                         }
                     }
+
                     // increment the tick counter
                     updates++;
+
+                    // simulation output
+                    if (updates % Parameters.displayLivingTime == 0)
+                    {
+                        Console.WriteLine("Number of Living Fluffies:  " + fluffiesList.Count + "\n"
+                                           + "Number of Living Wulffies:  " + wulffiesList.Count + "\n");
+                    }
                 }
                 else
                 {
-                    // CONSOLE OUTPUT
-                    // output any statistis that should be outputted after each generation here
-
                     // UPDATE PREDATORS
-                    // step1: gather semi-supervised data
-                    // step2: run semi-supervised routine, output new weights
-                    // step3: mutate new weights and place them back in predators (Creature.genes)
                     List<Creature> wulffiesListC = new List<Creature>(Enumerable.Union<Creature>(wulffiesList, deadWulffiesList));
-                    GeneticAlgorithm ga = new GeneticAlgorithm(wulffiesListC);
-                    ga.nextGeneration(wulffiesListC);
+                    wulffiesGen.nextGeneration(wulffiesListC);
                     wulffiesList = new List<Wulffies>(Enumerable.Union<Wulffies>(wulffiesList, deadWulffiesList));
 
                     // UPDATE PREY
-                    // step1: gather semi-supervised data
-                    // step2: run semi-supervised routine, output new weights
-                    // step3: mutate new weights and place them back in prey (Creatures.genes)
-                    List<Creature> fluffiesListC = new List<Creature>(Enumerable.Union<Creature>(fluffiesList, deadFluffiesList));
-                    GeneticAlgorithm ga2 = new GeneticAlgorithm(fluffiesListC);
-                    ga2.nextGeneration(fluffiesListC);
-                    fluffiesList = new List<Fluffies>(Enumerable.Union<Fluffies>(fluffiesList, deadFluffiesList));
-/*
-                    List<Wulffies> newWulffies = new List<Wulffies>();
-                    while (newWulffies.Count < Parameters.numberOfWolves)
+                    foreach (Fluffies f in fluffiesList)
                     {
-                        List<double> newWeights = w.genes;
-                        List<double> closest = new List<double>();
-                        List<int> closestID = new List<int>();
-                        for (int x = 0; x < wulffiesList.Count; x++)
-                        {
-                            List<double> xWeights = wulffiesList[x].genes;
-                            double sum = 0;
-                            for (int y = 0; y < newWeights.Count; y++)
-                            {
-                                sum = sum + ((newWeights[y] - xWeights[y]) * (newWeights[y] - xWeights[y]));
-                            }
-                            double distance = Math.Sqrt(sum);
-                            if (closest.Count < Parameters.k)
-                            {
-                                closest.Add(distance);
-                                closestID.Add(x);
-                            }
-                            else
-                            {
-                                foreach (double d in closest)
-                                {
-                                    if (distance < d)
-                                    {
-                                        closest.Remove(d);
-                                        closest.Add(distance);
-                                        closestID.Add(x);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        int countPlus = 0;
-                        int countMinus = 0;
-                        foreach (int i in closestID)
-                        {
-                            if (wulffiesList[i].good)
-                            {
-                                countPlus++;
-                            }
-                            else
-                            {
-                                countMinus++;
-                            }
-                        }
-                        if (countPlus > countMinus)
-                        {
-                            newWulffies.Add(w);
-                        }
+                        f.score = (int)Math.Max(0, f.score - f.hunger);
                     }
-            */        
+
+                    List<Creature> fluffiesListC = new List<Creature>(Enumerable.Union<Creature>(fluffiesList, deadFluffiesList));
+                    fluffiesGen.nextGeneration(fluffiesListC);
+                    fluffiesList = new List<Fluffies>(Enumerable.Union<Fluffies>(fluffiesList, deadFluffiesList));
+
+                    // CONSOLE OUTPUT
+                    // output any statistis that should be outputted after each generation here
+                    Console.WriteLine("---End of Generation Statistics---\n"
+                                        + ":::Fluffies:::\n"
+                                        + "Generation:  " + fluffiesGen.generationCount + "\n"
+                                        + "Best Score:  " + fluffiesGen.bestFitness + "\n"
+                                        + "Worst Score:  " + fluffiesGen.worstFitness + "\n"
+                                        + "Avg Score:  " + fluffiesGen.getAverageFitness() + "\n"
+                                        + ":::Wulffies:::\n"
+                                        + "Generation:  " + wulffiesGen.generationCount + "\n"
+                                        + "Best Score:  " + wulffiesGen.bestFitness + "\n"
+                                        + "Worst Score:  " + wulffiesGen.worstFitness + "\n"
+                                        + "Avg Score:  " + wulffiesGen.getAverageFitness() + "\n");
+
                     // reset simulation for next generation
                     updates = 0;
                     bestPredatorFitness = 0;
@@ -645,7 +607,7 @@ namespace PredatorPrey
                     }
                 }
 
-            } while (loop && updates != 0);
+            //} while (loop && updates != 0);
 
             base.Update(gameTime);
         }
