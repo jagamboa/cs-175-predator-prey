@@ -20,13 +20,10 @@ namespace PredatorPrey
         {
             brain = new NeuralNetwork(Parameters.predatorNumberOfRules * Parameters.inputsPerSensedObject, Parameters.inputsPerSensedObject,
                     Parameters.behav_numOfHiddenLayers, Parameters.behav_numOfNeuronsPerLayer);
-            good = false;
-            score = 0;
 
             avoid = new AvoidanceRule(Classification.Predator);
             align = new AlignmentRule(Classification.Predator);
             goal = new GoalRule();
-
             currentGoal = Vector2.Zero;
         }
 
@@ -86,12 +83,6 @@ namespace PredatorPrey
 
             // step4: update velocity, position, and direction
             Vector2 acceleration = new Vector2((float)outputs[0], (float)outputs[1]);
-
-            if (float.IsNaN(acceleration.X))
-            {
-                List<double> weights = brain.getListOfWeights();
-                Console.WriteLine("NaN");
-            }
 
             if (acceleration.Length() != 0)
                 acceleration = Vector2.Normalize(acceleration);
@@ -182,7 +173,18 @@ namespace PredatorPrey
                 List<double> target = new List<double>(2);
                 target.Add(correctedAcceleration.X);
                 target.Add(correctedAcceleration.Y);
-                brain.updateWeights(target);
+                List<double> deltaOut = brain.updateWeights(target);
+
+                List<double> deltaIn = new List<double>(Parameters.inputsPerSensedObject);
+                deltaIn.Add(deltaOut[0]);
+                deltaIn.Add(deltaOut[1]);
+                avoid.update(deltaIn);
+                deltaIn[0] = deltaOut[2];
+                deltaIn[1] = deltaOut[3];
+                align.update(deltaIn);
+                deltaIn[0] = deltaOut[4];
+                deltaIn[1] = deltaOut[5];
+                goal.update(deltaIn);
             }
 
             position = tempPosition;

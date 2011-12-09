@@ -45,9 +45,6 @@ namespace PredatorPrey
 
         public double rotation;
 
-        public double leftSideSpeed;
-        public double rightSideSpeed;
-
         public double hunger;
         public bool eating;
         public bool isAlive { get; protected set; }
@@ -62,13 +59,13 @@ namespace PredatorPrey
             this.position = new Vector2(initPos.X, initPos.Y);
             this.velocity = Vector2.Zero;// new Vector2((float)(2 * Parameters.random.NextDouble() - 1), (float)(2 * Parameters.random.NextDouble() - 1));
 
+            fitness = Parameters.initFitness;
             hunger = Parameters.startingHunger;
             eating = false;
             canEat = true;
             isAlive = true;
-            fitness = Parameters.initFitness;
-            leftSideSpeed = 0;
-            rightSideSpeed = 0;
+            score = 0;
+            good = false;
         }
 
         public List<double> run(List<double> inputs)
@@ -103,14 +100,16 @@ namespace PredatorPrey
 
         public void reset()
         {
-            fitness = Parameters.initFitness;
             position.X = initPos.X;
             position.Y = initPos.Y;
             velocity = new Vector2((float)(2 * Parameters.random.NextDouble() - 1), (float)(2 * Parameters.random.NextDouble() - 1));
-            leftSideSpeed = 0;
-            rightSideSpeed = 0;
+            fitness = Parameters.initFitness;
             hunger = Parameters.startingHunger;
+            eating = false;
+            canEat = true;
             isAlive = true;
+            score = 0;
+            good = false;
         }
 
         public double getAngle()

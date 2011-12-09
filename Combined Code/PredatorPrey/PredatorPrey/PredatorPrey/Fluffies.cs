@@ -24,8 +24,6 @@ namespace PredatorPrey
             align = new AlignmentRule(Classification.Prey);
             goal = new GoalRule();
             currentGoal = new Vector2(500, 500);
-            good = false;
-            score = 0;
         }
 
         public override void wrap(VisionContainer vc, AudioContainer ac)
@@ -70,7 +68,7 @@ namespace PredatorPrey
             
 
             // update the score
-            if (isAlive)
+            if (isAlive && hunger < Parameters.hungryThreshold)
                 score++;
 
             // update previous values
@@ -107,12 +105,6 @@ namespace PredatorPrey
 
             //step4: update velocity, position, and direction
             Vector2 acceleration = new Vector2((float) outputs[0], (float) outputs[1]);
-
-            if (float.IsNaN(acceleration.X))
-            {
-                List<double> weights = brain.getListOfWeights();
-                Console.WriteLine("NaN");
-            }
 
             prevAccMag = acceleration.Length();
 
@@ -217,7 +209,21 @@ namespace PredatorPrey
                 List<double> target = new List<double>(2);
                 target.Add(correctedAcceleration.X);
                 target.Add(correctedAcceleration.Y);
-                brain.updateWeights(target);
+                List<double> deltaOut = brain.updateWeights(target);
+
+                List<double> deltaIn = new List<double>(Parameters.inputsPerSensedObject);
+                deltaIn.Add(deltaOut[0]);
+                deltaIn.Add(deltaOut[1]);
+                avoid.update(deltaIn);
+                deltaIn[0] = deltaOut[2];
+                deltaIn[1] = deltaOut[3];
+                steer.update(deltaIn);
+                deltaIn[0] = deltaOut[4];
+                deltaIn[1] = deltaOut[5];
+                align.update(deltaIn);
+                deltaIn[0] = deltaOut[6];
+                deltaIn[1] = deltaOut[7];
+                goal.update(deltaIn);
             }
 
             position = tempPosition;
@@ -289,7 +295,7 @@ namespace PredatorPrey
 
         public override void die()
         {
-            score = (int)Math.Max(0,score- hunger);
+            score = (int)Math.Max(0,score + hunger * Parameters.hungerWeight);
             base.die();
         }
     }

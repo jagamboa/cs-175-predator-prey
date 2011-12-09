@@ -92,5 +92,11 @@ namespace PredatorPrey
 
             return result;
         }
+
+        // updates the rule with a list of delta values
+        public void update(List<double> deltaIn)
+        {
+            ruleNet.chainPropagation(deltaIn);
+        }
     }
 }
