@@ -502,7 +502,7 @@ namespace PredatorPrey
 
                                 int positionX = (int)(fluffiesList[j].position.X - wulffiesList[i].position.X);
                                 int positionY = (int)(fluffiesList[j].position.Y - wulffiesList[i].position.Y);
-                                if (!wulffiesList[i].eating && Vector2.Distance(wulffiesList[i].position, fluffiesList[j].position) < Parameters.minDistanceToTouch && positionX * wulffiesList[i].velocity.X > 0 && positionY * wulffiesList[i].velocity.Y > 0)
+                                if (!wulffiesList[i].eating && Vector2.Distance(wulffiesList[i].position, fluffiesList[j].position) < Parameters.minDistanceToTouch)
                                 {
                                     // step1: kill the sheep
                                     fluffiesList[j].die();
@@ -570,6 +570,7 @@ namespace PredatorPrey
                     }
 
                     // UPDATE PREDATORS
+                    
                     List<Creature> wulffiesListC = new List<Creature>(Enumerable.Union<Creature>(wulffiesList, deadWulffiesList));
                     wulffiesGen.nextGeneration(wulffiesListC);
                     wulffiesList = new List<Wulffies>(Enumerable.Union<Wulffies>(wulffiesList, deadWulffiesList));
@@ -587,7 +588,7 @@ namespace PredatorPrey
                     List<Creature> fluffiesListC = new List<Creature>(Enumerable.Union<Creature>(fluffiesList, deadFluffiesList));
                     fluffiesGen.nextGeneration(fluffiesListC);
                     fluffiesList = new List<Fluffies>(Enumerable.Union<Fluffies>(fluffiesList, deadFluffiesList));
-
+                    
                     // CONSOLE OUTPUT
                     // output any statistis that should be outputted after each generation here
                     Console.WriteLine("---End of Generation Statistics---\n"
@@ -603,6 +604,7 @@ namespace PredatorPrey
                                         + "Avg Score:  " + wulffiesGen.getAverageFitness() + "\n");
 
                     // reset simulation for next generation
+                    
                     updates = 0;
                     bestPredatorFitness = 0;
                     bestPredatorIndex = 0;
