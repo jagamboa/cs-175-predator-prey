@@ -75,6 +75,13 @@ namespace PredatorPrey
 
             //step2: use prey rules (extract data from VisionContainer) to create a list of movement vectors
             List<Vector2> ruleVectors = new List<Vector2>(Parameters.preyNumberOfRules);
+            for (int i = 0; i < vc.size(); i++)
+            {
+                if (vc.getSeenObject(i).type.Equals(Classification.Food))
+                {
+                    currentGoal = vc.getSeenObject(i).position;
+                }
+            }
 
             ruleVectors.Add(avoid.run(vc, ac));
             ruleVectors.Add(steer.run(vc));
