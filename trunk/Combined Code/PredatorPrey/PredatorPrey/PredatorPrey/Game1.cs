@@ -395,7 +395,6 @@ namespace PredatorPrey
                          * eyes = sm.findObjects(prey, visionRect, width, height,(int)prey.position.X-rectStartX, (int)prey.position.Y-rectStartY);
                         */
                         eyes.reset();
-                        List<Creature> visableCreats = new List<Creature>();
                         int i;
                         for (i = 0; i < wulffiesList.Count; i++)
                         {
@@ -409,6 +408,13 @@ namespace PredatorPrey
                             if (prey.position != fluffiesList[i].position && Vector2.Distance(prey.position, fluffiesList[i].position) < Parameters.fluffiesVisionThreashold)
                             {
                                 eyes.add(sm.compareCreats(fluffiesList[i], prey.position, preySprite));
+                            }
+                        }
+                        for (i = 0; i < grassiesList.Count; i++)
+                        {
+                            if (Vector2.Distance(prey.position, grassiesList[i].position) < Parameters.fluffiesVisionThreashold)
+                            {
+                                eyes.add(sm.compareCreats(grassiesList[i], prey.position, grassSprite));
                             }
                         }
                         eyes.sort(prey.position);

@@ -23,7 +23,7 @@ namespace PredatorPrey
             steer = new SteeringRule(Classification.Prey);
             align = new AlignmentRule(Classification.Prey);
             goal = new GoalRule();
-            currentGoal = new Vector2(500, 500);
+            currentGoal = Vector2.Zero;
         }
 
         public override void wrap(VisionContainer vc, AudioContainer ac)
@@ -89,7 +89,16 @@ namespace PredatorPrey
             ruleVectors.Add(avoid.run(vc, ac));
             ruleVectors.Add(steer.run(vc));
             ruleVectors.Add(align.run(vc));
-            ruleVectors.Add(goal.run(Vector2.Multiply(Vector2.Subtract(currentGoal, position), 0), (float)hunger));
+
+            for (int i = 0; i < vc.size(); i++)
+            {
+                if (vc.getSeenObject(i).type == Classification.Unknown)
+                {
+                    currentGoal = vc.getSeenObject(i).position;
+                    break;
+                }
+            }
+            ruleVectors.Add(Vector2.Multiply(goal.run(currentGoal, 0), 1));
 
             //step3: pass vectors into neural network to get outputs
             List<double> inputs = new List<double>(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject);
@@ -104,7 +113,28 @@ namespace PredatorPrey
             List<double> outputs = brain.run(inputs);
 
             //step4: update velocity, position, and direction
-            Vector2 acceleration = new Vector2((float) outputs[0], (float) outputs[1]);
+            Vector2 acceleration;
+
+            if (Parameters.preyRule == 1)
+            {
+                acceleration = new Vector2(ruleVectors[0].X, ruleVectors[0].Y);
+            }
+            else if (Parameters.preyRule == 2)
+            {
+                acceleration = new Vector2(ruleVectors[1].X, ruleVectors[1].Y);
+            }
+            else if (Parameters.preyRule == 3)
+            {
+                acceleration = new Vector2(ruleVectors[2].X, ruleVectors[2].Y);
+            }
+            else if (Parameters.preyRule == 4)
+            {
+                acceleration = new Vector2(ruleVectors[3].X, ruleVectors[3].Y);
+            }
+            else
+            {
+                acceleration = new Vector2((float)outputs[0], (float)outputs[1]);
+            }
 
             prevAccMag = acceleration.Length();
 
