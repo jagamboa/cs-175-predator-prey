@@ -15,8 +15,9 @@ namespace PredatorPrey
         public int score;
 
         public int fitness;
-
+        public bool canEat;
         public int eatDuration;
+        public int dontEatDuration;
 
         // the weights of the Creature's neural network
         public List<double> genes
@@ -57,6 +58,7 @@ namespace PredatorPrey
 
             hunger = Parameters.startingHunger;
             eating = false;
+            canEat = true;
             isAlive = true;
             fitness = Parameters.initFitness;
             leftSideSpeed = 0;
@@ -74,7 +76,10 @@ namespace PredatorPrey
             eating = true;
 
             if (hunger < 0)
+            {
+                eating = false;
                 hunger = 0;
+            }
         }
 
         public void starve()
@@ -98,6 +103,7 @@ namespace PredatorPrey
             velocity = new Vector2((float)(2 * Parameters.random.NextDouble() - 1), (float)(2 * Parameters.random.NextDouble() - 1));
             leftSideSpeed = 0;
             rightSideSpeed = 0;
+            hunger = Parameters.startingHunger;
             isAlive = true;
         }
 
@@ -139,6 +145,11 @@ namespace PredatorPrey
                 position.Y = Parameters.worldHeight + position.Y;
 
 
+        }
+
+        public virtual void die()
+        {
+            isAlive = false;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace PredatorPrey
         private Vector2 currentGoal;
 
 
+
         public Wulffies(Vector2 position) : base(position)
         {
             brain = new NeuralNetwork(Parameters.predatorNumberOfRules * Parameters.inputsPerSensedObject, Parameters.inputsPerSensedObject,

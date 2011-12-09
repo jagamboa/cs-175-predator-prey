@@ -20,9 +20,9 @@ namespace PredatorPrey
         public const int numberOfFittestCopies = 5;
 
         public const int numberOfWolves = 5;
-        public const int numberOfSheep = 20;
+        public const int numberOfSheep = 30;
         public const int numberOfGrassies = 5;
-        public const int numberOfUpdates = 1000;
+        public const int numberOfUpdates = 700;
 
         public const float maxRotation = 0.1F;
         public const float maxMoveSpeed = 2F;
@@ -40,9 +40,9 @@ namespace PredatorPrey
 
         //these are values for the creatures
         public const float startingHunger = 5F;
-        public const float maxHunger = 20F;
+        public const float maxHunger = 30F;
         public const int eating = -1;
-        public const float starving =.1F;
+        public const float starving =.03F;
 
         //these are values for the weights that determin the fitness function
         public const int hungerWeight = -10;
@@ -79,6 +79,9 @@ namespace PredatorPrey
         //Duration of eating
         public const int wulffieEatTime = 60;
         public const int fluffieEatTime = 40;
+        public const int minDistanceToFluffyEat = 25;
+        public const double eatingThreshold = .3;
+        public const int dontEatCount = 30;
 
         //constants for rules
         public const int preyNumberOfRules = 4;

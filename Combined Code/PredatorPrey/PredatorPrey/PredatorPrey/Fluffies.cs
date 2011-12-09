@@ -31,7 +31,22 @@ namespace PredatorPrey
         public override void wrap(VisionContainer vc, AudioContainer ac)
         {
             //step1: update values that change with time (hunger)
-            
+
+            if (eating)
+            {
+                eat();
+                if (hunger <= 0)
+                {
+                    eating = false;
+                    canEat = false;
+                    dontEatDuration = Parameters.dontEatCount;
+                }
+                else
+                    hunger--;
+            }
+            else
+                starve();
+
             // Stop the creature (fluffies or wulffies)
             if (eatDuration > 0)
             {
@@ -39,15 +54,20 @@ namespace PredatorPrey
                 if (eatDuration == 0)
                 {
                     eating = false;
+                    canEat = false;
+                    dontEatDuration = Parameters.dontEatCount;
                 }
-                return;
             }
 
-            //update the hunger
-            if (eating)
-                eat();
-            else
-                starve();
+            if (dontEatDuration > 0)
+            {
+                dontEatDuration--;
+                if (dontEatDuration == 0)
+                {
+                    canEat = true;
+                }
+            }
+            
 
             // update the score
             if (isAlive)
@@ -80,20 +100,28 @@ namespace PredatorPrey
             acceleration = Vector2.Clamp(acceleration, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),
                 new Vector2(Parameters.accel_clampVal, Parameters.accel_clampVal));
             acceleration = acceleration * Parameters.maxAcceleration;
-
-            velocity = acceleration + velocity;
-
-            if (velocity.Length() > Parameters.maxMoveSpeed)
+            if(!eating || (Math.Max(acceleration.X,acceleration.Y)>Parameters.eatingThreshold || Math.Min(acceleration.X,acceleration.Y)<-Parameters.eatingThreshold))
             {
-                velocity = Vector2.Normalize(velocity) * Parameters.maxMoveSpeed;
-            }
+                if (eating)
+                {
+                    eating = false;
+                    canEat = false;
+                    dontEatDuration = Parameters.dontEatCount;
+                }
+                velocity = acceleration + velocity;
 
-            position = position + velocity;
+                if (velocity.Length() > Parameters.maxMoveSpeed)
+                {
+                    velocity = Vector2.Normalize(velocity) * Parameters.maxMoveSpeed;
+                }
 
-            if (velocity != Vector2.Zero)
-            {
-                Vector2 direction = Vector2.Normalize(velocity);
-                rotation = Math.Atan2(direction.Y, direction.X) - Math.PI/2;
+                position = position + velocity;
+
+                if (velocity != Vector2.Zero)
+                {
+                    Vector2 direction = Vector2.Normalize(velocity);
+                    rotation = Math.Atan2(direction.Y, direction.X) - Math.PI/2;
+                }
             }
 
             base.wrap(vc, ac);
@@ -177,10 +205,10 @@ namespace PredatorPrey
  	        base.eat();
         }
 
-        public void die()
+        public override void die()
         {
             score = (int)Math.Max(0,score- hunger);
-            isAlive = false;
+            base.die();
         }
     }
 }
