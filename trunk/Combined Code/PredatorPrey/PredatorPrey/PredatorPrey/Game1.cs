@@ -262,6 +262,7 @@ namespace PredatorPrey
                         render.GetData<Color>(0,new Rectangle(rectStartX, rectStartY, width, height), visionRect, 0, height*width);
                         eyes =sm.findObjects(predator, visionRect, width, height,(int)predator.position.X - rectStartX,(int)predator.position.Y-rectStartY);
                         */
+                        
                         List<Creature> visableCreats = new List<Creature>();
                         int i;
                         eyes = new VisionContainer();
@@ -449,6 +450,13 @@ namespace PredatorPrey
                         //        Console.WriteLine("We Found Something!");
                         //    }
                         //}
+
+                        for (i = 0; i < grassiesList.Count; i++)
+                        {
+                            Vector2 center = new Vector2(grassiesList[i].position.X + 20, grassiesList[i].position.Y + 20);
+                            if (prey.canEat && Vector2.Distance(prey.position, center) < Parameters.minDistanceToFluffyEat)
+                                prey.eat();
+                        }
                         // step1: gather this prey's visual percepts
 
                         // step2: give the prey it's visual percepts and update's it's state (hunger, position, fitness, etc)
@@ -457,29 +465,40 @@ namespace PredatorPrey
                     }
 
                     // check if any predators ate any prey
+
                     for (int i = 0; i < wulffiesList.Count; i++)
                     {
-                        for (int j = 0; j < fluffiesList.Count; j++)
+                        if (wulffiesList[i].hunger >= Parameters.maxHunger)
                         {
-                            int positionX = (int)(fluffiesList[j].position.X -wulffiesList[i].position.X);
-                            int positionY = (int)(fluffiesList[j].position.Y -wulffiesList[i].position.Y);
-                            if (!wulffiesList[i].eating && Vector2.Distance(wulffiesList[i].position, fluffiesList[j].position) < Parameters.minDistanceToTouch && positionX*wulffiesList[i].velocity.X>0 && positionY*wulffiesList[i].velocity.Y>0)
-                            {
-                                // step1: kill the sheep
-                                fluffiesList[j].die();
-                                deadFluffiesList.Add(fluffiesList[j]);
-                                fluffiesList.RemoveAt(j);
-                                // step2: change any fitness/eat count values accordingly
-                                wulffiesList[i].eat();
-                                wulffiesList[i].score++;
-                            }
+                            wulffiesList[i].die();
+                            deadWulffiesList.Add(wulffiesList[i]);
+                            wulffiesList.RemoveAt(i);
                         }
-
-                        // keeps track of the index of the best predator
-                        if (wulffiesList[i].fitness > bestPredatorFitness)
+                        else
                         {
-                            bestPredatorFitness = wulffiesList[i].fitness;
-                            bestPredatorIndex = i;
+                            for (int j = 0; j < fluffiesList.Count; j++)
+                            {
+
+                                int positionX = (int)(fluffiesList[j].position.X - wulffiesList[i].position.X);
+                                int positionY = (int)(fluffiesList[j].position.Y - wulffiesList[i].position.Y);
+                                if (!wulffiesList[i].eating && Vector2.Distance(wulffiesList[i].position, fluffiesList[j].position) < Parameters.minDistanceToTouch && positionX * wulffiesList[i].velocity.X > 0 && positionY * wulffiesList[i].velocity.Y > 0)
+                                {
+                                    // step1: kill the sheep
+                                    fluffiesList[j].die();
+                                    deadFluffiesList.Add(fluffiesList[j]);
+                                    fluffiesList.RemoveAt(j);
+                                    j--;
+                                    // step2: change any fitness/eat count values accordingly
+                                    wulffiesList[i].eat();
+                                    wulffiesList[i].score++;
+                                }
+                            }
+                            // keeps track of the index of the best predator
+                            if (wulffiesList[i].fitness > bestPredatorFitness)
+                            {
+                                bestPredatorFitness = wulffiesList[i].fitness;
+                                bestPredatorIndex = i;
+                            }
                         }
                     }
 
@@ -531,7 +550,7 @@ namespace PredatorPrey
                     List<Creature> wulffiesListC = new List<Creature>(Enumerable.Union<Creature>(wulffiesList, deadWulffiesList));
                     GeneticAlgorithm ga = new GeneticAlgorithm(wulffiesListC);
                     ga.nextGeneration(wulffiesListC);
-
+                    wulffiesList = new List<Wulffies>(Enumerable.Union<Wulffies>(wulffiesList, deadWulffiesList));
 
                     // UPDATE PREY
                     // step1: gather semi-supervised data
@@ -540,6 +559,7 @@ namespace PredatorPrey
                     List<Creature> fluffiesListC = new List<Creature>(Enumerable.Union<Creature>(fluffiesList, deadFluffiesList));
                     GeneticAlgorithm ga2 = new GeneticAlgorithm(fluffiesListC);
                     ga2.nextGeneration(fluffiesListC);
+                    fluffiesList = new List<Fluffies>(Enumerable.Union<Fluffies>(fluffiesList, deadFluffiesList));
 /*
                     List<Wulffies> newWulffies = new List<Wulffies>();
                     while (newWulffies.Count < Parameters.numberOfWolves)
