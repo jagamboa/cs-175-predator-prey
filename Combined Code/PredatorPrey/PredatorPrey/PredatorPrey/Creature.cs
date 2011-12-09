@@ -14,10 +14,16 @@ namespace PredatorPrey
         public Boolean good;
         public int score;
 
-        public int fitness;
+        public double fitness;
         public bool canEat;
         public int eatDuration;
         public int dontEatDuration;
+
+        protected Vector2 prevPos;
+        protected Vector2 prevVel;
+        protected Vector2 prevAcc;
+        protected float prevAccMag;
+        protected VisionContainer prevVision;
 
         // the weights of the Creature's neural network
         public List<double> genes
@@ -127,7 +133,7 @@ namespace PredatorPrey
 
         //this is to calculate the personal fitness function
         //but must be overrided in the prey and predetor classes
-        public virtual int calculateFitness(VisionContainer vc)
+        public virtual double calculateFitness(VisionContainer vc)
         {
             return 0;
         }

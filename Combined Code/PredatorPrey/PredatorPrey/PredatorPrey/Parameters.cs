@@ -8,13 +8,13 @@ namespace PredatorPrey
 {
     static class Parameters
     {
+        // neural network
         public const int weightRange = 1;
-        public const int numberOfInputs = 4;
-        public const int numberOfOutputs = 2;
-        public const int numberOfHiddenLayers = 0;
-        public const int numberOfNeuronsPerHiddenLayer = 6;
         public const float responseCurve = 1F;
         public const float bias = -1F;
+        public const float learningRate = 10000F;
+
+        // genetic algorithm
         public const float crossoverRate = 0.7F;
         public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
@@ -40,23 +40,24 @@ namespace PredatorPrey
 
         //these are values for the creatures
         public const float startingHunger = 5F;
-        public const float maxHunger = 30F;
+        public const float maxHunger = 70F;
         public const int eating = -1;
         public const float starving =.03F;
 
         //these are values for the weights that determin the fitness function
-        public const int hungerWeight = -10;
-        public const int numberOfWolvesWeight = -3;
-        public const int closestWolfDist = 50;
-        public const int closestWolfWeight = 50;
-        public const int numberOfFoodWeight = 3;
+        public const int hungerWeight = -15;
+        public const int numberOfWolvesWeight = -5;
+        public const int closestWolfWeight = 1;
+        //public const int closestWolfDist = 300;
+        //public const int closestWolfWeight = 300;
+        public const int numberOfFoodWeight = 5;
         public const int closestFoodWeight = -1;
-        public const int closestFoodMaxPenalty = 50;
-        public const int numberOfSheepWeight = 3;
+        //public const int closestFoodMaxPenalty = 300;
+        public const int numberOfSheepWeight = 5;
         public const int closestSheepWeight = -1;
-        public const int closestSheepMaxPenalty = 50;
-        public const int maxFitness = 300;
-        public const int initFitness = 100;
+        //public const int closestSheepMaxPenalty = 300;
+        public const int maxFitness = 1000;
+        public const int initFitness = 500;
         public const int minFitness = 0;
 
         //these are for size of vision
@@ -91,7 +92,7 @@ namespace PredatorPrey
         public const int maxHearInput = 15 * inputsPerSensedObject;
 
         //behavior selection
-        public const int behav_numOfHiddenLayers = 1;
+        public const int behav_numOfHiddenLayers = 0;
         public const int behav_numOfNeuronsPerLayer = 5;
 
         // avoidance
@@ -112,6 +113,6 @@ namespace PredatorPrey
         public const int goal_numOfNeuronsPerLayer = 2;
 
         // steering modification
-        public const float accel_clampVal = 0.5F;//0.015F;
+        public const float accel_clampVal = 0.15F;//0.015F;
     }
 }

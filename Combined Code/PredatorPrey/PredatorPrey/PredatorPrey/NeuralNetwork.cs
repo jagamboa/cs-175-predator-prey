@@ -85,6 +85,86 @@ namespace PredatorPrey
             }
         }
 
+        // takes in a target output and propagates error throughout the network
+        // outputs the error propagated from the input layer
+        public List<double> updateWeights(List<double> targetOutput)
+        {
+            if (targetOutput.Count != numberOfOutputs)
+            {
+                throw new ArgumentException("The number of target outputs passed in to update the weights" +
+                            "is not equal to the total number of outputs in this neural network!" +
+                            "\nold weight count: " + numberOfOutputs + ", new weight count: " + targetOutput.Count);
+            }
+
+            // construct delta lists
+            List<List<double>> delta = new List<List<double>>(numberOfOutputs);
+            for (int i = 0; i < numberOfHiddenLayers; i++)
+            {
+                delta.Add(new List<double>(numberOfNeuronsPerHiddenLayer));
+
+                for (int j = 0; j < numberOfNeuronsPerHiddenLayer; j++)
+                {
+                    delta[i].Add(0);
+                }
+            }
+            delta.Add(new List<double>(numberOfOutputs));
+            for (int j = 0; j < numberOfOutputs; j++)
+            {
+                delta[numberOfHiddenLayers].Add(0);
+            }
+
+            // compute delta list for output layer
+            for (int i = 0; i < targetOutput.Count; i++)
+            {
+                List<double> outputs = networkLayers[numberOfHiddenLayers].getOutputs();
+
+                delta[numberOfHiddenLayers][i] = (targetOutput[i] - outputs[i]) / Parameters.learningRate;
+            }
+
+            // compute delta for hidden layers
+            for (int i = numberOfHiddenLayers - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < networkLayers[i].numberOfNeurons; j++)
+                {
+                    double sum = 0;
+
+                    for (int k = 0; k < networkLayers[i + 1].numberOfNeurons; k++)
+                    {
+                        sum += delta[i + 1][k] * networkLayers[i + 1].getWeights(k)[j];
+                    }
+                    delta[i][j] = sum;
+                }
+            }
+
+            // update weights
+            for (int i = 0; i < numberOfHiddenLayers + 1; i++)
+            {
+                networkLayers[i].updateWeights(delta[i]);
+            }
+
+            // normalize weights
+            List<double> weights = getListOfWeights();
+
+            double max = double.MinValue;
+
+            for (int i = 0; i < weights.Count; i++)
+            {
+                if (Math.Abs(weights[i]) > max)
+                {
+                    max = Math.Abs(weights[i]);
+                }
+            }
+
+            for (int i = 0; i < weights.Count; i++)
+            {
+                weights[i] = weights[i] / max;
+            }
+
+            replaceWeights(weights);
+
+            return delta[0];
+        }
+
 
 
 

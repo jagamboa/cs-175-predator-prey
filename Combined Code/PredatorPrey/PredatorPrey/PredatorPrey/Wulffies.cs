@@ -51,6 +51,11 @@ namespace PredatorPrey
             else
                 starve();
 
+            // update previous values
+            prevPos = position;
+            prevVel = velocity;
+            prevVision = vc;
+
             // step2: use predator rules (extract data from VisionContainer) to create a list of movement vectors
             List<Vector2> ruleVectors = new List<Vector2>(Parameters.predatorNumberOfRules);
 
@@ -80,8 +85,13 @@ namespace PredatorPrey
             List<double> outputs = brain.run(inputs);
 
             // step4: update velocity, position, and direction
-
             Vector2 acceleration = new Vector2((float)outputs[0], (float)outputs[1]);
+
+            if (float.IsNaN(acceleration.X))
+            {
+                List<double> weights = brain.getListOfWeights();
+                Console.WriteLine("NaN");
+            }
 
             if (acceleration.Length() != 0)
                 acceleration = Vector2.Normalize(acceleration);
@@ -110,41 +120,101 @@ namespace PredatorPrey
         public void updateWeights()
         {
             // step1: calculate fitness of current state
+            double fitnessForThisState = calculateFitness(prevVision);
 
-            // step2: classify state as either good or not good
+            // step2: calculate fitness for orthogonal acceleration values
+            Vector2 rightAcc = new Vector2((float)(prevAcc.X * Math.Cos(Math.PI / 2) - prevAcc.Y * Math.Sin(Math.PI / 2)),
+                                            (float)(prevAcc.X * Math.Sin(Math.PI / 2) + prevAcc.Y * Math.Cos(Math.PI / 2)));
+            Vector2 rightAccClamp = Vector2.Clamp(rightAcc, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),
+                                                new Vector2(Parameters.accel_clampVal, Parameters.accel_clampVal));
+            rightAccClamp = rightAccClamp * Parameters.maxAcceleration;
 
-            // step3: if state is good do nothing
-            //        if state is not good, attribute the bad state to 1 (or more) of the rules
-            //              ???????
+            Vector2 leftAcc = new Vector2((float)(prevAcc.X * Math.Cos(-Math.PI / 2) - prevAcc.Y * Math.Sin(-Math.PI / 2)),
+                                            (float)(prevAcc.X * Math.Sin(-Math.PI / 2) + prevAcc.Y * Math.Cos(-Math.PI / 2)));
+            Vector2 leftAccClamp = Vector2.Clamp(leftAcc, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),
+                                                new Vector2(Parameters.accel_clampVal, Parameters.accel_clampVal));
+            leftAccClamp = leftAccClamp * Parameters.maxAcceleration;
+
+            Vector2 leftChoiceVelocity = prevVel + leftAccClamp;
+            if (leftChoiceVelocity.Length() > Parameters.maxMoveSpeed)
+                leftChoiceVelocity = Vector2.Normalize(leftChoiceVelocity) * Parameters.maxMoveSpeed;
+
+            Vector2 rightChoiceVelocity = prevVel + rightAccClamp;
+            if (rightChoiceVelocity.Length() > Parameters.maxMoveSpeed)
+                rightChoiceVelocity = Vector2.Normalize(rightChoiceVelocity) * Parameters.maxMoveSpeed;
+
+            //Console.WriteLine("Hindsight: Angle between right/left velocities = " 
+            //    + (180 / Math.PI) * Math.Acos(Vector2.Dot(Vector2.Normalize(leftChoiceVelocity), Vector2.Normalize(rightChoiceVelocity))) + " degrees");
+
+            Vector2 tempPosition = position;
+
+            position = prevPos + leftChoiceVelocity;
+
+            double leftFitness = calculateFitness(prevVision);
+
+            position = prevPos + rightChoiceVelocity;
+
+            double rightFitness = calculateFitness(prevVision);
+
+            // step3: compare the 3 fitness values, if one of the two orthogonal
+            //          fitness values is greater than the current fitness,
+            //          generate a corrected acceleration vector
+            bool isError = false;
+            Vector2 correctedAcceleration = Vector2.Zero;
+            if (leftFitness > fitnessForThisState || rightFitness > fitnessForThisState)
+            {
+                isError = true;
+
+                if (leftFitness > rightFitness)
+                {
+                    correctedAcceleration = rightAcc * prevAccMag;
+                }
+                else
+                {
+                    correctedAcceleration = leftAcc * prevAccMag;
+                }
+            }
+
+            // step4: pass corrected acceleration vector to the neural network for
+            //          backpropagation
+            if (isError)
+            {
+                List<double> target = new List<double>(2);
+                target.Add(correctedAcceleration.X);
+                target.Add(correctedAcceleration.Y);
+                brain.updateWeights(target);
+            }
+
+            position = tempPosition;
         }
 
-        public override int calculateFitness(VisionContainer vc)
+        public override double calculateFitness(VisionContainer vc)
         {
             int numberOfSheep = 0;
-            int closestSheep = int.MaxValue;
+            double closestSheep = double.MaxValue;
 
             for (int i = 0; i < vc.size(); i++)
             {
                 if (vc.getSeenObject(i).type == Classification.Prey)
                 {
                     numberOfSheep++;
-                    int distance = (int)Vector2.Subtract(vc.getSeenObject(i).position, position).Length();
+                    double distance = Vector2.Subtract(vc.getSeenObject(i).position, position).Length();
 
                     if (distance < closestSheep)
                         closestSheep = distance;
                 }
             }
 
-            fitness = (int)(Parameters.initFitness + hunger * Parameters.hungerWeight + 
-                Parameters.numberOfSheepWeight * numberOfSheep);
+            fitness = Parameters.initFitness + hunger * Parameters.hungerWeight + 
+                Parameters.numberOfSheepWeight * numberOfSheep;
 
-            if (closestSheep < Parameters.closestSheepMaxPenalty)
+            if (numberOfSheep > 0)
             {
-                fitness += Parameters.closestFoodWeight * closestSheep;
+                fitness += Parameters.closestSheepWeight * closestSheep;
             }
             else
             {
-                fitness -= Parameters.closestSheepMaxPenalty;
+                fitness -= Parameters.wulffiesVisionThreashold;
             }
 
             if (fitness < Parameters.minFitness)
