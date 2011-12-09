@@ -171,8 +171,15 @@ namespace PredatorPrey
             return fitness;
         }
 
+        public override void  eat()
+        {
+            eatDuration = Parameters.fluffieEatTime;
+ 	        base.eat();
+        }
+
         public void die()
         {
+            score = (int)Math.Max(0,score- hunger);
             isAlive = false;
         }
     }

@@ -19,9 +19,10 @@ namespace PredatorPrey
         public const float mutationRate = 0.3F;
         public const int numberOfFittestCopies = 5;
 
-        public const int numberOfWolves = 10;
+        public const int numberOfWolves = 5;
         public const int numberOfSheep = 20;
-        public const int numberOfUpdates = 2000;
+        public const int numberOfGrassies = 5;
+        public const int numberOfUpdates = 1000;
 
         public const float maxRotation = 0.1F;
         public const float maxMoveSpeed = 2F;
@@ -76,7 +77,8 @@ namespace PredatorPrey
         public const double histThreshold = 3;
 
         //Duration of eating
-        public const int eatTime = 20;
+        public const int wulffieEatTime = 60;
+        public const int fluffieEatTime = 40;
 
         //constants for rules
         public const int preyNumberOfRules = 4;

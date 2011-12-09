@@ -157,6 +157,7 @@ namespace PredatorPrey
         public override void eat()
         {
             currentGoal = Vector2.Zero;
+            eatDuration = Parameters.wulffieEatTime;
             base.eat();
         }
     }

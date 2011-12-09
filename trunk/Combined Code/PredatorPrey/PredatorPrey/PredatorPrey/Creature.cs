@@ -71,7 +71,6 @@ namespace PredatorPrey
         public virtual void eat()
         {
             hunger += Parameters.eating;
-            eatDuration = Parameters.eatTime;
             eating = true;
 
             if (hunger < 0)
@@ -99,6 +98,7 @@ namespace PredatorPrey
             velocity = new Vector2((float)(2 * Parameters.random.NextDouble() - 1), (float)(2 * Parameters.random.NextDouble() - 1));
             leftSideSpeed = 0;
             rightSideSpeed = 0;
+            isAlive = true;
         }
 
         public double getAngle()
