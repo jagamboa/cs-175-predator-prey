@@ -57,7 +57,7 @@ namespace PredatorPrey
             List<Vector2> ruleVectors = new List<Vector2>(Parameters.predatorNumberOfRules);
 
             ruleVectors.Add(avoid.run(vc, ac));
-            ruleVectors.Add(align.run(vc));
+            //ruleVectors.Add(align.run(vc));
 
             for (int i = 0; i < vc.size(); i++)
             {
@@ -181,10 +181,10 @@ namespace PredatorPrey
                 avoid.update(deltaIn);
                 deltaIn[0] = deltaOut[2];
                 deltaIn[1] = deltaOut[3];
-                align.update(deltaIn);
-                deltaIn[0] = deltaOut[4];
-                deltaIn[1] = deltaOut[5];
                 goal.update(deltaIn);
+               /* deltaIn[0] = deltaOut[4];
+                deltaIn[1] = deltaOut[5];
+                goal.update(deltaIn);*/
             }
 
             position = tempPosition;

@@ -12,7 +12,7 @@ namespace PredatorPrey
         public const int weightRange = 1;
         public const float responseCurve = 1F;
         public const float bias = -1F;
-        public const float learningRate = 1000F;
+        public const float learningRate = 10000F;
 
         // genetic algorithm
         public const float crossoverRate = 0.7F;
@@ -22,7 +22,7 @@ namespace PredatorPrey
         public const int numberOfWolves = 10;
         public const int numberOfSheep = 40;
         public const int numberOfGrassies = 5;
-        public const int numberOfUpdates = 700;
+        public const int numberOfUpdates = 1000;
         public const int displayLivingTime = 350;
 
         public const float maxRotation = 0.1F;
@@ -41,13 +41,13 @@ namespace PredatorPrey
 
         //these are values for the creatures
         public const float startingHunger = 5F;
-        public const float hungryThreshold = 15F;
+        public const float hungryThreshold = 20F;
         public const float maxHunger = 30F;
         public const int eating = -1;
-        public const float starving =.045F;
+        public const float starving =.025F;
 
         //these are values for the weights that determin the fitness function
-        public const int hungerWeight = -15;
+        public const int hungerWeight = -1;
         public const int numberOfWolvesWeight = -5;
         public const int closestWolfWeight = 1;
         //public const int closestWolfDist = 300;
@@ -72,8 +72,8 @@ namespace PredatorPrey
         public const int preyVisionHeight = 30;
         public const int preyMaxVisionDist = 25;
         */
-        public const int wulffiesVisionThreashold = 300;
-        public const int fluffiesVisionThreashold = 300;
+        public const int wulffiesVisionThreashold = 400;
+        public const int fluffiesVisionThreashold = 400;
 
         public const int boxNum1 = 10;
         public const int boxNum2 = 10;
@@ -88,7 +88,7 @@ namespace PredatorPrey
 
         //constants for rules
         public const int preyNumberOfRules = 4;
-        public const int predatorNumberOfRules = 3;
+        public const int predatorNumberOfRules = 2;
         public const int inputsPerSensedObject = 2;
         public const int maxVisionInput = 15 * inputsPerSensedObject;
         public const int maxHearInput = 15 * inputsPerSensedObject;
@@ -120,6 +120,6 @@ namespace PredatorPrey
 
         // test run modifiers
         public const bool wulffiesLearn = true;
-        public const bool fluffiesLearn = false;
+        public const bool fluffiesLearn = true;
     }
 }
