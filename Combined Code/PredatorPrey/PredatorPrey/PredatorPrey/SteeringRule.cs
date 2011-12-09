@@ -8,7 +8,7 @@ namespace PredatorPrey
 {
     class SteeringRule
     {
-        private NeuralNetwork ruleNet;
+        public NeuralNetwork ruleNet;
         private Classification acceptType;
 
         public SteeringRule(Classification acceptType)

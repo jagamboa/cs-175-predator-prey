@@ -479,8 +479,23 @@ namespace PredatorPrey
                     {
                         foreach (Fluffies f in fluffiesList)
                         {
+
+                            //if (f == fluffiesList[0])
+                            //{
+                            //    Console.WriteLine("--My Old Weights--");
+                            //    f.printWeights();
+                            //    Console.WriteLine();
+                            //}
+
                             // the prey runs it's weight improvement routine (through the nerual net)
                             f.updateWeights();
+
+                            //if (f == fluffiesList[0])
+                            //{
+                            //    Console.WriteLine("--My New Weights--");
+                            //    f.printWeights();
+                            //    Console.WriteLine();
+                            //}
                         }
                     }
 

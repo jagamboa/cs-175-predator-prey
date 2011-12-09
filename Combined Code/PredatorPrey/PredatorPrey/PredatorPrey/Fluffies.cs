@@ -237,6 +237,8 @@ namespace PredatorPrey
             double closestWolf = double.MaxValue;
             int numberOfFood = 0;
             double closestFood = double.MaxValue;
+            int numberOfSheep = 0;
+            double closestSheep = double.MaxValue;
 
             for (int i = 0; i < vc.size(); i++)
             {
@@ -256,10 +258,19 @@ namespace PredatorPrey
                     if (distance < closestFood)
                         closestFood = distance;
                 }
+                else if (vc.getSeenObject(i).type == Classification.Prey)
+                {
+                    numberOfSheep++;
+                    double distance = Vector2.Subtract(vc.getSeenObject(i).position, position).Length();
+
+                    if (distance < closestSheep)
+                        closestSheep = distance;
+                }
             }
 
             fitness = Parameters.initFitness + numberOfWolves * Parameters.numberOfWolvesWeight + 
-                        hunger * Parameters.hungerWeight + Parameters.numberOfFoodWeight * numberOfFood;
+                        hunger * Parameters.hungerWeight + Parameters.numberOfFoodWeight * numberOfFood
+                        + Parameters.numberOfSheepWeight * numberOfSheep;
 
             if (numberOfWolves > 0)
             {
@@ -277,6 +288,15 @@ namespace PredatorPrey
             else
             {
                 fitness -= Parameters.fluffiesVisionThreashold;
+            }
+
+            if (numberOfSheep > 0)
+            {
+                fitness += Parameters.closestSheepWeight * closestSheep;
+            }
+            else
+            {
+                fitness -= Parameters.wulffiesVisionThreashold;
             }
 
             if (fitness < Parameters.minFitness)
@@ -297,6 +317,26 @@ namespace PredatorPrey
         {
             score = (int)Math.Max(0,score + hunger * Parameters.hungerWeight);
             base.die();
+        }
+
+        public void printWeights()
+        {
+            Action<double> print = elem => { Console.Write(elem + ", "); };
+            Console.Write("Behavior Neural Net:  ");
+            brain.getListOfWeights().ForEach(print);
+            Console.Write("\n");
+            Console.Write("Avoid Rule:  ");
+            avoid.ruleNet.getListOfWeights().ForEach(print);
+            Console.Write("\n");
+            Console.Write("Steer Rule:  ");
+            steer.ruleNet.getListOfWeights().ForEach(print);
+            Console.Write("\n");
+            Console.Write("Align Rule:  ");
+            align.ruleNet.getListOfWeights().ForEach(print);
+            Console.Write("\n");
+            Console.Write("Goal Rule:  ");
+            goal.ruleNet.getListOfWeights().ForEach(print);
+            Console.Write("\n");
         }
     }
 }

@@ -8,7 +8,7 @@ namespace PredatorPrey
 {
     class AlignmentRule
     {
-        private NeuralNetwork ruleNet;
+        public NeuralNetwork ruleNet;
         private Classification acceptType;
 
         public AlignmentRule(Classification acceptType)

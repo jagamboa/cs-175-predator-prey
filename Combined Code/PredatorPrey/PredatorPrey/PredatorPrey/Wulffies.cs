@@ -233,5 +233,19 @@ namespace PredatorPrey
             eatDuration = Parameters.wulffieEatTime;
             base.eat();
         }
+
+        public void printWeights()
+        {
+            Action<double> print = elem => { Console.Write(elem + ", "); };
+            Console.Write("Behavior Neural Net:  ");
+            brain.getListOfWeights().ForEach(print);
+            Console.Write("\n");
+            Console.Write("Avoid Rule:  ");
+            avoid.ruleNet.getListOfWeights().ForEach(print);
+            Console.Write("\n");
+            Console.Write("Goal Rule:  ");
+            goal.ruleNet.getListOfWeights().ForEach(print);
+            Console.Write("\n");
+        }
     }
 }
