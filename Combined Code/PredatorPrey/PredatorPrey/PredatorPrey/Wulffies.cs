@@ -67,7 +67,7 @@ namespace PredatorPrey
                     break;
                 }
             }
-            ruleVectors.Add(Vector2.Multiply(goal.run(currentGoal, 0), (float)hunger));
+            ruleVectors.Add(Vector2.Multiply(goal.run(currentGoal, 0), 1));
 
             // step3: sum up movement vectors using stored weights
             List<double> inputs = new List<double>(Parameters.preyNumberOfRules * Parameters.inputsPerSensedObject);
@@ -82,8 +82,8 @@ namespace PredatorPrey
             List<double> outputs = brain.run(inputs);
 
             // step4: update velocity, position, and direction
-            Vector2 acceleration = new Vector2((float)outputs[0], (float)outputs[1]);
-
+            //Vector2 acceleration = new Vector2((float)outputs[0], (float)outputs[1]);
+            Vector2 acceleration = new Vector2(ruleVectors[1].X, ruleVectors[1].Y);
             if (acceleration.Length() != 0)
                 acceleration = Vector2.Normalize(acceleration);
             acceleration = Vector2.Clamp(acceleration, new Vector2(-Parameters.accel_clampVal, -Parameters.accel_clampVal),

@@ -73,7 +73,7 @@ namespace PredatorPrey
             
         }
 
-        public ObjectSeen compareCreats(Creature visableCreat, Texture2D texture)
+        public ObjectSeen compareCreats(Creature visableCreat, Vector2 viewPos, Texture2D texture)
         {
             int count = 0;
             int width = texture.Width;
@@ -109,7 +109,7 @@ namespace PredatorPrey
                 if (tempHist < best)
                 {
                     best = tempHist;
-                    bestObject = new ObjectSeen(types[i], visableCreat.position, visableCreat.velocity);
+                    bestObject = new ObjectSeen(types[i], Vector2.Subtract(visableCreat.position, viewPos), visableCreat.velocity);
                 }
             }
             if (best > Parameters.histThreshold)
@@ -121,7 +121,7 @@ namespace PredatorPrey
 
                 }
                 if (count > 30)
-                    bestObject = new ObjectSeen(Classification.Food, visableCreat.position, Vector2.Zero);
+                    bestObject = new ObjectSeen(Classification.Food, Vector2.Subtract(visableCreat.position, viewPos), Vector2.Zero);
                 else
                     bestObject.type = Classification.Unknown;
             }

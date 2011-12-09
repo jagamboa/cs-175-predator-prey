@@ -271,7 +271,7 @@ namespace PredatorPrey
                         {
                             if (predator.position != wulffiesList[i].position && Vector2.Distance(predator.position, wulffiesList[i].position) < Parameters.wulffiesVisionThreashold)
                             {
-                               eyes.add(sm.compareCreats(wulffiesList[i], predatorSprite));
+                               eyes.add(sm.compareCreats(wulffiesList[i], predator.position, predatorSprite));
 
                             }
                         }
@@ -279,7 +279,7 @@ namespace PredatorPrey
                         {
                             if (Vector2.Distance(predator.position, fluffiesList[i].position) < Parameters.wulffiesVisionThreashold)
                             {
-                                eyes.add(sm.compareCreats(fluffiesList[i], preySprite));
+                                eyes.add(sm.compareCreats(fluffiesList[i], predator.position, preySprite));
                             }
                         }
                         eyes.sort(predator.position);
@@ -401,14 +401,14 @@ namespace PredatorPrey
                         {
                             if (Vector2.Distance(prey.position, wulffiesList[i].position) < Parameters.fluffiesVisionThreashold)
                             {
-                                eyes.add(sm.compareCreats(wulffiesList[i],predatorSprite));
+                                eyes.add(sm.compareCreats(wulffiesList[i], prey.position,predatorSprite));
                             }
                         }
                         for (i = 0; i < fluffiesList.Count; i++)
                         {
                             if (prey.position != fluffiesList[i].position && Vector2.Distance(prey.position, fluffiesList[i].position) < Parameters.fluffiesVisionThreashold)
                             {
-                                eyes.add(sm.compareCreats(fluffiesList[i], preySprite));
+                                eyes.add(sm.compareCreats(fluffiesList[i], prey.position, preySprite));
                             }
                         }
                         eyes.sort(prey.position);
